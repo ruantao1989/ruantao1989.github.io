@@ -86,16 +86,16 @@
 
 
 
-<meta name="description" content="ruby的sass环境弄起来麻烦, 反正以后项目里集成sass也是自动的, 装个Koala…">
+<meta name="description" content="最近比较忙, 不过还是想看看jQuery源码.晚上大概翻了一下 好多看不懂的…试着拆解一下 希望在博客里强制自己叙述出来 能稍微多看懂一点点.">
 <meta property="og:type" content="article">
-<meta property="og:title" content="试试scss">
-<meta property="og:url" content="http://ruantao1989.github.io/2016/07/07/scss-start1/index.html">
+<meta property="og:title" content="jQuery源码阅读1:jQuery对象的生成">
+<meta property="og:url" content="http://ruantao1989.github.io/2014/05/06/jQuery-read-01/index.html">
 <meta property="og:site_name" content="ruantao1989">
-<meta property="og:description" content="ruby的sass环境弄起来麻烦, 反正以后项目里集成sass也是自动的, 装个Koala…">
-<meta property="og:updated_time" content="2016-07-07T08:28:32.307Z">
+<meta property="og:description" content="最近比较忙, 不过还是想看看jQuery源码.晚上大概翻了一下 好多看不懂的…试着拆解一下 希望在博客里强制自己叙述出来 能稍微多看懂一点点.">
+<meta property="og:updated_time" content="2016-07-07T08:49:29.796Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="试试scss">
-<meta name="twitter:description" content="ruby的sass环境弄起来麻烦, 反正以后项目里集成sass也是自动的, 装个Koala…">
+<meta name="twitter:title" content="jQuery源码阅读1:jQuery对象的生成">
+<meta name="twitter:description" content="最近比较忙, 不过还是想看看jQuery源码.晚上大概翻了一下 好多看不懂的…试着拆解一下 希望在博客里强制自己叙述出来 能稍微多看懂一点点.">
 
 
 
@@ -116,9 +116,9 @@
 
 
 
-  <link rel="canonical" href="http://ruantao1989.github.io/2016/07/07/scss-start1/"/>
+  <link rel="canonical" href="http://ruantao1989.github.io/2014/05/06/jQuery-read-01/"/>
 
-  <title> 试试scss | ruantao1989 </title>
+  <title> jQuery源码阅读1:jQuery对象的生成 | ruantao1989 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="en">
@@ -258,7 +258,7 @@
             
             
               
-                试试scss
+                jQuery源码阅读1:jQuery对象的生成
               
             
           </h1>
@@ -270,8 +270,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-07-07T22:00:00+08:00" content="2016-07-07">
-              2016-07-07
+            <time itemprop="dateCreated" datetime="2014-05-06T23:46:00+08:00" content="2014-05-06">
+              2014-05-06
             </time>
           </span>
 
@@ -284,8 +284,8 @@
               <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/css/" itemprop="url" rel="index">
-                    <span itemprop="name">css</span>
+                  <a href="/categories/jQuery源码阅读/" itemprop="url" rel="index">
+                    <span itemprop="name">jQuery源码阅读</span>
                   </a>
                 </span>
 
@@ -300,8 +300,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/07/07/scss-start1/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/07/scss-start1/" itemprop="commentsCount"></span>
+                <a href="/2014/05/06/jQuery-read-01/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/06/jQuery-read-01/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -324,15 +324,9 @@
       
 
       
-        <p>ruby的sass环境弄起来麻烦, 反正以后项目里集成sass也是自动的, 装个Koala…<br><a id="more"></a></p>
-<h2 id="规范"><a href="#规范" class="headerlink" title="规范"></a>规范</h2><p>只有*.scss的文件 支持scss语法的编译,<br>还有个问题 注释里有中文就会报错…</p>
-<h2 id="scss语法"><a href="#scss语法" class="headerlink" title="scss语法"></a>scss语法</h2><h3 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h3><figure class="highlight scss"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* variables */</span></div><div class="line"><span class="variable">$var-color</span>: red;</div><div class="line"><span class="selector-class">.p1</span> &#123;</div><div class="line">  <span class="attribute">background-color</span>: <span class="variable">$var-color</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="计算"><a href="#计算" class="headerlink" title="计算"></a>计算</h3><figure class="highlight scss"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* calculate */</span></div><div class="line"><span class="selector-class">.p1</span> &#123;</div><div class="line">  <span class="attribute">border-radius</span>: (<span class="number">50px</span> /<span class="number">2</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="缩进结构"><a href="#缩进结构" class="headerlink" title="缩进结构"></a>缩进结构</h3><figure class="highlight scss"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* indent */</span></div><div class="line"><span class="selector-class">.p1</span> &#123;</div><div class="line">  <span class="attribute">background-color</span>: <span class="variable">$var-color</span>;</div><div class="line">  <span class="selector-class">.c1</span> &#123;</div><div class="line">    <span class="attribute">background-color</span>: <span class="number">#000</span>;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="父选择器"><a href="#父选择器" class="headerlink" title="父选择器"></a>父选择器</h3><figure class="highlight scss"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* parent selector */</span></div><div class="line"><span class="selector-class">.p1</span> &#123;</div><div class="line">  <span class="attribute">background-color</span>: <span class="variable">$var-color</span>;</div><div class="line">  &amp;:hover &#123;<span class="attribute">background-color</span>: yellow;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h3><figure class="highlight scss"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* import */</span></div><div class="line">@<span class="keyword">import</span> <span class="string">"scssFile"</span>; <span class="comment">/*same as scssFile.scss*/</span></div></pre></td></tr></table></figure>
-<h3 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h3><figure class="highlight scss"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* inheritance */</span></div><div class="line"><span class="selector-class">.p2</span> &#123;</div><div class="line">  @<span class="keyword">extend</span> .p1;</div><div class="line">  <span class="attribute">border</span>: <span class="number">5px</span> solid blue; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="混入"><a href="#混入" class="headerlink" title="混入"></a>混入</h3><figure class="highlight scss"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*list of properties*/</span></div><div class="line"><span class="variable">$prefixes</span> : -webkit-, -moz-, -ms-, -o-,<span class="string">""</span>;</div><div class="line">@<span class="keyword">mixin</span> scss-radius (<span class="variable">$radius</span>) &#123;</div><div class="line">    @<span class="keyword">each</span> <span class="variable">$pre</span> in <span class="variable">$prefixes</span> &#123;</div><div class="line">        #&#123;<span class="variable">$pre</span>&#125;<span class="attribute">border-radius</span>:<span class="variable">$radius</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="selector-class">.p2</span> &#123;</div><div class="line">    @<span class="keyword">include</span> scss-radius (<span class="number">10px</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+        <p>最近比较忙, 不过还是想看看jQuery源码.<br>晚上大概翻了一下 好多看不懂的…<br>试着拆解一下 希望在博客里强制自己叙述出来 能稍微多看懂一点点.<br><a id="more"></a></p>
+<p>阅读源码的版本是”1.8.3+1”, 因为一直在用这个版本,更高级的版本怕连api都不熟 那就更没得看了…<br>第一步先来分析下jQuery对象的生成: (其实原型链这块还没完全理清 边想边写吧)<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"> window, undefined </span>) </span>&#123;</div><div class="line"><span class="comment">/**</span></div><div class="line"> * ruantao1989@gmail.com</div><div class="line"> */</div><div class="line"><span class="keyword">var</span> </div><div class="line">    rootjQuery,</div><div class="line">    <span class="comment">//一: Define a local copy of jQuery</span></div><div class="line">    jQuery = <span class="function"><span class="keyword">function</span>(<span class="params"> selector, context </span>) </span>&#123;</div><div class="line">        <span class="comment">//不论是不是用"new" jQuery(), 都会返回new jQuery.fn.init().</span></div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> jQuery.fn.init( selector, context, rootjQuery );</div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">     </div><div class="line">    <span class="comment">//二: jQuery对象原型. 功力不够, 原型链这块没完全理清...</span></div><div class="line">    <span class="comment">//应该是为了保护jQuery.prototype, 所以将jQuery.prototype赋给fn, 插件等只操作fn而非prototype</span></div><div class="line">    jQuery.fn = jQuery.prototype = &#123;</div><div class="line">        <span class="comment">//原型链中指定constructor指针, 否则第一级链中没有constructor对象, 第二辑链constructor直接指向Object()</span></div><div class="line">        <span class="keyword">constructor</span>: jQuery,</div><div class="line">        //init貌似负责处理具体的选择器</div><div class="line">        init: function( selector, context, rootjQuery ) &#123;</div><div class="line">            <span class="comment">//这里会根据传参, 处理有各种情况</span></div><div class="line">        &#125;,</div><div class="line">        <span class="comment">//其他一堆静态方法...后续分析</span></div><div class="line">    &#125;;</div><div class="line">     </div><div class="line">     </div><div class="line">    <span class="comment">//三: 这句最tm难理解:</span></div><div class="line">    <span class="comment">//1.因为第一部分返回jQuery对象等于return new jQuery.fn.init(), 所以要想操作新生jQuery对象的prototype,我们手上有两种方法:①是操作jQuery.fn.init.prototype,②是直接写jQuery.prototype.someFun = function()&#123;&#125;;</span></div><div class="line">    <span class="comment">//2.又因为第二部分的目的就是为了保护jQuery.prototype, 所以我们不能用类似jQuery.prototype.someFun = function()&#123;&#125;;的写法</span></div><div class="line">    <span class="comment">//3.所以最终我们的选择是操作jQuery.fn(如jQuery.fn.extend()), 而后jQuery.fn.init.prototype = jQuery.fn;</span></div><div class="line">    jQuery.fn.init.prototype = jQuery.fn;</div><div class="line"> </div><div class="line">    <span class="comment">//jQuery对象赋给window.$和window.jQuery, 方便访问</span></div><div class="line">    <span class="built_in">window</span>.jQuery = <span class="built_in">window</span>.$ = jQuery;</div><div class="line">&#125;)(<span class="built_in">window</span>);</div><div class="line"> </div><div class="line"> </div><div class="line"><span class="comment">//1实验用new</span></div><div class="line"><span class="keyword">var</span> $obj_withNew = <span class="keyword">new</span> jQuery(<span class="string">"用new构造对象"</span>);</div><div class="line"><span class="built_in">console</span>.log($obj_withNew);</div><div class="line"><span class="comment">//2实验不用new</span></div><div class="line"><span class="keyword">var</span> $obj_withoutNew = $(<span class="string">"折腾半天 可以不用new了"</span>);</div><div class="line"><span class="built_in">console</span>.log($obj_withoutNew);</div><div class="line"> </div><div class="line"><span class="comment">//结论是经过如此这般折腾, 产生的对象是一样的</span></div></pre></td></tr></table></figure></p>
+
       
     </div>
 
@@ -357,13 +351,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/07/06/move-to-hexo/" rel="next" title="Move to hexo">
-                <i class="fa fa-chevron-left"></i> Move to hexo
-              </a>
-            
           </div>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/05/08/jQuery-read-02/" rel="prev" title="jQuery源码阅读2:用extend()和fn.extend()扩展方法">
+                jQuery源码阅读2:用extend()和fn.extend()扩展方法 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -389,8 +383,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/07/07/scss-start1/"
-           data-title="试试scss" data-url="http://ruantao1989.github.io/2016/07/07/scss-start1/">
+      <div class="ds-thread" data-thread-key="2014/05/06/jQuery-read-01/"
+           data-title="jQuery源码阅读1:jQuery对象的生成" data-url="http://ruantao1989.github.io/2014/05/06/jQuery-read-01/">
       </div>
     
   </div>
@@ -481,7 +475,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#规范"><span class="nav-number">1.</span> <span class="nav-text">规范</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#scss语法"><span class="nav-number">2.</span> <span class="nav-text">scss语法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#变量"><span class="nav-number">2.1.</span> <span class="nav-text">变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计算"><span class="nav-number">2.2.</span> <span class="nav-text">计算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缩进结构"><span class="nav-number">2.3.</span> <span class="nav-text">缩进结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#父选择器"><span class="nav-number">2.4.</span> <span class="nav-text">父选择器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#引用"><span class="nav-number">2.5.</span> <span class="nav-text">引用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#继承"><span class="nav-number">2.6.</span> <span class="nav-text">继承</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#混入"><span class="nav-number">2.7.</span> <span class="nav-text">混入</span></a></li></ol></li></ol></div>
+              <p class="post-toc-empty">This post does not have a Table of Contents</p>
             
           </div>
         </section>

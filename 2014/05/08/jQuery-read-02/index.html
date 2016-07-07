@@ -1,0 +1,636 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="ruantao1989" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="jQuery对象生成出来了, 下一步就是往里加方法 , 主要用的是extend()方法:还是拆一下代码, 仅分析最简单的流程, 说明下工作原理.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jQuery源码阅读2:用extend()和fn.extend()扩展方法">
+<meta property="og:url" content="http://ruantao1989.github.io/2014/05/08/jQuery-read-02/index.html">
+<meta property="og:site_name" content="ruantao1989">
+<meta property="og:description" content="jQuery对象生成出来了, 下一步就是往里加方法 , 主要用的是extend()方法:还是拆一下代码, 仅分析最简单的流程, 说明下工作原理.">
+<meta property="og:updated_time" content="2016-07-07T08:53:36.156Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="jQuery源码阅读2:用extend()和fn.extend()扩展方法">
+<meta name="twitter:description" content="jQuery对象生成出来了, 下一步就是往里加方法 , 主要用的是extend()方法:还是拆一下代码, 仅分析最简单的流程, 说明下工作原理.">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://ruantao1989.github.io/2014/05/08/jQuery-read-02/"/>
+
+  <title> jQuery源码阅读2:用extend()和fn.extend()扩展方法 | ruantao1989 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">ruantao1989</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                jQuery源码阅读2:用extend()和fn.extend()扩展方法
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2014-05-08T21:55:00+08:00" content="2014-05-08">
+              2014-05-08
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/jQuery源码阅读/" itemprop="url" rel="index">
+                    <span itemprop="name">jQuery源码阅读</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2014/05/08/jQuery-read-02/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/08/jQuery-read-02/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>jQuery对象生成出来了, 下一步就是往里加方法 , 主要用的是extend()方法:<br>还是拆一下代码, 仅分析最简单的流程, 说明下工作原理.<br><a id="more"></a></p>
+<p>1.源码第35行第一次调用jQuery.extned(), 仅传入一个包含函数的对象<br>这种情况就是给jQuery对象增加静态方法</p>
+<p>2.源码1726行第一次调用jQuery.fn.extend(),也是传入一个包含函数的对象<br>因为上文书分析过<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jQuery.fn = jQuery.prototype</div></pre></td></tr></table></figure></p>
+<p> 所以这是给生成的jQuery对象增加原型方法<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * 博文作者:ruantao1989@gmail.com</div><div class="line"> * 出自博客:ruantao.duapp.com/blog</div><div class="line"> */</div><div class="line"><span class="comment">//==&gt;源码291行, 在上个示例jQuery.fn.init.prototype = jQuery.fn;后增加下面代码</span></div><div class="line">        <span class="comment">//一: 上文书说到操作jQuery.fn就是操作jQuery.fn.init.prototype. 此处的目的正是对返回的jQuery对象进行扩展</span></div><div class="line">        <span class="comment">//每次调用jQuery.extend或jQuery.fn.extend, 如果仅传一个参数, 即是对jQuery对象自身的扩展</span></div><div class="line">        jQuery.extend = jQuery.fn.extend = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">            <span class="keyword">var</span> options, name, src, copy, copyIsArray, clone,</div><div class="line">                target = <span class="built_in">arguments</span>[<span class="number">0</span>] || &#123;&#125;,<span class="comment">//第一个传参,一般都是一个含有多个方法的对象&#123;xxx:&#123;yyy&#125;..&#125;</span></div><div class="line">                i = <span class="number">1</span>,</div><div class="line">                length = <span class="built_in">arguments</span>.length,<span class="comment">//仅有一个arguments[0]时,len等于1</span></div><div class="line">                deep = <span class="literal">false</span>;</div><div class="line"> </div><div class="line">            <span class="comment">//...deep copy的情况先忽略, 头一次扩展不需要</span></div><div class="line"> </div><div class="line">            <span class="comment">//这个是对jQuery自身扩展的情况</span></div><div class="line">            <span class="comment">//以源码355行的代码为例(源码中第一次扩展), 每次扩展只传入一个对象,这里判断相等</span></div><div class="line">            <span class="comment">//this是jQuery对象, 之后要把传入的方法拷贝进target对象中</span></div><div class="line">            <span class="keyword">if</span> ( length === i ) &#123;</div><div class="line">                target = <span class="keyword">this</span>;</div><div class="line">                --i;</div><div class="line">            &#125;</div><div class="line"> </div><div class="line">            <span class="keyword">for</span> ( ; i &lt; length; i++ ) &#123;</div><div class="line">                <span class="comment">//此处options是传入的待拷贝的各个函数</span></div><div class="line">                <span class="keyword">if</span> ( (options = <span class="built_in">arguments</span>[ i ]) != <span class="literal">null</span> ) &#123;</div><div class="line">                    <span class="comment">//遍历取函数名</span></div><div class="line">                    <span class="keyword">for</span> ( name <span class="keyword">in</span> options ) &#123;</div><div class="line">                        src = target[ name ];</div><div class="line">                        <span class="comment">//copy是options中取出的其中一个函数</span></div><div class="line">                        copy = options[ name ];</div><div class="line"> </div><div class="line">                        <span class="comment">// Prevent never-ending loop</span></div><div class="line">                        <span class="keyword">if</span> ( target === copy ) &#123;</div><div class="line">                            <span class="keyword">continue</span>;</div><div class="line">                        &#125;</div><div class="line"> </div><div class="line">                        <span class="comment">//...deep copy的情况先忽略</span></div><div class="line"> </div><div class="line">                        <span class="comment">//动态写入target,这里是jQuery对象</span></div><div class="line">                        target[ name ] = copy;</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line"> </div><div class="line">            <span class="comment">//完成一次扩展</span></div><div class="line">            <span class="keyword">return</span> target;</div><div class="line">        &#125;;</div><div class="line"> </div><div class="line">        <span class="comment">//==&gt;源码355行</span></div><div class="line">        <span class="comment">//二: 源码中第一次运行extend()给jQuery增加静态方法</span></div><div class="line">        jQuery.extend(&#123;</div><div class="line">            <span class="comment">//比如说要扩展isWindow()方法</span></div><div class="line">            isWindow: <span class="function"><span class="keyword">function</span>(<span class="params"> obj </span>) </span>&#123;</div><div class="line">                <span class="keyword">return</span> obj != <span class="literal">null</span> &amp;&amp; obj == obj.window;</div><div class="line">            &#125;</div><div class="line">            <span class="comment">//这里有好些方法挺好 比如each, 争取下次分析</span></div><div class="line">        &#125;);</div><div class="line">         </div><div class="line">        <span class="comment">//三:自己扩展一个静态方法</span></div><div class="line">        jQuery.extend(&#123;</div><div class="line">            staticFun: <span class="function"><span class="keyword">function</span>(<span class="params"> deep </span>) </span>&#123;</div><div class="line">                alert(<span class="string">"静态方法staticFun==&gt;ruantao.duapp.com"</span>);</div><div class="line">            &#125;</div><div class="line">        &#125;); </div><div class="line">        <span class="comment">//四:自己扩展一个原型方法</span></div><div class="line">        jQuery.fn.extend(&#123;          </div><div class="line">            prototypeFun: <span class="function"><span class="keyword">function</span>(<span class="params"> deep </span>) </span>&#123;</div><div class="line">                alert(<span class="string">"原型方法prototypeFun==&gt;ruantao.duapp.com"</span>);</div><div class="line">            &#125;</div><div class="line">        &#125;); </div><div class="line">         </div><div class="line">        <span class="comment">//jQuery对象赋给window.$和window.jQuery, 方便访问</span></div><div class="line">        <span class="built_in">window</span>.jQuery = <span class="built_in">window</span>.$ = jQuery;</div><div class="line">    &#125;)(<span class="built_in">window</span>);</div><div class="line">      </div><div class="line">      </div><div class="line">    <span class="comment">//五:验证扩展</span></div><div class="line">    <span class="comment">//5.1 验证静态方法</span></div><div class="line">    $.staticFun()</div><div class="line">     </div><div class="line">    <span class="keyword">var</span> $obj = $(<span class="string">""</span>);</div><div class="line">    <span class="built_in">console</span>.log($obj);</div><div class="line">    <span class="comment">//5.2验证原型方法</span></div><div class="line">    $obj.prototypeFun();</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014/05/06/jQuery-read-01/" rel="next" title="jQuery源码阅读1:jQuery对象的生成">
+                <i class="fa fa-chevron-left"></i> jQuery源码阅读1:jQuery对象的生成
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/05/11/jQuery-read-03/" rel="prev" title="jQuery源码阅读3:each()方法">
+                jQuery源码阅读3:each()方法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2014/05/08/jQuery-read-02/"
+           data-title="jQuery源码阅读2:用extend()和fn.extend()扩展方法" data-url="http://ruantao1989.github.io/2014/05/08/jQuery-read-02/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars2.githubusercontent.com/u/1949437?v=3&s=460"
+               alt="ruantao1989" />
+          <p class="site-author-name" itemprop="name">ruantao1989</p>
+          <p class="site-description motion-element" itemprop="description">思行合一</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <p class="post-toc-empty">This post does not have a Table of Contents</p>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ruantao1989</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"ruantao1989"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
