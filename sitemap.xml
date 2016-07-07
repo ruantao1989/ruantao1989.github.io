@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://ruantao1989.github.io/2016/07/07/scss-start1/</loc>
+    
+    <lastmod>2016-07-07T08:28:32.307Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://ruantao1989.github.io/2016/07/06/move-to-hexo/</loc>
     
     <lastmod>2016-07-07T07:20:24.228Z</lastmod>
@@ -26,13 +33,6 @@
     <loc>http://ruantao1989.github.io/tags/index.html</loc>
     
     <lastmod>2016-07-07T06:23:42.687Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://ruantao1989.github.io/2016/07/07/scss-start1/</loc>
-    
-    <lastmod>2016-07-07T03:31:58.094Z</lastmod>
     
   </url>
   
