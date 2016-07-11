@@ -86,16 +86,16 @@
 
 
 
-<meta name="description" content="ruby的sass环境弄起来麻烦, 反正以后项目里集成sass也是自动的, 装个Koala…">
+<meta name="description" content="几个内置指令的用法, 不全 回头再补">
 <meta property="og:type" content="article">
-<meta property="og:title" content="试试scss">
-<meta property="og:url" content="http://ruantao1989.github.io/2016/07/07/scss-start1/index.html">
+<meta property="og:title" content="Angular2笔记4-内置指令">
+<meta property="og:url" content="http://ruantao1989.github.io/2016/07/11/angular2-note-04/index.html">
 <meta property="og:site_name" content="ruantao1989">
-<meta property="og:description" content="ruby的sass环境弄起来麻烦, 反正以后项目里集成sass也是自动的, 装个Koala…">
-<meta property="og:updated_time" content="2016-07-11T08:54:02.338Z">
+<meta property="og:description" content="几个内置指令的用法, 不全 回头再补">
+<meta property="og:updated_time" content="2016-07-11T08:38:51.514Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="试试scss">
-<meta name="twitter:description" content="ruby的sass环境弄起来麻烦, 反正以后项目里集成sass也是自动的, 装个Koala…">
+<meta name="twitter:title" content="Angular2笔记4-内置指令">
+<meta name="twitter:description" content="几个内置指令的用法, 不全 回头再补">
 
 
 
@@ -116,9 +116,9 @@
 
 
 
-  <link rel="canonical" href="http://ruantao1989.github.io/2016/07/07/scss-start1/"/>
+  <link rel="canonical" href="http://ruantao1989.github.io/2016/07/11/angular2-note-04/"/>
 
-  <title> 试试scss | ruantao1989 </title>
+  <title> Angular2笔记4-内置指令 | ruantao1989 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="en">
@@ -258,7 +258,7 @@
             
             
               
-                试试scss
+                Angular2笔记4-内置指令
               
             
           </h1>
@@ -270,8 +270,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-07-07T22:00:00+08:00" content="2016-07-07">
-              2016-07-07
+            <time itemprop="dateCreated" datetime="2016-07-11T16:30:00+08:00" content="2016-07-11">
+              2016-07-11
             </time>
           </span>
 
@@ -284,8 +284,8 @@
               <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/css入门/" itemprop="url" rel="index">
-                    <span itemprop="name">css入门</span>
+                  <a href="/categories/Angular2/" itemprop="url" rel="index">
+                    <span itemprop="name">Angular2</span>
                   </a>
                 </span>
 
@@ -300,8 +300,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/07/07/scss-start1/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/07/scss-start1/" itemprop="commentsCount"></span>
+                <a href="/2016/07/11/angular2-note-04/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/11/angular2-note-04/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -324,15 +324,15 @@
       
 
       
-        <p>ruby的sass环境弄起来麻烦, 反正以后项目里集成sass也是自动的, 装个Koala…<br><a id="more"></a></p>
-<h2 id="规范"><a href="#规范" class="headerlink" title="规范"></a>规范</h2><p>只有*.scss的文件 支持scss语法的编译,<br>还有个问题 注释里有中文就会报错…</p>
-<h2 id="scss语法"><a href="#scss语法" class="headerlink" title="scss语法"></a>scss语法</h2><h3 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h3><figure class="highlight scss"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* variables */</span></div><div class="line"><span class="variable">$var-color</span>: red;</div><div class="line"><span class="selector-class">.p1</span> &#123;</div><div class="line">  <span class="attribute">background-color</span>: <span class="variable">$var-color</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="计算"><a href="#计算" class="headerlink" title="计算"></a>计算</h3><figure class="highlight scss"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* calculate */</span></div><div class="line"><span class="selector-class">.p1</span> &#123;</div><div class="line">  <span class="attribute">border-radius</span>: (<span class="number">50px</span> /<span class="number">2</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="缩进结构"><a href="#缩进结构" class="headerlink" title="缩进结构"></a>缩进结构</h3><figure class="highlight scss"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* indent */</span></div><div class="line"><span class="selector-class">.p1</span> &#123;</div><div class="line">  <span class="attribute">background-color</span>: <span class="variable">$var-color</span>;</div><div class="line">  <span class="selector-class">.c1</span> &#123;</div><div class="line">    <span class="attribute">background-color</span>: <span class="number">#000</span>;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="父选择器"><a href="#父选择器" class="headerlink" title="父选择器"></a>父选择器</h3><figure class="highlight scss"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* parent selector */</span></div><div class="line"><span class="selector-class">.p1</span> &#123;</div><div class="line">  <span class="attribute">background-color</span>: <span class="variable">$var-color</span>;</div><div class="line">  &amp;:hover &#123;<span class="attribute">background-color</span>: yellow;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h3><figure class="highlight scss"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* import */</span></div><div class="line">@<span class="keyword">import</span> <span class="string">"scssFile"</span>; <span class="comment">/*same as scssFile.scss*/</span></div></pre></td></tr></table></figure>
-<h3 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h3><figure class="highlight scss"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* inheritance */</span></div><div class="line"><span class="selector-class">.p2</span> &#123;</div><div class="line">  @<span class="keyword">extend</span> .p1;</div><div class="line">  <span class="attribute">border</span>: <span class="number">5px</span> solid blue; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="混入"><a href="#混入" class="headerlink" title="混入"></a>混入</h3><figure class="highlight scss"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*list of properties*/</span></div><div class="line"><span class="variable">$prefixes</span> : -webkit-, -moz-, -ms-, -o-,<span class="string">""</span>;</div><div class="line">@<span class="keyword">mixin</span> scss-radius (<span class="variable">$radius</span>) &#123;</div><div class="line">    @<span class="keyword">each</span> <span class="variable">$pre</span> in <span class="variable">$prefixes</span> &#123;</div><div class="line">        #&#123;<span class="variable">$pre</span>&#125;<span class="attribute">border-radius</span>:<span class="variable">$radius</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="selector-class">.p2</span> &#123;</div><div class="line">    @<span class="keyword">include</span> scss-radius (<span class="number">10px</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+        <p>几个内置指令的用法, 不全 回头再补<br> <a id="more"></a></p>
+<h2 id="ngIf"><a href="#ngIf" class="headerlink" title="ngIf"></a>ngIf</h2><p>如果表达式结果是false的话，该元素将不会渲染DOM。<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> *<span class="attr">ngIf</span>=<span class="string">"false"</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<h2 id="ngSwtichWhen-ngSwitchDefault"><a href="#ngSwtichWhen-ngSwitchDefault" class="headerlink" title="ngSwtichWhen ngSwitchDefault"></a>ngSwtichWhen ngSwitchDefault</h2><p>相当于switch语句, 不限于只匹配一个。例如,在上面的示例中choice是2时,第二和第五li将渲染。<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"ui raised segment"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">ul</span> [<span class="attr">ngSwitch</span>]=<span class="string">"choice"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span> *<span class="attr">ngSwitchWhen</span>=<span class="string">"1"</span>&gt;</span>First choice<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span> *<span class="attr">ngSwitchWhen</span>=<span class="string">"2"</span>&gt;</span>Second choice<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span> *<span class="attr">ngSwitchWhen</span>=<span class="string">"3"</span>&gt;</span>Third choice<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span> *<span class="attr">ngSwitchWhen</span>=<span class="string">"4"</span>&gt;</span>Fourth choice<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span> *<span class="attr">ngSwitchWhen</span>=<span class="string">"2"</span>&gt;</span>Second choice, again<span class="tag">&lt;/<span class="name">li</span>&gt;</span> </div><div class="line">        <span class="tag">&lt;<span class="name">li</span> *<span class="attr">ngSwitchDefault</span>&gt;</span>Default choice<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">ul</span>&gt;</span> </div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<h2 id="ngStyle"><a href="#ngStyle" class="headerlink" title="ngStyle"></a>ngStyle</h2><p>为DOM元素设置一个CSS属性<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> [<span class="attr">ngStyle</span>]=<span class="string">"&#123;color: 'white', 'background-color': 'blue'&#125;"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">name</span>=<span class="string">"fontSize"</span> <span class="attr">value</span>=<span class="string">"&#123;&#123;fontSize&#125;&#125;"</span> #<span class="attr">fontinput</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">span</span> [<span class="attr">ngStyle</span>]=<span class="string">"&#123;color: 'red'&#125;"</span> [<span class="attr">style.font-size.px</span>]=<span class="string">"fontSize"</span>&gt;</span>red text<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<h2 id="ngClass"><a href="#ngClass" class="headerlink" title="ngClass"></a>ngClass</h2><p>给DOM元素动态地设置和改变CSS类<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> [<span class="attr">ngClass</span>]=<span class="string">"&#123;bordered: false&#125;"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">div</span> [<span class="attr">ngClass</span>]=<span class="string">"['blue', 'round']"</span>&gt;</span> <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<h2 id="ngFor"><a href="#ngFor" class="headerlink" title="ngFor"></a>ngFor</h2><p>语法是<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">*ngFor=<span class="string">"#item of items"</span></div></pre></td></tr></table></figure></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">this.people = [</div><div class="line">    &#123; name: 'Anderson', age: 35, city: 'Sao Paulo' &#125;,</div><div class="line">    &#123; name: 'John', age: 12, city: 'Miami' &#125;,</div><div class="line">    &#123; name: 'Peter', age: 22, city: 'New York' &#125;</div><div class="line">];</div><div class="line"><span class="tag">&lt;<span class="name">tr</span> *<span class="attr">ngFor</span>=<span class="string">"#p of people; #num = index"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span>&#123;&#123; num+1 &#125;&#125; -- &#123;&#123; p.name &#125;&#125;<span class="tag">&lt;/<span class="name">td</span>&gt;</span> </div><div class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span>&#123;&#123; num+1 &#125;&#125; -- &#123;&#123; p.age &#125;&#125;<span class="tag">&lt;/<span class="name">td</span>&gt;</span> </div><div class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span>&#123;&#123; num+1 &#125;&#125; -- &#123;&#123; p.city &#125;&#125;<span class="tag">&lt;/<span class="name">td</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">tr</span>&gt;</span></div></pre></td></tr></table></figure>
+<h2 id="NgNonBindable"><a href="#NgNonBindable" class="headerlink" title="NgNonBindable"></a>NgNonBindable</h2><p>告诉angular不编译或绑定我们的页面的特定部分<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;span class="pre" ngNonBindable&gt;&lt;- This is what &#123;&#123; content &#125;&#125; rendered &lt;/span&gt;</div></pre></td></tr></table></figure></p>
+
       
     </div>
 
@@ -357,17 +357,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/07/06/move-to-hexo/" rel="next" title="Move to hexo">
-                <i class="fa fa-chevron-left"></i> Move to hexo
+              <a href="/2016/07/11/angular2-note-03/" rel="next" title="Angular2笔记3-多个组件">
+                <i class="fa fa-chevron-left"></i> Angular2笔记3-多个组件
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/07/08/angular2-note-01/" rel="prev" title="Angular2笔记1-typeScript">
-                Angular2笔记1-typeScript <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -393,8 +389,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/07/07/scss-start1/"
-           data-title="试试scss" data-url="http://ruantao1989.github.io/2016/07/07/scss-start1/">
+      <div class="ds-thread" data-thread-key="2016/07/11/angular2-note-04/"
+           data-title="Angular2笔记4-内置指令" data-url="http://ruantao1989.github.io/2016/07/11/angular2-note-04/">
       </div>
     
   </div>
@@ -485,7 +481,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#规范"><span class="nav-number">1.</span> <span class="nav-text">规范</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#scss语法"><span class="nav-number">2.</span> <span class="nav-text">scss语法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#变量"><span class="nav-number">2.1.</span> <span class="nav-text">变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计算"><span class="nav-number">2.2.</span> <span class="nav-text">计算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缩进结构"><span class="nav-number">2.3.</span> <span class="nav-text">缩进结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#父选择器"><span class="nav-number">2.4.</span> <span class="nav-text">父选择器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#引用"><span class="nav-number">2.5.</span> <span class="nav-text">引用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#继承"><span class="nav-number">2.6.</span> <span class="nav-text">继承</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#混入"><span class="nav-number">2.7.</span> <span class="nav-text">混入</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ngIf"><span class="nav-number">1.</span> <span class="nav-text">ngIf</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ngSwtichWhen-ngSwitchDefault"><span class="nav-number">2.</span> <span class="nav-text">ngSwtichWhen ngSwitchDefault</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ngStyle"><span class="nav-number">3.</span> <span class="nav-text">ngStyle</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ngClass"><span class="nav-number">4.</span> <span class="nav-text">ngClass</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ngFor"><span class="nav-number">5.</span> <span class="nav-text">ngFor</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NgNonBindable"><span class="nav-number">6.</span> <span class="nav-text">NgNonBindable</span></a></li></ol></div>
             
           </div>
         </section>
