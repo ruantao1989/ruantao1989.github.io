@@ -1,0 +1,634 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="ruantao1989" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="在ng2 form中两个基本的对象是Control 和 ControlGroup.一个Control代表着一个input字段(这是一个ng2表单的最小单位)Control 封装了该字段的值,状态..">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Angular2笔记5-Form验证">
+<meta property="og:url" content="http://ruantao1989.github.io/2016/07/12/angular2/angular2-note-05/index.html">
+<meta property="og:site_name" content="ruantao1989">
+<meta property="og:description" content="在ng2 form中两个基本的对象是Control 和 ControlGroup.一个Control代表着一个input字段(这是一个ng2表单的最小单位)Control 封装了该字段的值,状态..">
+<meta property="og:updated_time" content="2016-07-12T08:02:52.954Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Angular2笔记5-Form验证">
+<meta name="twitter:description" content="在ng2 form中两个基本的对象是Control 和 ControlGroup.一个Control代表着一个input字段(这是一个ng2表单的最小单位)Control 封装了该字段的值,状态..">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://ruantao1989.github.io/2016/07/12/angular2/angular2-note-05/"/>
+
+  <title> Angular2笔记5-Form验证 | ruantao1989 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">ruantao1989</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Angular2笔记5-Form验证
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2016-07-12T15:30:00+08:00" content="2016-07-12">
+              2016-07-12
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Angular2入门/" itemprop="url" rel="index">
+                    <span itemprop="name">Angular2入门</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/07/12/angular2/angular2-note-05/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/12/angular2/angular2-note-05/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在ng2 form中两个基本的对象是Control 和 ControlGroup.<br>一个Control代表着一个input字段(这是一个ng2表单的最小单位)<br>Control 封装了该字段的值,状态..<br> <a id="more"></a></p>
+<h2 id="Control和ControlGroup"><a href="#Control和ControlGroup" class="headerlink" title="Control和ControlGroup"></a>Control和ControlGroup</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">ng-control</span>=<span class="string">"name"</span> /&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// create a new Control with the value "Nate"</span></div><div class="line"><span class="keyword">var</span> nameControl = <span class="keyword">new</span> Control(<span class="string">"Nate"</span>);</div><div class="line"><span class="keyword">var</span> name = nameControl.value; <span class="comment">// -&gt; Nate</span></div><div class="line"><span class="comment">// now we can query this control for certain values:</span></div><div class="line">nameControl.errors <span class="comment">// -&gt; StringMap&lt;string, any&gt; of errors</span></div><div class="line">nameControl.dirty <span class="comment">// -&gt; false</span></div><div class="line">nameControl.valid <span class="comment">// -&gt; true</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">var</span> personInfo = <span class="keyword">new</span> ControlGroup(&#123;</div><div class="line">    firstName: <span class="keyword">new</span> Control(<span class="string">"Nate"</span>),</div><div class="line">    lastName: <span class="keyword">new</span> Control(<span class="string">"Murray"</span>),</div><div class="line">    zip: <span class="keyword">new</span> Control(<span class="string">"90210"</span>)</div><div class="line">&#125;)</div><div class="line"><span class="comment">// now we can query this control group for certain values, which have sensible</span></div><div class="line">personInfo.value; </div><div class="line"><span class="comment">// -&gt; &#123;</span></div><div class="line"><span class="comment">//  firstName: "Nate",</span></div><div class="line"><span class="comment">//  lastName: "Murray",</span></div><div class="line"><span class="comment">//  zip: "90210"</span></div><div class="line"><span class="comment">// &#125;</span></div><div class="line"><span class="comment">// values depending on the children Control's values:</span></div><div class="line">personInfo.errors <span class="comment">// -&gt; StringMap&lt;string, any&gt; of errors</span></div><div class="line">personInfo.dirty <span class="comment">// -&gt; false</span></div><div class="line">personInfo.valid <span class="comment">// -&gt; true</span></div></pre></td></tr></table></figure>
+<h2 id="最简单的form"><a href="#最简单的form" class="headerlink" title="最简单的form"></a>最简单的form</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//引入导出的类</span></div><div class="line"><span class="keyword">import</span> &#123;DemoFormSkuBuilder&#125; <span class="keyword">from</span> <span class="string">'./forms/demo_form_sku_with_builder'</span>;</div></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">@Component(&#123;</div><div class="line">  selector: <span class="string">'demo-form-sku'</span>,</div><div class="line"></div><div class="line">  template: <span class="string">`</span></div><div class="line">  &lt;div class="ui raised segment"&gt;</div><div class="line">    &lt;h2 class="ui header"&gt;Demo Form: Sku&lt;/h2&gt;</div><div class="line">    &lt;form #f="ngForm" (ngSubmit)="onSubmit(f.value)" class="ui form"&gt;</div><div class="line"></div><div class="line">      &lt;div class="field"&gt;</div><div class="line">        &lt;label for="skuInput"&gt;SKU&lt;/label&gt;</div><div class="line">        &lt;input type="text" id="skuInput" placeholder="SKU" name="sku" ngModel&gt;</div><div class="line">      &lt;/div&gt;</div><div class="line"></div><div class="line">      &lt;button type="submit" class="ui button"&gt;Submit&lt;/button&gt;</div><div class="line">    &lt;/form&gt;</div><div class="line">  &lt;/div&gt;</div><div class="line">  `</div><div class="line">&#125;)</div><div class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">DemoFormSku</span> </span>&#123;</div><div class="line">  onSubmit(form: any): <span class="keyword">void</span> &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'you submitted value:'</span>, form);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="自定义验证form"><a href="#自定义验证form" class="headerlink" title="自定义验证form"></a>自定义验证form</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">skuValidator</span>(<span class="params">control: FormControl</span>): </span>&#123; [s: string]: boolean &#125; &#123;</div><div class="line">  <span class="keyword">if</span> (!control.value.match(<span class="regexp">/^123/</span>)) &#123;</div><div class="line">    <span class="keyword">return</span> &#123;invalidSku: <span class="literal">true</span>&#125;;<span class="comment">//新增的error类型</span></div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// sku 相当于是一个new Control("");</span></div><div class="line"><span class="comment">//sku.errors, sku.dirty, sku.valid 这些Control的属性</span></div><div class="line"><span class="comment">//用*ngIf控制UI</span></div><div class="line">@Component(&#123;</div><div class="line">  selector: <span class="string">'demo-form-with-custom-validations'</span>,</div><div class="line">  directives: [FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES],</div><div class="line">  template: <span class="string">`</span></div><div class="line">  &lt;div class="ui raised segment"&gt;</div><div class="line">    &lt;h2 class="ui header"&gt;Demo Form: with custom validations&lt;/h2&gt;</div><div class="line">    &lt;form [formGroup]="myForm" (ngSubmit)="onSubmit(myForm.value)" class="ui form"&gt;</div><div class="line"></div><div class="line">      &lt;div class="field" [class.error]="!sku.valid &amp;&amp; sku.touched"&gt;</div><div class="line">        &lt;label for="skuInput"&gt;SKU&lt;/label&gt;</div><div class="line">        &lt;input type="text"</div><div class="line">               id="skuInput"</div><div class="line">               placeholder="SKU"</div><div class="line">               [formControl]="sku"&gt;</div><div class="line">         &lt;div *ngIf="!sku.valid" class="ui error message"&gt;SKU is invalid&lt;/div&gt;</div><div class="line">         &lt;div *ngIf="sku.hasError('required')" class="ui error message"&gt;SKU is required&lt;/div&gt;</div><div class="line">         &lt;div *ngIf="sku.hasError('invalidSku')" class="ui error message"&gt;SKU must begin with &lt;tt&gt;123&lt;/tt&gt;&lt;/div&gt;</div><div class="line">      &lt;/div&gt;</div><div class="line"></div><div class="line">      &lt;div *ngIf="!myForm.valid" class="ui error message"&gt;Form is invalid&lt;/div&gt;</div><div class="line">      &lt;button type="submit" class="ui button"&gt;Submit&lt;/button&gt;</div><div class="line">    &lt;/form&gt;</div><div class="line">  &lt;/div&gt;</div><div class="line">  `</div><div class="line">&#125;)</div><div class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">DemoFormWithCustomValidations</span> </span>&#123;</div><div class="line">  myForm: FormGroup;<span class="comment">//表单里[formGroup]="myForm"</span></div><div class="line">  sku: AbstractControl;</div><div class="line"></div><div class="line">  <span class="keyword">constructor</span>(fb: FormBuilder) &#123;</div><div class="line">    <span class="comment">//Form默认是一个ControlGroup</span></div><div class="line">    <span class="keyword">this</span>.myForm = fb.group(&#123;</div><div class="line">      <span class="comment">//[formControl]="sku"</span></div><div class="line">      <span class="comment">//赋值可以用'sku':['ABC123']</span></div><div class="line">      <span class="comment">//Validators.compose用于追加一个验证, 不然'sku':  ['', Validators.required]只会保留一个</span></div><div class="line">      <span class="string">'sku'</span>:  [<span class="string">''</span>, Validators.compose([Validators.required, skuValidator])]</div><div class="line">    &#125;);</div><div class="line"></div><div class="line">    <span class="keyword">this</span>.sku = <span class="keyword">this</span>.myForm.controls[<span class="string">'sku'</span>];</div><div class="line"></div><div class="line">    <span class="comment">//监听值的变化事件</span></div><div class="line">    <span class="keyword">this</span>.sku.valueChanges.subscribe(</div><div class="line">      (value: string) =&gt; &#123;</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'sku changed to:'</span>, value);</div><div class="line">      &#125;</div><div class="line">    );</div><div class="line">    <span class="keyword">this</span>.myForm.valueChanges.subscribe(</div><div class="line">      (form: any) =&gt; &#123;</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'form changed to:'</span>, form);</div><div class="line">      &#125;</div><div class="line">    );</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  onSubmit(value: string): <span class="keyword">void</span> &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'you submitted value: '</span>, value);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/07/11/angular2/angular2-note-04/" rel="next" title="Angular2笔记4-内置指令">
+                <i class="fa fa-chevron-left"></i> Angular2笔记4-内置指令
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/07/12/angular2/angular2-note-05/"
+           data-title="Angular2笔记5-Form验证" data-url="http://ruantao1989.github.io/2016/07/12/angular2/angular2-note-05/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars2.githubusercontent.com/u/1949437?v=3&s=460"
+               alt="ruantao1989" />
+          <p class="site-author-name" itemprop="name">ruantao1989</p>
+          <p class="site-description motion-element" itemprop="description">思行合一</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Control和ControlGroup"><span class="nav-number">1.</span> <span class="nav-text">Control和ControlGroup</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最简单的form"><span class="nav-number">2.</span> <span class="nav-text">最简单的form</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义验证form"><span class="nav-number">3.</span> <span class="nav-text">自定义验证form</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ruantao1989</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"ruantao1989"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

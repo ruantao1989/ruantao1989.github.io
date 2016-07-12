@@ -1,0 +1,640 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="ruantao1989" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="还是拆解第一次jQuery.extend, 这次阅读json和xml相关的解析除了这一波 , 工具函数里还有proxy,access,和ready没读ready用到了jQuery的队列处理, 打算读完Deferred那块再拆解
+这对转换用正则比较多, 今天应该还有点儿时间, 打算补一补正则">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jQuery源码阅读6:xml和json解析">
+<meta property="og:url" content="http://ruantao1989.github.io/2014/05/16/jQueryRead/jQuery-read-06/index.html">
+<meta property="og:site_name" content="ruantao1989">
+<meta property="og:description" content="还是拆解第一次jQuery.extend, 这次阅读json和xml相关的解析除了这一波 , 工具函数里还有proxy,access,和ready没读ready用到了jQuery的队列处理, 打算读完Deferred那块再拆解
+这对转换用正则比较多, 今天应该还有点儿时间, 打算补一补正则">
+<meta property="og:updated_time" content="2016-07-12T07:04:33.125Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="jQuery源码阅读6:xml和json解析">
+<meta name="twitter:description" content="还是拆解第一次jQuery.extend, 这次阅读json和xml相关的解析除了这一波 , 工具函数里还有proxy,access,和ready没读ready用到了jQuery的队列处理, 打算读完Deferred那块再拆解
+这对转换用正则比较多, 今天应该还有点儿时间, 打算补一补正则">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://ruantao1989.github.io/2014/05/16/jQueryRead/jQuery-read-06/"/>
+
+  <title> jQuery源码阅读6:xml和json解析 | ruantao1989 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">ruantao1989</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                jQuery源码阅读6:xml和json解析
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2014-05-16T14:52:00+08:00" content="2014-05-16">
+              2014-05-16
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/jQuery源码阅读/" itemprop="url" rel="index">
+                    <span itemprop="name">jQuery源码阅读</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2014/05/16/jQueryRead/jQuery-read-06/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/16/jQueryRead/jQuery-read-06/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>还是拆解第一次jQuery.extend, 这次阅读json和xml相关的解析<br>除了这一波 , 工具函数里还有proxy,access,和ready没读<br>ready用到了jQuery的队列处理, 打算读完Deferred那块再拆解</p>
+<p>这对转换用正则比较多, 今天应该还有点儿时间, 打算补一补正则<br><a id="more"></a></p>
+<h2 id="1-parseXML"><a href="#1-parseXML" class="headerlink" title="1.parseXML"></a>1.parseXML</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//解析XML</span></div><div class="line">parseXML: <span class="function"><span class="keyword">function</span>(<span class="params"> data </span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> xml, tmp;</div><div class="line">    <span class="keyword">if</span> ( !data || <span class="keyword">typeof</span> data !== <span class="string">"string"</span> ) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="literal">null</span>;<span class="comment">//空返回null</span></div><div class="line">    &#125;</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        <span class="comment">//标准浏览器用window.DOMParser处理</span></div><div class="line">        <span class="keyword">if</span> ( <span class="built_in">window</span>.DOMParser ) &#123; </div><div class="line">            tmp = <span class="keyword">new</span> DOMParser();</div><div class="line">            <span class="comment">//原生的DOMParser.parseFromString</span></div><div class="line">            <span class="comment">//这必须用new出来的DOMParser,而且作用域也得是刚new出来的对象,用call就比较蛋疼了tmp.parseFromString.call(tmp,data,"text/xml")</span></div><div class="line">            xml = tmp.parseFromString( data , <span class="string">"text/xml"</span> );<span class="comment">//第二个参数类型貌似还能转别的</span></div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="comment">//低版本IE用ActiveXObject</span></div><div class="line">            xml = <span class="keyword">new</span> ActiveXObject( <span class="string">"Microsoft.XMLDOM"</span> );</div><div class="line">            xml.async = <span class="string">"false"</span>;</div><div class="line">            xml.loadXML( data );</div><div class="line">        &#125;</div><div class="line">    &#125; <span class="keyword">catch</span>( e ) &#123;</div><div class="line">        <span class="comment">//chrome里,解析出错也xml也会是一个document,里边是个&lt;a&gt;出错内容&lt;/a&gt;</span></div><div class="line">        xml = <span class="literal">undefined</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//出错抛一个异常Invalid XML+传参, 兼容处理DOMParser和ActiveXObject</span></div><div class="line">    <span class="keyword">if</span> ( !xml || !xml.documentElement || xml.getElementsByTagName( <span class="string">"parsererror"</span> ).length ) &#123;</div><div class="line">        jQuery.error( <span class="string">"Invalid XML: "</span> + data );</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> xml;</div><div class="line">&#125;,</div></pre></td></tr></table></figure>
+<h2 id="2-parseJSON"><a href="#2-parseJSON" class="headerlink" title="2.parseJSON"></a>2.parseJSON</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * 博文作者:ruantao1989@gmail.com</div><div class="line"> * 引自博客:ruantao.duapp.com/blog</div><div class="line"> */</div><div class="line"><span class="comment">// JSON RegExp</span></div><div class="line">rvalidchars = <span class="regexp">/^[\],:&#123;&#125;\s]*$/</span>,<span class="comment">//这个正则只能看懂一点...</span></div><div class="line">rvalidbraces = <span class="regexp">/(?:^|:|,)(?:\s*\[)+/g</span>,</div><div class="line">rvalidescape = <span class="regexp">/\\(?:["\\\/bfnrt]|u[\da-fA-F]&#123;4&#125;)/g</span>,</div><div class="line">rvalidtokens = <span class="regexp">/"[^"\\\r\n]*"|true|false|null|-?(?:\d\d*\.|)\d+(?:[eE][\-+]?\d+|)/g</span>,</div><div class="line"><span class="comment">//==&gt;源码504行</span></div><div class="line">parseJSON: <span class="function"><span class="keyword">function</span>(<span class="params"> data </span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> ( !data || <span class="keyword">typeof</span> data !== <span class="string">"string"</span>) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="comment">//官方注释:IE处理不了空格</span></div><div class="line">    data = jQuery.trim( data );</div><div class="line"> </div><div class="line">    <span class="comment">//标准浏览器调用JSON.parse</span></div><div class="line">    <span class="keyword">if</span> ( <span class="built_in">window</span>.JSON &amp;&amp; <span class="built_in">window</span>.JSON.parse ) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="built_in">window</span>.JSON.parse( data );</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="comment">//用上述4个正则校验是不是正确的json</span></div><div class="line">    <span class="keyword">if</span> ( rvalidchars.test( data.replace( rvalidescape, <span class="string">"@"</span> )</div><div class="line">        .replace( rvalidtokens, <span class="string">"]"</span> )</div><div class="line">        .replace( rvalidbraces, <span class="string">""</span>)) ) &#123;</div><div class="line"> </div><div class="line">        <span class="comment">//json格式校验通过</span></div><div class="line">        <span class="comment">//new Function是用字串创建一个匿名函数, 内容就是return "JSON",并且立即执行</span></div><div class="line">        <span class="comment">//这样就挺巧妙的用字面量生成了一个Object, 避免用eval()了</span></div><div class="line">        <span class="keyword">return</span> ( <span class="keyword">new</span> <span class="built_in">Function</span>( <span class="string">"return "</span> + data ) )();</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="comment">//到这证明json校验没通过, 或是转换出错</span></div><div class="line">    <span class="comment">//统一抛个异常</span></div><div class="line">    jQuery.error( <span class="string">"Invalid JSON: "</span> + data );</div><div class="line">&#125;,</div></pre></td></tr></table></figure>
+<h2 id="3-globalEval"><a href="#3-globalEval" class="headerlink" title="3.globalEval"></a>3.globalEval</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//匹配非空白符的正则, 这个能看懂 哈</span></div><div class="line">core_rnotwhite = <span class="regexp">/\S/</span>,</div><div class="line"><span class="comment">//在全局作用域里执行js代码, </span></div><div class="line"><span class="comment">//这个源代码中选择器用了一次, 动态加载用了一次, 不太明白什么场景会有用</span></div><div class="line">globalEval: <span class="function"><span class="keyword">function</span>(<span class="params"> data </span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> ( data &amp;&amp; core_rnotwhite.test( data ) ) &#123;</div><div class="line">        <span class="comment">//支持window.execScript的用(window.execScript)(data)</span></div><div class="line">        <span class="comment">//不支持的window[ "eval" ].call( window, data );</span></div><div class="line">        <span class="comment">//这个写法很简洁,也易读</span></div><div class="line">        <span class="comment">//关于window[ "eval" ]这个写法应该是游浏览器兼容问题</span></div><div class="line">        ( <span class="built_in">window</span>.execScript || <span class="function"><span class="keyword">function</span>(<span class="params"> data </span>) </span>&#123;</div><div class="line">            <span class="built_in">window</span>[ <span class="string">"eval"</span> ].call( <span class="built_in">window</span>, data );</div><div class="line">        &#125; )( data );</div><div class="line">    &#125;</div><div class="line">&#125;,</div></pre></td></tr></table></figure>
+<h2 id="4-parseHTML"><a href="#4-parseHTML" class="headerlink" title="4.parseHTML"></a>4.parseHTML</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//html标签正则: 以&lt;开头 跟至少一个文字 跟若干空格 ,后边语法看不懂了...,正则的细节以后单开个文章学吧</span></div><div class="line">rsingleTag = <span class="regexp">/^&lt;(\w+)\s*\/?&gt;(?:&lt;\/\1&gt;|)$/</span>,</div><div class="line"><span class="comment">//把传入的html字串解析成数组, 只有选择器里用了一次</span></div><div class="line">parseHTML: <span class="function"><span class="keyword">function</span>(<span class="params"> data, context, scripts </span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> parsed;</div><div class="line">    <span class="keyword">if</span> ( !data || <span class="keyword">typeof</span> data !== <span class="string">"string"</span> ) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> ( <span class="keyword">typeof</span> context === <span class="string">"boolean"</span> ) &#123;<span class="comment">//上下文如果是布尔型</span></div><div class="line">        scripts = context;</div><div class="line">        context = <span class="number">0</span>;</div><div class="line">    &#125;</div><div class="line">    context = context || <span class="built_in">document</span>;<span class="comment">//上下文默认是document</span></div><div class="line"> </div><div class="line">    <span class="comment">//parsed是正则生成的html标签数组</span></div><div class="line">    <span class="keyword">if</span> ( (parsed = rsingleTag.exec( data )) ) &#123;</div><div class="line">        <span class="keyword">return</span> [ context.createElement( parsed[<span class="number">1</span>] ) ];<span class="comment">//createElement创建标签</span></div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="comment">//生成选择器所需的数组,并合并</span></div><div class="line">    parsed = jQuery.buildFragment( [ data ], context, scripts ? <span class="literal">null</span> : [] );</div><div class="line">    <span class="keyword">return</span> jQuery.merge( [],</div><div class="line">        (parsed.cacheable ? jQuery.clone( parsed.fragment ) : parsed.fragment).childNodes );</div><div class="line">&#125;,</div></pre></td></tr></table></figure>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014/05/16/jQueryRead/jQuery-read-05-2/" rel="next" title="jQuery源码阅读5-2:字串数组工具2">
+                <i class="fa fa-chevron-left"></i> jQuery源码阅读5-2:字串数组工具2
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/05/17/js/regex-start/" rel="prev" title="正则入门">
+                正则入门 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2014/05/16/jQueryRead/jQuery-read-06/"
+           data-title="jQuery源码阅读6:xml和json解析" data-url="http://ruantao1989.github.io/2014/05/16/jQueryRead/jQuery-read-06/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars2.githubusercontent.com/u/1949437?v=3&s=460"
+               alt="ruantao1989" />
+          <p class="site-author-name" itemprop="name">ruantao1989</p>
+          <p class="site-description motion-element" itemprop="description">思行合一</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-parseXML"><span class="nav-number">1.</span> <span class="nav-text">1.parseXML</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-parseJSON"><span class="nav-number">2.</span> <span class="nav-text">2.parseJSON</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-globalEval"><span class="nav-number">3.</span> <span class="nav-text">3.globalEval</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-parseHTML"><span class="nav-number">4.</span> <span class="nav-text">4.parseHTML</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ruantao1989</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"ruantao1989"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
