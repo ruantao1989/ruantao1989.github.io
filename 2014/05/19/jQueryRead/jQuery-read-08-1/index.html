@@ -1,0 +1,642 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="ruantao1989" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="属性操作是比较独立的一块,这次说下prop相关的, 和属性必须用的access 下次说更麻烦一点的attr,val 还有css相关的
+以prop的一次操作为例, 调用顺序是: fn.prop -&amp;gt; access -&amp;gt; jQuery.prop">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jQuery源码阅读8-1:属性操作prop()和access()">
+<meta property="og:url" content="http://ruantao1989.github.io/2014/05/19/jQueryRead/jQuery-read-08-1/index.html">
+<meta property="og:site_name" content="ruantao1989">
+<meta property="og:description" content="属性操作是比较独立的一块,这次说下prop相关的, 和属性必须用的access 下次说更麻烦一点的attr,val 还有css相关的
+以prop的一次操作为例, 调用顺序是: fn.prop -&amp;gt; access -&amp;gt; jQuery.prop">
+<meta property="og:updated_time" content="2016-07-14T06:05:23.952Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="jQuery源码阅读8-1:属性操作prop()和access()">
+<meta name="twitter:description" content="属性操作是比较独立的一块,这次说下prop相关的, 和属性必须用的access 下次说更麻烦一点的attr,val 还有css相关的
+以prop的一次操作为例, 调用顺序是: fn.prop -&amp;gt; access -&amp;gt; jQuery.prop">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://ruantao1989.github.io/2014/05/19/jQueryRead/jQuery-read-08-1/"/>
+
+  <title> jQuery源码阅读8-1:属性操作prop()和access() | ruantao1989 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">ruantao1989</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                jQuery源码阅读8-1:属性操作prop()和access()
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2014-05-19T22:39:00+08:00" content="2014-05-19">
+              2014-05-19
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/jQuery源码阅读/" itemprop="url" rel="index">
+                    <span itemprop="name">jQuery源码阅读</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2014/05/19/jQueryRead/jQuery-read-08-1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/19/jQueryRead/jQuery-read-08-1/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>属性操作是比较独立的一块,<br>这次说下prop相关的, 和属性必须用的access 下次说更麻烦一点的attr,val 还有css相关的</p>
+<p>以prop的一次操作为例, 调用顺序是: fn.prop -&gt; access -&gt; jQuery.prop<br><a id="more"></a></p>
+<h2 id="一-用法"><a href="#一-用法" class="headerlink" title="一:用法"></a>一:用法</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * 博文作者:ruantao1989@gmail.com</div><div class="line"> * 引自博客:ruantao.duapp.com/blog</div><div class="line"> */</div><div class="line"><span class="comment">//==&gt;源码2014行</span></div><div class="line">prop: <span class="function"><span class="keyword">function</span>(<span class="params"> name, value </span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> jQuery.access( <span class="keyword">this</span>, jQuery.prop, name, value, <span class="built_in">arguments</span>.length &gt; <span class="number">1</span> );</div><div class="line">&#125;,</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//==&gt;源码2416行</span></div><div class="line">prop: <span class="function"><span class="keyword">function</span>(<span class="params"> elem, name, value </span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> ret, hooks, notxml,</div><div class="line">        nType = elem.nodeType;</div><div class="line"> </div><div class="line">    <span class="comment">//以下nodeType不操作</span></div><div class="line">    <span class="keyword">if</span> ( !elem || nType === <span class="number">3</span> || nType === <span class="number">8</span> || nType === <span class="number">2</span> ) &#123;</div><div class="line">        <span class="keyword">return</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//elem是选择出来的对象,不是xml</span></div><div class="line">    notxml = nType !== <span class="number">1</span> || !jQuery.isXMLDoc( elem );</div><div class="line"> </div><div class="line">    <span class="keyword">if</span> ( notxml ) &#123;</div><div class="line">        <span class="comment">//propFix对象中出现的键,需要修改成值, 不需修改的 还用name</span></div><div class="line">        name = jQuery.propFix[ name ] || name;</div><div class="line">        <span class="comment">//这的hook只对应"tabIndex"一个值, 针对tabIndex做了兼容处理</span></div><div class="line">        hooks = jQuery.propHooks[ name ];</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="comment">//有value就是要写入</span></div><div class="line">    <span class="keyword">if</span> ( value !== <span class="literal">undefined</span> ) &#123;</div><div class="line">        <span class="comment">//其实看源代码propHooks没set</span></div><div class="line">        <span class="keyword">if</span> ( hooks &amp;&amp; <span class="string">"set"</span> <span class="keyword">in</span> hooks &amp;&amp; (ret = hooks.set( elem, value, name )) !== <span class="literal">undefined</span> ) &#123;</div><div class="line">            <span class="keyword">return</span> ret;</div><div class="line"> </div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="comment">//dom对象修改属性值</span></div><div class="line">            <span class="keyword">return</span> ( elem[ name ] = value );</div><div class="line">        &#125;</div><div class="line">    <span class="comment">//没value,读取</span></div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="comment">//如果之前生成钩子,钩子里又有get可用,且钩子运行完有结果, 则返回结果</span></div><div class="line">        <span class="keyword">if</span> ( hooks &amp;&amp; <span class="string">"get"</span> <span class="keyword">in</span> hooks &amp;&amp; (ret = hooks.get( elem, name )) !== <span class="literal">null</span> ) &#123;</div><div class="line">            <span class="keyword">return</span> ret;</div><div class="line"> </div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="comment">//dom对象读取属性值</span></div><div class="line">            <span class="keyword">return</span> elem[ name ];</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;,</div></pre></td></tr></table></figure>
+<p>负责在中间层调度的access最后再说, 这中间要经过几个判断<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//==&gt;源码4020行, 选择器中的isXML判断</span></div><div class="line">isXML = Sizzle.isXML = <span class="function"><span class="keyword">function</span>(<span class="params"> elem </span>) </span>&#123;</div><div class="line">    <span class="comment">// documentElement is verified for cases where it doesn't yet exist</span></div><div class="line">    <span class="comment">//如果elem为某个元素,并且有document超父级对象,如果没有,就认为elem为document对象</span></div><div class="line">    <span class="keyword">var</span> documentElement = elem &amp;&amp; (elem.ownerDocument || elem).documentElement;</div><div class="line">    <span class="comment">//没有documentElement直接返回false</span></div><div class="line">    <span class="comment">//判断其node名称是否为html,是html返回false,不是返回true</span></div><div class="line">    <span class="keyword">return</span> documentElement ? documentElement.nodeName !== <span class="string">"HTML"</span> : <span class="literal">false</span>;</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<p>之后是prop的钩子(钩子的设计不赖, 一下吧所有特殊处理都抽象出来的)<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//propHooks只针对tabIndex做了兼容处理</span></div><div class="line"><span class="comment">//其余的属性都用不上这个钩子</span></div><div class="line">propHooks: &#123;</div><div class="line">    tabIndex: &#123;</div><div class="line">        get: <span class="function"><span class="keyword">function</span>(<span class="params"> elem </span>) </span>&#123;</div><div class="line">            <span class="keyword">var</span> attributeNode = elem.getAttributeNode(<span class="string">"tabindex"</span>);</div><div class="line">            <span class="comment">//对取出来的tabindex多特殊处理</span></div><div class="line">            <span class="keyword">return</span> attributeNode &amp;&amp; attributeNode.specified ?</div><div class="line">                <span class="built_in">parseInt</span>( attributeNode.value, <span class="number">10</span> ) :</div><div class="line">                rfocusable.test( elem.nodeName ) || rclickable.test( elem.nodeName ) &amp;&amp; elem.href ?</div><div class="line">                    <span class="number">0</span> :</div><div class="line">                    <span class="literal">undefined</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>最后说下access, 这个东西把所有属性相关的操作都统一接口了, 判断的情况巨多<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//==&gt;源码786行</span></div><div class="line"><span class="comment">//作为中间层调度各种读写</span></div><div class="line"><span class="comment">//拿attr来说这样调用: jQuery.access( this, jQuery.attr, name, value, arguments.length &gt; 1 );</span></div><div class="line">access: <span class="function"><span class="keyword">function</span>(<span class="params"> elems, fn, key, value, chainable, emptyGet, pass </span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> exec,</div><div class="line">        bulk = key == <span class="literal">null</span>,<span class="comment">//bulk是判断(key == null),读取时候key等于属性id</span></div><div class="line">        i = <span class="number">0</span>,</div><div class="line">        length = elems.length;</div><div class="line"> </div><div class="line">    <span class="comment">//传入的key要是数组或者对象, 就遍历对象属性, 分别access</span></div><div class="line">    <span class="keyword">if</span> ( key &amp;&amp; <span class="keyword">typeof</span> key === <span class="string">"object"</span> ) &#123;</div><div class="line">        <span class="keyword">for</span> ( i <span class="keyword">in</span> key ) &#123;</div><div class="line">            jQuery.access( elems, fn, i, key[i], <span class="number">1</span>, emptyGet, value );</div><div class="line">        &#125;</div><div class="line">        chainable = <span class="number">1</span>;</div><div class="line"> </div><div class="line">    <span class="comment">//写入单一属性</span></div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> ( value !== <span class="literal">undefined</span> ) &#123;</div><div class="line">        <span class="comment">//value传入一个function, 且pass传值的时候, exec改为pass的传值</span></div><div class="line">        exec = pass === <span class="literal">undefined</span> &amp;&amp; jQuery.isFunction( value );</div><div class="line">        <span class="comment">//写入模式</span></div><div class="line">        <span class="keyword">if</span> ( bulk ) &#123;</div><div class="line">            <span class="comment">//仅在attr(function()&#123;&#125;,true)时用</span></div><div class="line">            <span class="keyword">if</span> ( exec ) &#123;</div><div class="line">                exec = fn;<span class="comment">//attr(function()&#123;&#125;,true)中的function</span></div><div class="line">                fn = <span class="function"><span class="keyword">function</span>(<span class="params"> elem, key, value </span>) </span>&#123;</div><div class="line">                    <span class="keyword">return</span> exec.call( jQuery( elem ), value );<span class="comment">//调call</span></div><div class="line">                &#125;;</div><div class="line"> </div><div class="line">            <span class="comment">//正常情况下的set</span></div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                <span class="comment">//fn一般就是jQuery.attr</span></div><div class="line">                fn.call( elems, value );</div><div class="line">                fn = <span class="literal">null</span>;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//如果elems是数组, 组装参数, 遍历调用fn</span></div><div class="line">        <span class="keyword">if</span> ( fn ) &#123;</div><div class="line">            <span class="keyword">for</span> (; i &lt; length; i++ ) &#123;</div><div class="line">                fn( elems[i], key, exec ? value.call( elems[i], i, fn( elems[i], key ) ) : value, pass );</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        chainable = <span class="number">1</span>;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="keyword">return</span> chainable ?</div><div class="line">        <span class="comment">//写入时chainable传值就true, 遍历后会改成1</span></div><div class="line">        <span class="comment">//chainable的值是arguments.length &gt; 1, 光传对象id就是读, 后边跟值就是写</span></div><div class="line">        elems :</div><div class="line">        <span class="comment">//读取模式</span></div><div class="line">        bulk ?</div><div class="line">            fn.call( elems ) :</div><div class="line">            <span class="comment">//没有elems 返回emptyGet(是undefined), 有elems调==&gt;源码2275的attr:</span></div><div class="line">            length ? fn( elems[<span class="number">0</span>], key ) : emptyGet;</div><div class="line">&#125;,</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014/05/18/jQueryRead/jQuery-read-07/" rel="next" title="jQuery源码阅读7:作用域代理proxy()">
+                <i class="fa fa-chevron-left"></i> jQuery源码阅读7:作用域代理proxy()
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/05/20/jQueryRead/jQuery-read-09/" rel="prev" title="jQuery源码阅读9:css操作">
+                jQuery源码阅读9:css操作 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2014/05/19/jQueryRead/jQuery-read-08-1/"
+           data-title="jQuery源码阅读8-1:属性操作prop()和access()" data-url="http://ruantao1989.github.io/2014/05/19/jQueryRead/jQuery-read-08-1/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars2.githubusercontent.com/u/1949437?v=3&s=460"
+               alt="ruantao1989" />
+          <p class="site-author-name" itemprop="name">ruantao1989</p>
+          <p class="site-description motion-element" itemprop="description">思行合一</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">21</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-用法"><span class="nav-number">1.</span> <span class="nav-text">一:用法</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ruantao1989</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"ruantao1989"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

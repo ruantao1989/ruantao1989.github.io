@@ -627,8 +627,8 @@
             
               
                 
-                <a class="post-title-link" href="/2014/05/17/js/regex-start/" itemprop="url">
-                  正则入门
+                <a class="post-title-link" href="/2014/05/20/jQueryRead/jQuery-read-08-2/" itemprop="url">
+                  jQuery源码阅读8-2:属性操作val(),removeAttr()
                 </a>
               
             
@@ -641,8 +641,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2014-05-17T22:12:00+08:00" content="2014-05-17">
-              2014-05-17
+            <time itemprop="dateCreated" datetime="2014-05-20T22:06:00+08:00" content="2014-05-20">
+              2014-05-20
             </time>
           </span>
 
@@ -655,8 +655,8 @@
               <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/js入门/" itemprop="url" rel="index">
-                    <span itemprop="name">js入门</span>
+                  <a href="/categories/jQuery源码阅读/" itemprop="url" rel="index">
+                    <span itemprop="name">jQuery源码阅读</span>
                   </a>
                 </span>
 
@@ -671,8 +671,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2014/05/17/js/regex-start/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/17/js/regex-start/" itemprop="commentsCount"></span>
+                <a href="/2014/05/20/jQueryRead/jQuery-read-08-2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/20/jQueryRead/jQuery-read-08-2/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -696,9 +696,10 @@
 
       
         
-          <p>就是按照教程学一下基本概念, 自己的理解很少 ,<br>看这架势正则一篇文章不够 还得再弄点儿文章学习学习稍微高级一点儿的…<br>
+          <p>属性操作是比较独立的一块,<br>这次说下prop相关的, 和属性必须用的access 下次说更麻烦一点的attr,val 还有css相关的</p>
+<p>以prop的一次操作为例, 调用顺序是: fn.prop -&gt; access -&gt; jQuery.prop<br>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2014/05/17/js/regex-start/#more" rel="contents">
+            <a class="btn" href="/2014/05/20/jQueryRead/jQuery-read-08-2/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -749,8 +750,8 @@
             
               
                 
-                <a class="post-title-link" href="/2014/05/16/jQueryRead/jQuery-read-06/" itemprop="url">
-                  jQuery源码阅读6:xml和json解析
+                <a class="post-title-link" href="/2014/05/20/jQueryRead/jQuery-read-09/" itemprop="url">
+                  jQuery源码阅读9:css操作
                 </a>
               
             
@@ -763,8 +764,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2014-05-16T14:52:00+08:00" content="2014-05-16">
-              2014-05-16
+            <time itemprop="dateCreated" datetime="2014-05-20T22:06:00+08:00" content="2014-05-20">
+              2014-05-20
             </time>
           </span>
 
@@ -793,8 +794,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2014/05/16/jQueryRead/jQuery-read-06/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/16/jQueryRead/jQuery-read-06/" itemprop="commentsCount"></span>
+                <a href="/2014/05/20/jQueryRead/jQuery-read-09/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/20/jQueryRead/jQuery-read-09/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -818,10 +819,9 @@
 
       
         
-          <p>还是拆解第一次jQuery.extend, 这次阅读json和xml相关的解析<br>除了这一波 , 工具函数里还有proxy,access,和ready没读<br>ready用到了jQuery的队列处理, 打算读完Deferred那块再拆解</p>
-<p>这对转换用正则比较多, 今天应该还有点儿时间, 打算补一补正则<br>
+          <p>css操作是一大块, 核心操作里有关兼容性的问题太多太杂<br>先记下来以后一个一个看吧<br>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2014/05/16/jQueryRead/jQuery-read-06/#more" rel="contents">
+            <a class="btn" href="/2014/05/20/jQueryRead/jQuery-read-09/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -855,7 +855,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -896,7 +896,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-count">21</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>

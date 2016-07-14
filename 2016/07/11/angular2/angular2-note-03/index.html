@@ -86,16 +86,16 @@
 
 
 
-<meta name="description" content="每个组件就是@Component+class + html标签, 组件内部的交互 和 多个组件之间的通信都用了Angular2自己的语法满满都是套路啊 记录一下">
+<meta name="description" content="几个内置指令的用法, 不全 回头再补">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Angular2笔记3-多个组件">
+<meta property="og:title" content="Angular2笔记3-内置指令">
 <meta property="og:url" content="http://ruantao1989.github.io/2016/07/11/angular2/angular2-note-03/index.html">
 <meta property="og:site_name" content="ruantao1989">
-<meta property="og:description" content="每个组件就是@Component+class + html标签, 组件内部的交互 和 多个组件之间的通信都用了Angular2自己的语法满满都是套路啊 记录一下">
-<meta property="og:updated_time" content="2016-07-12T08:05:08.274Z">
+<meta property="og:description" content="几个内置指令的用法, 不全 回头再补">
+<meta property="og:updated_time" content="2016-07-14T05:59:47.288Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Angular2笔记3-多个组件">
-<meta name="twitter:description" content="每个组件就是@Component+class + html标签, 组件内部的交互 和 多个组件之间的通信都用了Angular2自己的语法满满都是套路啊 记录一下">
+<meta name="twitter:title" content="Angular2笔记3-内置指令">
+<meta name="twitter:description" content="几个内置指令的用法, 不全 回头再补">
 
 
 
@@ -118,7 +118,7 @@
 
   <link rel="canonical" href="http://ruantao1989.github.io/2016/07/11/angular2/angular2-note-03/"/>
 
-  <title> Angular2笔记3-多个组件 | ruantao1989 </title>
+  <title> Angular2笔记3-内置指令 | ruantao1989 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="en">
@@ -258,7 +258,7 @@
             
             
               
-                Angular2笔记3-多个组件
+                Angular2笔记3-内置指令
               
             
           </h1>
@@ -270,7 +270,7 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-07-11T16:00:00+08:00" content="2016-07-11">
+            <time itemprop="dateCreated" datetime="2016-07-11T16:30:00+08:00" content="2016-07-11">
               2016-07-11
             </time>
           </span>
@@ -324,9 +324,14 @@
       
 
       
-        <p>每个组件就是@Component+class + html标签, 组件内部的交互 和 多个组件之间的通信都用了Angular2自己的语法<br>满满都是套路啊 记录一下<br> <a id="more"></a></p>
-<h2 id="UI交互"><a href="#UI交互" class="headerlink" title="UI交互"></a>UI交互</h2><p>用#newtitle保持引用, (click)=”fun()”绑定事件<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//&lt;input name="title" #newtitle&gt;用#newtitle声明引用</span></div><div class="line"><span class="comment">//&lt;button (click)="addArticle(newtitle, newlink)" 事件相应传参</span></div><div class="line">@Component(&#123;</div><div class="line">  selector: <span class="string">'reddit'</span>,</div><div class="line">  template: <span class="string">`</span></div><div class="line">    &lt;form class="ui large form segment"&gt;</div><div class="line">      &lt;h3 class="ui header"&gt;Add a Link&lt;/h3&gt;</div><div class="line">      &lt;div class="field"&gt;</div><div class="line">        &lt;label for="title"&gt;Title:&lt;/label&gt;</div><div class="line">        &lt;input name="title" #newtitle&gt;</div><div class="line">      &lt;/div&gt;</div><div class="line">      &lt;div class="field"&gt;</div><div class="line">        &lt;label for="link"&gt;Link:&lt;/label&gt;</div><div class="line">        &lt;input name="link" #newlink&gt;</div><div class="line">      &lt;/div&gt;</div><div class="line"></div><div class="line">      &lt;button (click)="addArticle(newtitle, newlink)" class="ui positive right floated button"&gt;</div><div class="line">        Submit link</div><div class="line">      &lt;/button&gt;</div><div class="line">    &lt;/form&gt; `</div><div class="line">&#125;)</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">RedditApp</span> </span>&#123;</div><div class="line">  <span class="keyword">constructor</span>() &#123;&#125;</div><div class="line">  <span class="comment">//相应事件, 类型是HTMLInputElement, 取值靠.value</span></div><div class="line">  addArticle(title: HTMLInputElement, link: HTMLInputElement): <span class="keyword">void</span> &#123; </div><div class="line">    <span class="built_in">console</span>.log(<span class="string">`Adding article title: <span class="subst">$&#123;title.value&#125;</span> and link: <span class="subst">$&#123;link.value&#125;</span>`</span>);</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">bootstrap(RedditApp);</div></pre></td></tr></table></figure></p>
-<h2 id="多个组件"><a href="#多个组件" class="headerlink" title="多个组件"></a>多个组件</h2><p>RedditApp是最顶级的组件, ArticleComponent是他的子组件<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div></pre></td><td class="code"><pre><div class="line">//同一页面的第二个组件</div><div class="line">@Component(&#123;</div><div class="line">    selector: 'reddit-article',</div><div class="line">    host: &#123;</div><div class="line">        class: 'row'//相当于在html里写 class="roe"</div><div class="line">    &#125;,</div><div class="line">    template: `</div><div class="line">    &lt;div class="four wide column center aligned votes"&gt;</div><div class="line">      &lt;div class="ui statistic"&gt;</div><div class="line">          &lt;div class="value"&gt; &#123;&#123; votes &#125;&#125;&lt;/div&gt;</div><div class="line">          &lt;div class="label"&gt;Points&lt;/div&gt;</div><div class="line">      &lt;/div&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line"></div><div class="line">    &lt;div class="twelve wide column"&gt;</div><div class="line">        &lt;a class="ui large header" href="&#123;&#123; link &#125;&#125;"&gt; &#123;&#123; title &#125;&#125;&lt;/a&gt;</div><div class="line">        &lt;ul class="ui big horizontal list voters"&gt;</div><div class="line">            &lt;li class="item"&gt;</div><div class="line">                &lt;a href (click)="voteUp()"&gt;</div><div class="line">                    &lt;i class="arrow up icon"&gt;&lt;/i&gt; upvote</div><div class="line">                &lt;/a&gt;</div><div class="line">            &lt;/li&gt;</div><div class="line">            &lt;li class="item"&gt;</div><div class="line">                &lt;a href (click)="voteDown()"&gt;</div><div class="line">                    &lt;i class="arrow down icon"&gt;&lt;/i&gt;</div><div class="line">                    downvote</div><div class="line">                &lt;/a&gt;</div><div class="line">            &lt;/li&gt;</div><div class="line">        &lt;/ul&gt;</div><div class="line">    &lt;/div&gt;`</div><div class="line">&#125;)</div><div class="line">class ArticleComponent &#123;</div><div class="line">    votes:number;//对应组件里的变量&#123;&#123; votes &#125;&#125;</div><div class="line">    title:string;</div><div class="line">    link:string;</div><div class="line"></div><div class="line">    constructor() &#123;</div><div class="line">        this.votes = 10;</div><div class="line">        this.title = 'Angular 2';</div><div class="line">        this.link = 'http://angular.io';</div><div class="line">    &#125;</div><div class="line">    voteUp() &#123;</div><div class="line">        this.votes += 1;</div><div class="line">        return false;//阻止默认行为(因为是在&lt;a&gt;里)</div><div class="line">    &#125;</div><div class="line">    voteDown() &#123;</div><div class="line">        this.votes -= 1;</div><div class="line">        return false;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">//并没有自己去渲染, 而是靠其他@Component的directives参数(要先于其他组件声明)</div><div class="line">////////////////////////////////////////////////////////////////</div><div class="line">//directives里的其他组件要先于此组件声明, 不然就是undefined</div><div class="line">@Component(&#123;</div><div class="line">  selector: 'reddit',</div><div class="line">  directives: [ArticleComponent],//模版末尾集成另一个组件&lt;reddit-article&gt;, 对应类ArticleComponent</div><div class="line">  template: `</div><div class="line">    &lt;form&gt;...&lt;/form&gt; </div><div class="line">    </div><div class="line">    &lt;div class="ui grid posts"&gt;</div><div class="line">      &lt;reddit-article&gt;&lt;/reddit-article&gt;</div><div class="line">    &lt;/div&gt;`</div><div class="line">&#125;)</div><div class="line">class RedditApp &#123;</div><div class="line">  //...</div><div class="line">&#125;</div><div class="line">bootstrap(RedditApp);</div></pre></td></tr></table></figure></p>
+        <p>几个内置指令的用法, 不全 回头再补<br> <a id="more"></a></p>
+<h2 id="ngIf"><a href="#ngIf" class="headerlink" title="ngIf"></a>ngIf</h2><p>如果表达式结果是false的话，该元素将不会渲染DOM。<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> *<span class="attr">ngIf</span>=<span class="string">"false"</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<h2 id="ngSwtichWhen-ngSwitchDefault"><a href="#ngSwtichWhen-ngSwitchDefault" class="headerlink" title="ngSwtichWhen ngSwitchDefault"></a>ngSwtichWhen ngSwitchDefault</h2><p>相当于switch语句, 不限于只匹配一个。例如,在上面的示例中choice是2时,第二和第五li将渲染。<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"ui raised segment"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">ul</span> [<span class="attr">ngSwitch</span>]=<span class="string">"choice"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span> *<span class="attr">ngSwitchWhen</span>=<span class="string">"1"</span>&gt;</span>First choice<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span> *<span class="attr">ngSwitchWhen</span>=<span class="string">"2"</span>&gt;</span>Second choice<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span> *<span class="attr">ngSwitchWhen</span>=<span class="string">"3"</span>&gt;</span>Third choice<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span> *<span class="attr">ngSwitchWhen</span>=<span class="string">"4"</span>&gt;</span>Fourth choice<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span> *<span class="attr">ngSwitchWhen</span>=<span class="string">"2"</span>&gt;</span>Second choice, again<span class="tag">&lt;/<span class="name">li</span>&gt;</span> </div><div class="line">        <span class="tag">&lt;<span class="name">li</span> *<span class="attr">ngSwitchDefault</span>&gt;</span>Default choice<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">ul</span>&gt;</span> </div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<h2 id="ngStyle"><a href="#ngStyle" class="headerlink" title="ngStyle"></a>ngStyle</h2><p>为DOM元素设置一个CSS属性<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> [<span class="attr">ngStyle</span>]=<span class="string">"&#123;color: 'white', 'background-color': 'blue'&#125;"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">name</span>=<span class="string">"fontSize"</span> <span class="attr">value</span>=<span class="string">"&#123;&#123;fontSize&#125;&#125;"</span> #<span class="attr">fontinput</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">span</span> [<span class="attr">ngStyle</span>]=<span class="string">"&#123;color: 'red'&#125;"</span> [<span class="attr">style.font-size.px</span>]=<span class="string">"fontSize"</span>&gt;</span>red text<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<h2 id="ngClass"><a href="#ngClass" class="headerlink" title="ngClass"></a>ngClass</h2><p>给DOM元素动态地设置和改变CSS类<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> [<span class="attr">ngClass</span>]=<span class="string">"&#123;bordered: false&#125;"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">div</span> [<span class="attr">ngClass</span>]=<span class="string">"['blue', 'round']"</span>&gt;</span> <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<h2 id="ngFor"><a href="#ngFor" class="headerlink" title="ngFor"></a>ngFor</h2><p>语法是<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">*ngFor=<span class="string">"#item of items"</span></div></pre></td></tr></table></figure></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">this.people = [</div><div class="line">    &#123; name: 'Anderson', age: 35, city: 'Sao Paulo' &#125;,</div><div class="line">    &#123; name: 'John', age: 12, city: 'Miami' &#125;,</div><div class="line">    &#123; name: 'Peter', age: 22, city: 'New York' &#125;</div><div class="line">];</div><div class="line"><span class="tag">&lt;<span class="name">tr</span> *<span class="attr">ngFor</span>=<span class="string">"#p of people; #num = index"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span>&#123;&#123; num+1 &#125;&#125; -- &#123;&#123; p.name &#125;&#125;<span class="tag">&lt;/<span class="name">td</span>&gt;</span> </div><div class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span>&#123;&#123; num+1 &#125;&#125; -- &#123;&#123; p.age &#125;&#125;<span class="tag">&lt;/<span class="name">td</span>&gt;</span> </div><div class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span>&#123;&#123; num+1 &#125;&#125; -- &#123;&#123; p.city &#125;&#125;<span class="tag">&lt;/<span class="name">td</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">tr</span>&gt;</span></div></pre></td></tr></table></figure>
+<h2 id="NgNonBindable"><a href="#NgNonBindable" class="headerlink" title="NgNonBindable"></a>NgNonBindable</h2><p>告诉angular不编译或绑定我们的页面的特定部分<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;span class="pre" ngNonBindable&gt;&lt;- This is what &#123;&#123; content &#125;&#125; rendered &lt;/span&gt;</div></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -352,16 +357,16 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/07/10/angular2/angular2-note-02/" rel="next" title="Angular2笔记2-helloWorld">
-                <i class="fa fa-chevron-left"></i> Angular2笔记2-helloWorld
+              <a href="/2016/07/11/angular2/angular2-note-02/" rel="next" title="Angular2笔记2-多个组件">
+                <i class="fa fa-chevron-left"></i> Angular2笔记2-多个组件
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/07/11/angular2/angular2-note-04/" rel="prev" title="Angular2笔记4-内置指令">
-                Angular2笔记4-内置指令 <i class="fa fa-chevron-right"></i>
+              <a href="/2016/07/12/angular2/angular2-note-04/" rel="prev" title="Angular2笔记4-Form验证">
+                Angular2笔记4-Form验证 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -389,7 +394,7 @@
   <div class="comments" id="comments">
     
       <div class="ds-thread" data-thread-key="2016/07/11/angular2/angular2-note-03/"
-           data-title="Angular2笔记3-多个组件" data-url="http://ruantao1989.github.io/2016/07/11/angular2/angular2-note-03/">
+           data-title="Angular2笔记3-内置指令" data-url="http://ruantao1989.github.io/2016/07/11/angular2/angular2-note-03/">
       </div>
     
   </div>
@@ -434,7 +439,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-count">21</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
@@ -480,7 +485,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#UI交互"><span class="nav-number">1.</span> <span class="nav-text">UI交互</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多个组件"><span class="nav-number">2.</span> <span class="nav-text">多个组件</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ngIf"><span class="nav-number">1.</span> <span class="nav-text">ngIf</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ngSwtichWhen-ngSwitchDefault"><span class="nav-number">2.</span> <span class="nav-text">ngSwtichWhen ngSwitchDefault</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ngStyle"><span class="nav-number">3.</span> <span class="nav-text">ngStyle</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ngClass"><span class="nav-number">4.</span> <span class="nav-text">ngClass</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ngFor"><span class="nav-number">5.</span> <span class="nav-text">ngFor</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NgNonBindable"><span class="nav-number">6.</span> <span class="nav-text">NgNonBindable</span></a></li></ol></div>
             
           </div>
         </section>

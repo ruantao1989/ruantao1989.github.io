@@ -86,16 +86,19 @@
 
 
 
-<meta name="description" content="几个内置指令的用法, 不全 回头再补">
+<meta name="description" content="学一下Angular2, 虽然不太喜欢(大概看了下 感觉限制太多, 貌似也没比原生好使多少…)
+Angular2自己的语法还是挺多的, 这篇弄了个最简单的hello world就得写不少东西…">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Angular2笔记4-内置指令">
-<meta property="og:url" content="http://ruantao1989.github.io/2016/07/11/angular2/angular2-note-04/index.html">
+<meta property="og:title" content="Angular2笔记1-helloWorld">
+<meta property="og:url" content="http://ruantao1989.github.io/2016/07/10/angular2/angular2-note-01/index.html">
 <meta property="og:site_name" content="ruantao1989">
-<meta property="og:description" content="几个内置指令的用法, 不全 回头再补">
-<meta property="og:updated_time" content="2016-07-12T08:05:13.624Z">
+<meta property="og:description" content="学一下Angular2, 虽然不太喜欢(大概看了下 感觉限制太多, 貌似也没比原生好使多少…)
+Angular2自己的语法还是挺多的, 这篇弄了个最简单的hello world就得写不少东西…">
+<meta property="og:updated_time" content="2016-07-14T05:59:28.882Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Angular2笔记4-内置指令">
-<meta name="twitter:description" content="几个内置指令的用法, 不全 回头再补">
+<meta name="twitter:title" content="Angular2笔记1-helloWorld">
+<meta name="twitter:description" content="学一下Angular2, 虽然不太喜欢(大概看了下 感觉限制太多, 貌似也没比原生好使多少…)
+Angular2自己的语法还是挺多的, 这篇弄了个最简单的hello world就得写不少东西…">
 
 
 
@@ -116,9 +119,9 @@
 
 
 
-  <link rel="canonical" href="http://ruantao1989.github.io/2016/07/11/angular2/angular2-note-04/"/>
+  <link rel="canonical" href="http://ruantao1989.github.io/2016/07/10/angular2/angular2-note-01/"/>
 
-  <title> Angular2笔记4-内置指令 | ruantao1989 </title>
+  <title> Angular2笔记1-helloWorld | ruantao1989 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="en">
@@ -258,7 +261,7 @@
             
             
               
-                Angular2笔记4-内置指令
+                Angular2笔记1-helloWorld
               
             
           </h1>
@@ -270,8 +273,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-07-11T16:30:00+08:00" content="2016-07-11">
-              2016-07-11
+            <time itemprop="dateCreated" datetime="2016-07-10T16:30:00+08:00" content="2016-07-10">
+              2016-07-10
             </time>
           </span>
 
@@ -300,8 +303,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/07/11/angular2/angular2-note-04/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/11/angular2/angular2-note-04/" itemprop="commentsCount"></span>
+                <a href="/2016/07/10/angular2/angular2-note-01/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/10/angular2/angular2-note-01/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -324,14 +327,15 @@
       
 
       
-        <p>几个内置指令的用法, 不全 回头再补<br> <a id="more"></a></p>
-<h2 id="ngIf"><a href="#ngIf" class="headerlink" title="ngIf"></a>ngIf</h2><p>如果表达式结果是false的话，该元素将不会渲染DOM。<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> *<span class="attr">ngIf</span>=<span class="string">"false"</span>&gt;</span></div></pre></td></tr></table></figure></p>
-<h2 id="ngSwtichWhen-ngSwitchDefault"><a href="#ngSwtichWhen-ngSwitchDefault" class="headerlink" title="ngSwtichWhen ngSwitchDefault"></a>ngSwtichWhen ngSwitchDefault</h2><p>相当于switch语句, 不限于只匹配一个。例如,在上面的示例中choice是2时,第二和第五li将渲染。<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"ui raised segment"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">ul</span> [<span class="attr">ngSwitch</span>]=<span class="string">"choice"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span> *<span class="attr">ngSwitchWhen</span>=<span class="string">"1"</span>&gt;</span>First choice<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span> *<span class="attr">ngSwitchWhen</span>=<span class="string">"2"</span>&gt;</span>Second choice<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span> *<span class="attr">ngSwitchWhen</span>=<span class="string">"3"</span>&gt;</span>Third choice<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span> *<span class="attr">ngSwitchWhen</span>=<span class="string">"4"</span>&gt;</span>Fourth choice<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span> *<span class="attr">ngSwitchWhen</span>=<span class="string">"2"</span>&gt;</span>Second choice, again<span class="tag">&lt;/<span class="name">li</span>&gt;</span> </div><div class="line">        <span class="tag">&lt;<span class="name">li</span> *<span class="attr">ngSwitchDefault</span>&gt;</span>Default choice<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">ul</span>&gt;</span> </div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure></p>
-<h2 id="ngStyle"><a href="#ngStyle" class="headerlink" title="ngStyle"></a>ngStyle</h2><p>为DOM元素设置一个CSS属性<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> [<span class="attr">ngStyle</span>]=<span class="string">"&#123;color: 'white', 'background-color': 'blue'&#125;"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">name</span>=<span class="string">"fontSize"</span> <span class="attr">value</span>=<span class="string">"&#123;&#123;fontSize&#125;&#125;"</span> #<span class="attr">fontinput</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">span</span> [<span class="attr">ngStyle</span>]=<span class="string">"&#123;color: 'red'&#125;"</span> [<span class="attr">style.font-size.px</span>]=<span class="string">"fontSize"</span>&gt;</span>red text<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div></pre></td></tr></table></figure></p>
-<h2 id="ngClass"><a href="#ngClass" class="headerlink" title="ngClass"></a>ngClass</h2><p>给DOM元素动态地设置和改变CSS类<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> [<span class="attr">ngClass</span>]=<span class="string">"&#123;bordered: false&#125;"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">div</span> [<span class="attr">ngClass</span>]=<span class="string">"['blue', 'round']"</span>&gt;</span> <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure></p>
-<h2 id="ngFor"><a href="#ngFor" class="headerlink" title="ngFor"></a>ngFor</h2><p>语法是<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">*ngFor=<span class="string">"#item of items"</span></div></pre></td></tr></table></figure></p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">this.people = [</div><div class="line">    &#123; name: 'Anderson', age: 35, city: 'Sao Paulo' &#125;,</div><div class="line">    &#123; name: 'John', age: 12, city: 'Miami' &#125;,</div><div class="line">    &#123; name: 'Peter', age: 22, city: 'New York' &#125;</div><div class="line">];</div><div class="line"><span class="tag">&lt;<span class="name">tr</span> *<span class="attr">ngFor</span>=<span class="string">"#p of people; #num = index"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span>&#123;&#123; num+1 &#125;&#125; -- &#123;&#123; p.name &#125;&#125;<span class="tag">&lt;/<span class="name">td</span>&gt;</span> </div><div class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span>&#123;&#123; num+1 &#125;&#125; -- &#123;&#123; p.age &#125;&#125;<span class="tag">&lt;/<span class="name">td</span>&gt;</span> </div><div class="line">    <span class="tag">&lt;<span class="name">td</span>&gt;</span>&#123;&#123; num+1 &#125;&#125; -- &#123;&#123; p.city &#125;&#125;<span class="tag">&lt;/<span class="name">td</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">tr</span>&gt;</span></div></pre></td></tr></table></figure>
-<h2 id="NgNonBindable"><a href="#NgNonBindable" class="headerlink" title="NgNonBindable"></a>NgNonBindable</h2><p>告诉angular不编译或绑定我们的页面的特定部分<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;span class="pre" ngNonBindable&gt;&lt;- This is what &#123;&#123; content &#125;&#125; rendered &lt;/span&gt;</div></pre></td></tr></table></figure></p>
+        <p>学一下Angular2, 虽然不太喜欢<br>(大概看了下 感觉限制太多, 貌似也没比原生好使多少…)</p>
+<p>Angular2自己的语法还是挺多的, 这篇弄了个最简单的hello world就得写不少东西…<br> <a id="more"></a></p>
+<h2 id="node命令"><a href="#node命令" class="headerlink" title="node命令"></a>node命令</h2><p>先记俩node的命令:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tsc --watch</div></pre></td></tr></table></figure></p>
+<p>按目录下的tsconfig.json配置 把.ts编译成.js<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm run go</div></pre></td></tr></table></figure></p>
+<p>启动一个server</p>
+<h2 id="html里"><a href="#html里" class="headerlink" title="html里"></a>html里</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></div><div class="line">    System.import(<span class="string">'app.js'</span>).then(<span class="literal">null</span>, <span class="built_in">console</span>.error.bind(<span class="built_in">console</span>));</div><div class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">hello-world</span>&gt;</span><span class="tag">&lt;/<span class="name">hello-world</span>&gt;</span></div></pre></td></tr></table></figure>
+<h2 id="app-js里"><a href="#app-js里" class="headerlink" title="app.js里"></a>app.js里</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//@Component注解会关联一个html组件</span></div><div class="line">@Component(&#123;</div><div class="line">  selector: <span class="string">'hello-world'</span>,<span class="comment">//按selector名比如去html里找名为&lt;hello-world&gt;的标签</span></div><div class="line">  template: <span class="string">`&lt;div&gt;Hello &#123;&#123; name &#125;&#125;&lt;/div&gt;`</span></div><div class="line">&#125;)</div><div class="line"><span class="comment">//每个Component注解带一个class</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">HelloWorldWithName</span> </span>&#123;</div><div class="line">  name: string;</div><div class="line">  <span class="keyword">constructor</span>() &#123;</div><div class="line">    <span class="keyword">this</span>.name = <span class="string">'Felipe'</span>;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">bootstrap(HelloWorldWithName);</div></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">hello-world-array</span>&gt;</span><span class="tag">&lt;/<span class="name">hello-world-array</span>&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//*ngFor是angular的指令</span></div><div class="line"><span class="comment">//#name of names 或是 let name of names 做循环</span></div><div class="line">@Component(&#123;</div><div class="line">  selector: <span class="string">'hello-world-array'</span>,</div><div class="line">  template: <span class="string">`</span></div><div class="line">  &lt;ul&gt;</div><div class="line">    &lt;li *ngFor="let #name of names"&gt;Hello &#123;&#123; name &#125;&#125;&lt;/li&gt;</div><div class="line">  &lt;/ul&gt;</div><div class="line">`</div><div class="line">&#125;)</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">HelloWorldWithNames</span> </span>&#123;</div><div class="line">  names: string[];</div><div class="line">  <span class="keyword">constructor</span>() &#123;</div><div class="line">    <span class="keyword">this</span>.names = [<span class="string">'Ari'</span>, <span class="string">'Carlos'</span>, <span class="string">'Felipe'</span>, <span class="string">'Nate'</span>];</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">bootstrap(HelloWorldWithNames);</div></pre></td></tr></table></figure>
 
       
     </div>
@@ -357,16 +361,16 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/07/11/angular2/angular2-note-03/" rel="next" title="Angular2笔记3-多个组件">
-                <i class="fa fa-chevron-left"></i> Angular2笔记3-多个组件
+              <a href="/2016/07/08/js/typescript-start/" rel="next" title="typeScript入门">
+                <i class="fa fa-chevron-left"></i> typeScript入门
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/07/12/angular2/angular2-note-05/" rel="prev" title="Angular2笔记5-Form验证">
-                Angular2笔记5-Form验证 <i class="fa fa-chevron-right"></i>
+              <a href="/2016/07/11/angular2/angular2-note-02/" rel="prev" title="Angular2笔记2-多个组件">
+                Angular2笔记2-多个组件 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -393,8 +397,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/07/11/angular2/angular2-note-04/"
-           data-title="Angular2笔记4-内置指令" data-url="http://ruantao1989.github.io/2016/07/11/angular2/angular2-note-04/">
+      <div class="ds-thread" data-thread-key="2016/07/10/angular2/angular2-note-01/"
+           data-title="Angular2笔记1-helloWorld" data-url="http://ruantao1989.github.io/2016/07/10/angular2/angular2-note-01/">
       </div>
     
   </div>
@@ -439,7 +443,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-count">21</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
@@ -485,7 +489,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ngIf"><span class="nav-number">1.</span> <span class="nav-text">ngIf</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ngSwtichWhen-ngSwitchDefault"><span class="nav-number">2.</span> <span class="nav-text">ngSwtichWhen ngSwitchDefault</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ngStyle"><span class="nav-number">3.</span> <span class="nav-text">ngStyle</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ngClass"><span class="nav-number">4.</span> <span class="nav-text">ngClass</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ngFor"><span class="nav-number">5.</span> <span class="nav-text">ngFor</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NgNonBindable"><span class="nav-number">6.</span> <span class="nav-text">NgNonBindable</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#node命令"><span class="nav-number">1.</span> <span class="nav-text">node命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#html里"><span class="nav-number">2.</span> <span class="nav-text">html里</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#app-js里"><span class="nav-number">3.</span> <span class="nav-text">app.js里</span></a></li></ol></div>
             
           </div>
         </section>

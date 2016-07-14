@@ -86,16 +86,15 @@
 
 
 
-<meta name="description" content="Angular2自己的语法还是挺多的, 这篇弄了个最简单的hello world就得写不少东西…">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Angular2笔记2-helloWorld">
-<meta property="og:url" content="http://ruantao1989.github.io/2016/07/10/angular2/angular2-note-02/index.html">
+<meta name="description" content="思行合一">
+<meta property="og:type" content="website">
+<meta property="og:title" content="ruantao1989">
+<meta property="og:url" content="http://ruantao1989.github.io/page/5/index.html">
 <meta property="og:site_name" content="ruantao1989">
-<meta property="og:description" content="Angular2自己的语法还是挺多的, 这篇弄了个最简单的hello world就得写不少东西…">
-<meta property="og:updated_time" content="2016-07-12T08:05:03.463Z">
+<meta property="og:description" content="思行合一">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Angular2笔记2-helloWorld">
-<meta name="twitter:description" content="Angular2自己的语法还是挺多的, 这篇弄了个最简单的hello world就得写不少东西…">
+<meta name="twitter:title" content="ruantao1989">
+<meta name="twitter:description" content="思行合一">
 
 
 
@@ -116,9 +115,9 @@
 
 
 
-  <link rel="canonical" href="http://ruantao1989.github.io/2016/07/10/angular2/angular2-note-02/"/>
+  <link rel="canonical" href="http://ruantao1989.github.io/page/5/"/>
 
-  <title> Angular2笔记2-helloWorld | ruantao1989 </title>
+  <title> ruantao1989 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="en">
@@ -139,7 +138,9 @@
     
   
 
-  <div class="container one-collumn sidebar-position-right page-post-detail ">
+  <div class="container one-collumn sidebar-position-right 
+   page-home 
+ ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -236,9 +237,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-
-  <div id="posts" class="posts-expand">
+  <section id="posts" class="posts-expand">
     
+      
 
   
   
@@ -258,7 +259,10 @@
             
             
               
-                Angular2笔记2-helloWorld
+                
+                <a class="post-title-link" href="/2014/05/06/jQueryRead/jQuery-read-01/" itemprop="url">
+                  jQuery源码阅读1:jQuery对象的生成
+                </a>
               
             
           </h1>
@@ -270,8 +274,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-07-10T16:30:00+08:00" content="2016-07-10">
-              2016-07-10
+            <time itemprop="dateCreated" datetime="2014-05-06T23:46:00+08:00" content="2014-05-06">
+              2014-05-06
             </time>
           </span>
 
@@ -284,8 +288,8 @@
               <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Angular2入门/" itemprop="url" rel="index">
-                    <span itemprop="name">Angular2入门</span>
+                  <a href="/categories/jQuery源码阅读/" itemprop="url" rel="index">
+                    <span itemprop="name">jQuery源码阅读</span>
                   </a>
                 </span>
 
@@ -300,8 +304,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/07/10/angular2/angular2-note-02/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/10/angular2/angular2-note-02/" itemprop="commentsCount"></span>
+                <a href="/2014/05/06/jQueryRead/jQuery-read-01/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/06/jQueryRead/jQuery-read-01/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -324,29 +328,22 @@
       
 
       
-        <p>Angular2自己的语法还是挺多的, 这篇弄了个最简单的hello world就得写不少东西…<br> <a id="more"></a></p>
-<h2 id="node命令"><a href="#node命令" class="headerlink" title="node命令"></a>node命令</h2><p>先记俩node的命令:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tsc --watch</div></pre></td></tr></table></figure></p>
-<p>按目录下的tsconfig.json配置 把.ts编译成.js<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm run go</div></pre></td></tr></table></figure></p>
-<p>启动一个server</p>
-<h2 id="html里"><a href="#html里" class="headerlink" title="html里"></a>html里</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></div><div class="line">    System.import(<span class="string">'app.js'</span>).then(<span class="literal">null</span>, <span class="built_in">console</span>.error.bind(<span class="built_in">console</span>));</div><div class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">hello-world</span>&gt;</span><span class="tag">&lt;/<span class="name">hello-world</span>&gt;</span></div></pre></td></tr></table></figure>
-<h2 id="app-js里"><a href="#app-js里" class="headerlink" title="app.js里"></a>app.js里</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//@Component注解会关联一个html组件</span></div><div class="line">@Component(&#123;</div><div class="line">  selector: <span class="string">'hello-world'</span>,<span class="comment">//按selector名比如去html里找名为&lt;hello-world&gt;的标签</span></div><div class="line">  template: <span class="string">`&lt;div&gt;Hello &#123;&#123; name &#125;&#125;&lt;/div&gt;`</span></div><div class="line">&#125;)</div><div class="line"><span class="comment">//每个Component注解带一个class</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">HelloWorldWithName</span> </span>&#123;</div><div class="line">  name: string;</div><div class="line">  <span class="keyword">constructor</span>() &#123;</div><div class="line">    <span class="keyword">this</span>.name = <span class="string">'Felipe'</span>;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">bootstrap(HelloWorldWithName);</div></pre></td></tr></table></figure>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">hello-world-array</span>&gt;</span><span class="tag">&lt;/<span class="name">hello-world-array</span>&gt;</span></div></pre></td></tr></table></figure>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//*ngFor是angular的指令</span></div><div class="line"><span class="comment">//#name of names 或是 let name of names 做循环</span></div><div class="line">@Component(&#123;</div><div class="line">  selector: <span class="string">'hello-world-array'</span>,</div><div class="line">  template: <span class="string">`</span></div><div class="line">  &lt;ul&gt;</div><div class="line">    &lt;li *ngFor="let #name of names"&gt;Hello &#123;&#123; name &#125;&#125;&lt;/li&gt;</div><div class="line">  &lt;/ul&gt;</div><div class="line">`</div><div class="line">&#125;)</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">HelloWorldWithNames</span> </span>&#123;</div><div class="line">  names: string[];</div><div class="line">  <span class="keyword">constructor</span>() &#123;</div><div class="line">    <span class="keyword">this</span>.names = [<span class="string">'Ari'</span>, <span class="string">'Carlos'</span>, <span class="string">'Felipe'</span>, <span class="string">'Nate'</span>];</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">bootstrap(HelloWorldWithNames);</div></pre></td></tr></table></figure>
-
+        
+          <p>最近比较忙, 不过还是想看看jQuery源码.<br>晚上大概翻了一下 好多看不懂的…<br>试着拆解一下 希望在博客里强制自己叙述出来 能稍微多看懂一点点.<br>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2014/05/06/jQueryRead/jQuery-read-01/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+        
       
     </div>
 
     <div>
       
-        
-
-      
     </div>
 
     <div>
-      
-        
-
       
     </div>
 
@@ -354,36 +351,23 @@
       
 
       
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2016/07/08/angular2/angular2-note-01/" rel="next" title="Angular2笔记1-typeScript">
-                <i class="fa fa-chevron-left"></i> Angular2笔记1-typeScript
-              </a>
-            
-          </div>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/07/11/angular2/angular2-note-03/" rel="prev" title="Angular2笔记3-多个组件">
-                Angular2笔记3-多个组件 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
 
       
+      
+        <div class="post-eof"></div>
       
     </footer>
   </article>
 
 
+    
+  </section>
 
-    <div class="post-spread">
-      
-    </div>
-  </div>
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span>
+  </nav>
+
 
 
           </div>
@@ -391,14 +375,6 @@
 
 
           
-  <div class="comments" id="comments">
-    
-      <div class="ds-thread" data-thread-key="2016/07/10/angular2/angular2-note-02/"
-           data-title="Angular2笔记2-helloWorld" data-url="http://ruantao1989.github.io/2016/07/10/angular2/angular2-note-02/">
-      </div>
-    
-  </div>
-
 
         </div>
         
@@ -418,17 +394,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            Table of Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            Overview
-          </li>
-        </ul>
-      
 
-      <section class="site-overview sidebar-panel ">
+      <section class="site-overview sidebar-panel  sidebar-panel-active ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="https://avatars2.githubusercontent.com/u/1949437?v=3&s=460"
@@ -439,7 +406,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-count">21</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
@@ -478,17 +445,6 @@
 
       </section>
 
-      
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-            
-              
-            
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#node命令"><span class="nav-number">1.</span> <span class="nav-text">node命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#html里"><span class="nav-number">2.</span> <span class="nav-text">html里</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#app-js里"><span class="nav-number">3.</span> <span class="nav-text">app.js里</span></a></li></ol></div>
-            
-          </div>
-        </section>
       
 
     </div>
@@ -585,10 +541,6 @@
   
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
-
-
 
   
 
