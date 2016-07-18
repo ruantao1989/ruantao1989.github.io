@@ -260,8 +260,8 @@
             
               
                 
-                <a class="post-title-link" href="/2014/05/19/jQueryRead/jQuery-read-08-1/" itemprop="url">
-                  jQuery源码阅读8-1:属性操作prop()和access()
+                <a class="post-title-link" href="/2014/06/01/jQueryRead/jQuery-read-13-3/" itemprop="url">
+                  jQuery源码阅读13-3:事件trigger流程
                 </a>
               
             
@@ -274,8 +274,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2014-05-19T22:39:00+08:00" content="2014-05-19">
-              2014-05-19
+            <time itemprop="dateCreated" datetime="2014-06-01T23:47:00+08:00" content="2014-06-01">
+              2014-06-01
             </time>
           </span>
 
@@ -304,8 +304,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2014/05/19/jQueryRead/jQuery-read-08-1/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/19/jQueryRead/jQuery-read-08-1/" itemprop="commentsCount"></span>
+                <a href="/2014/06/01/jQueryRead/jQuery-read-13-3/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/06/01/jQueryRead/jQuery-read-13-3/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -329,10 +329,10 @@
 
       
         
-          <p>属性操作是比较独立的一块,<br>这次说下prop相关的, 和属性必须用的access 下次说更麻烦一点的attr,val 还有css相关的</p>
-<p>以prop的一次操作为例, 调用顺序是: fn.prop -&gt; access -&gt; jQuery.prop<br>
+          <p>模拟触发的调用流程和之前基本一致: fn.trigger ==&gt; jQuery.event.trigger ==&gt; 缓存的jQ.Event队列</p>
+<p>最近工作比较烦, 碰上这么个自私的领导算是我三生有幸 对我来说绝对算得上是修炼. 都说机会是给有准备的人 我看还得加个前提: 要有合适的舞台.<br>我认栽, 但并不代表我会接受你们只会糊弄的习惯. 我的代码是给我自己写的 我不糊弄别人 更不糊弄自己. 我都25了 我可不想一辈子都只写这种垃圾代码.<br>想到&lt;中国合伙人&gt;里的一句台词(电影虽烂 但是这句台词我印象挺深)大概意思是: 没必要和有些人生气 她这样对你是因为她会永远留在这刷盘子 而你不一样, 你会飞的很远.<br>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2014/05/19/jQueryRead/jQuery-read-08-1/#more" rel="contents">
+            <a class="btn" href="/2014/06/01/jQueryRead/jQuery-read-13-3/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -383,8 +383,8 @@
             
               
                 
-                <a class="post-title-link" href="/2014/05/18/jQueryRead/jQuery-read-07/" itemprop="url">
-                  jQuery源码阅读7:作用域代理proxy()
+                <a class="post-title-link" href="/2014/05/31/jQueryRead/jQuery-read-13-2/" itemprop="url">
+                  jQuery源码阅读13-2:事件删除流程
                 </a>
               
             
@@ -397,8 +397,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2014-05-18T22:06:00+08:00" content="2014-05-18">
-              2014-05-18
+            <time itemprop="dateCreated" datetime="2014-05-31T18:14:00+08:00" content="2014-05-31">
+              2014-05-31
             </time>
           </span>
 
@@ -427,8 +427,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2014/05/18/jQueryRead/jQuery-read-07/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/18/jQueryRead/jQuery-read-07/" itemprop="commentsCount"></span>
+                <a href="/2014/05/31/jQueryRead/jQuery-read-13-2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/31/jQueryRead/jQuery-read-13-2/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -452,9 +452,11 @@
 
       
         
-          <p>jQuery里的proxy代理是: 函数在指定作用域中的执行的闭包<br>要是想限定函数的执行上下文, proxy就特别有用了<br>
+          <p>由于事件的绑定实际上是把对应的处理函数添加到cache中, 再addEventListener或attachEvent绑定jQuery.event.dispatch.apply( eventHandle.elem, arguments ).<br>所以删除就有两种情况 一是把目标事件从缓存的处理列表里删掉, 二是彻底解除绑定</p>
+<p>以click事件为例:<br>如果dom元素上有多个绑定好的click事件,<br>解除绑定有两种情况, 1是删掉缓存上事件队列里的其中一个,2是事件队列全都删完了 这时才需要removeEventListener或detachEvent</p>
+<p>调用过程还是fn.off ==&gt; jQuery.event.remove ==&gt; 第二种情况jQuery.removeEvent<br>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2014/05/18/jQueryRead/jQuery-read-07/#more" rel="contents">
+            <a class="btn" href="/2014/05/31/jQueryRead/jQuery-read-13-2/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -505,8 +507,8 @@
             
               
                 
-                <a class="post-title-link" href="/2014/05/17/js/regex-start/" itemprop="url">
-                  正则入门
+                <a class="post-title-link" href="/2014/05/31/jQueryRead/jQuery-read-13-1/" itemprop="url">
+                  jQuery源码阅读13-1:事件绑定流程
                 </a>
               
             
@@ -519,8 +521,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2014-05-17T22:12:00+08:00" content="2014-05-17">
-              2014-05-17
+            <time itemprop="dateCreated" datetime="2014-05-31T01:19:00+08:00" content="2014-05-31">
+              2014-05-31
             </time>
           </span>
 
@@ -533,8 +535,8 @@
               <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/js入门/" itemprop="url" rel="index">
-                    <span itemprop="name">js入门</span>
+                  <a href="/categories/jQuery源码阅读/" itemprop="url" rel="index">
+                    <span itemprop="name">jQuery源码阅读</span>
                   </a>
                 </span>
 
@@ -549,8 +551,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2014/05/17/js/regex-start/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/17/js/regex-start/" itemprop="commentsCount"></span>
+                <a href="/2014/05/31/jQueryRead/jQuery-read-13-1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/31/jQueryRead/jQuery-read-13-1/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -574,9 +576,10 @@
 
       
         
-          <p>就是按照教程学一下基本概念, 自己的理解很少 ,<br>看这架势正则一篇文章不够 还得再弄点儿文章学习学习稍微高级一点儿的…<br>
+          <p>Event这个摸块大概用了1千行, 占源代码的1/9, 我知道代码量挺大 但是没想到就看一个绑定过程(边跟边记)就得花五六个小时…挺好的周末夜晚就这样到凌晨1点了…<br>这篇按时间顺序 说说jQ事件绑定还有event对象fix的流程</p>
+<p>事件这块结构大概是这样:<br>1.外层: fn里有on,bind,live这些常用的接口<br>2.中间层: 上述接口会调用jQuery.event对象中的基础方法, 如add(). jQuery.event对象只是真正的执行者, 主要负责做(1)data缓存, (2)做兼容,  (3)最终生成jQuery.Event实例 (4)dispatch执行<br>3.内层: jQuery.Event实例包装原生事件对象, 记录扩展的data, 记录执行函数结果等<br>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2014/05/17/js/regex-start/#more" rel="contents">
+            <a class="btn" href="/2014/05/31/jQueryRead/jQuery-read-13-1/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -627,8 +630,8 @@
             
               
                 
-                <a class="post-title-link" href="/2014/05/16/jQueryRead/jQuery-read-06/" itemprop="url">
-                  jQuery源码阅读6:xml和json解析
+                <a class="post-title-link" href="/2014/05/24/jQueryRead/jQuery-read-12-2/" itemprop="url">
+                  jQuery源码阅读12-2:回调队列$.Deferred对象
                 </a>
               
             
@@ -641,8 +644,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2014-05-16T14:52:00+08:00" content="2014-05-16">
-              2014-05-16
+            <time itemprop="dateCreated" datetime="2014-05-24T13:39:00+08:00" content="2014-05-24">
+              2014-05-24
             </time>
           </span>
 
@@ -671,8 +674,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2014/05/16/jQueryRead/jQuery-read-06/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/16/jQueryRead/jQuery-read-06/" itemprop="commentsCount"></span>
+                <a href="/2014/05/24/jQueryRead/jQuery-read-12-2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/24/jQueryRead/jQuery-read-12-2/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -696,10 +699,10 @@
 
       
         
-          <p>还是拆解第一次jQuery.extend, 这次阅读json和xml相关的解析<br>除了这一波 , 工具函数里还有proxy,access,和ready没读<br>ready用到了jQuery的队列处理, 打算读完Deferred那块再拆解</p>
-<p>这对转换用正则比较多, 今天应该还有点儿时间, 打算补一补正则<br>
+          <p>Deferred这个东西我没看懂… 只看出他能干嘛了 连他实现的思路都没研究清楚…<br>后边很多模块的核心都是Deferred(比如Ajax)本应好好研究研究的, 不过时间有限, 先把读代码笔记发出来吧 回头再迭代</p>
+<p>deferred对象有三种执行状态:未完成，已完成和已失败.<br>如果执行状态是”已完成”（resolved）,deferred对象立刻调用done()方法指定的回调函数；如果执行状态是”已失败”，调用fail()方法指定的回调函数；如果执行状态是”未完成”，则继续等待，或者调用progress()方法指定的回调函数<br>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2014/05/16/jQueryRead/jQuery-read-06/#more" rel="contents">
+            <a class="btn" href="/2014/05/24/jQueryRead/jQuery-read-12-2/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -750,8 +753,8 @@
             
               
                 
-                <a class="post-title-link" href="/2014/05/16/jQueryRead/jQuery-read-05-2/" itemprop="url">
-                  jQuery源码阅读5-2:字串数组工具2
+                <a class="post-title-link" href="/2014/05/24/jQueryRead/jQuery-read-12-1/" itemprop="url">
+                  jQuery源码阅读12-1:回调队列$.Callback对象
                 </a>
               
             
@@ -764,8 +767,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2014-05-16T00:35:00+08:00" content="2014-05-16">
-              2014-05-16
+            <time itemprop="dateCreated" datetime="2014-05-24T13:39:00+08:00" content="2014-05-24">
+              2014-05-24
             </time>
           </span>
 
@@ -794,8 +797,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2014/05/16/jQueryRead/jQuery-read-05-2/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/16/jQueryRead/jQuery-read-05-2/" itemprop="commentsCount"></span>
+                <a href="/2014/05/24/jQueryRead/jQuery-read-12-1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/24/jQueryRead/jQuery-read-12-1/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -819,9 +822,9 @@
 
       
         
-          <p>剩这仨数组操作都稍微有点儿绕:<br>
+          <p>Deferred这个东西异常nb, 应该是jQuery中异步处理的核心<br>因为没有实现这种东西的经验, 所以不太好理解, 好多代码看不出目的性<br>有点儿操作系统里任务控制的感觉, 还得弄个状态机 三四种运行状态循环 管理运行状态什么的…<br>“回调队列”这个专题被迫拆成两部分吧, 先读简单的Callbacks队列<br>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2014/05/16/jQueryRead/jQuery-read-05-2/#more" rel="contents">
+            <a class="btn" href="/2014/05/24/jQueryRead/jQuery-read-12-1/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -855,7 +858,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -896,7 +899,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">21</span>
+              <span class="site-state-item-count">30</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>

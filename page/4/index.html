@@ -260,8 +260,8 @@
             
               
                 
-                <a class="post-title-link" href="/2014/05/14/jQueryRead/jQuery-read-05-1/" itemprop="url">
-                  jQuery源码阅读5-1:字串数组工具1
+                <a class="post-title-link" href="/2014/05/24/jQueryRead/jQuery-read-11/" itemprop="url">
+                  jQuery源码阅读11:数据缓存data()
                 </a>
               
             
@@ -274,8 +274,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2014-05-14T21:00:00+08:00" content="2014-05-14">
-              2014-05-14
+            <time itemprop="dateCreated" datetime="2014-05-24T12:39:00+08:00" content="2014-05-24">
+              2014-05-24
             </time>
           </span>
 
@@ -304,8 +304,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2014/05/14/jQueryRead/jQuery-read-05-1/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/14/jQueryRead/jQuery-read-05-1/" itemprop="commentsCount"></span>
+                <a href="/2014/05/24/jQueryRead/jQuery-read-11/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/24/jQueryRead/jQuery-read-11/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -329,9 +329,12 @@
 
       
         
-          <p>第一次jQuery.extend中, 有不少工具函数,<br>这次拆解一下字符串操作 和 头几个数组操作<br>
+          <p>读event之前, 核心方法里还有data和queue没读,先把基础方法里的障碍扫清吧</p>
+<p>1:data可以把目标数据绑定在dom元素上,或者js对象里<br>  (1).对于dom元素: 程序生成一个uuid关联数据和缓存, 把id写进对象, 把要缓存的数据缓存在jQuery.cache对象里<br>  (2).对于js对象:直接在此对象中增加一个名为jQuery/\d+/的对象, 把要缓存的数据放入此对象<br>2:缓存机制自身也用data缓存数据,提高效率</p>
+<p>这点儿代码看了好几个小时才看明白, 读懂之后发现其实缓存机制道理不复杂 就是流程太多太绕<br>总感觉对js对象缓存的处理是后加进来的, 做了一大堆追加判断 原有逻辑一下就复杂了<br>要是我写 有可能写两套逻辑单独处理, 但是那样维护又比较麻烦</p>
+<p>所以有感而发:再nb的人写傻大全的代码也避免不了臃肿…<br>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2014/05/14/jQueryRead/jQuery-read-05-1/#more" rel="contents">
+            <a class="btn" href="/2014/05/24/jQueryRead/jQuery-read-11/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -382,8 +385,8 @@
             
               
                 
-                <a class="post-title-link" href="/2014/05/13/jQueryRead/jQuery-read-04-2/" itemprop="url">
-                  jQuery源码阅读4-2:类型判断isPlainObject()方法
+                <a class="post-title-link" href="/2014/05/22/jQueryRead/jQuery-read-10/" itemprop="url">
+                  jQuery源码阅读10:浏览器检测support()
                 </a>
               
             
@@ -396,8 +399,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2014-05-13T23:00:00+08:00" content="2014-05-13">
-              2014-05-13
+            <time itemprop="dateCreated" datetime="2014-05-22T22:46:00+08:00" content="2014-05-22">
+              2014-05-22
             </time>
           </span>
 
@@ -426,8 +429,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2014/05/13/jQueryRead/jQuery-read-04-2/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/13/jQueryRead/jQuery-read-04-2/" itemprop="commentsCount"></span>
+                <a href="/2014/05/22/jQueryRead/jQuery-read-10/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/22/jQueryRead/jQuery-read-10/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -451,10 +454,9 @@
 
       
         
-          <p>isPlainObject这个方法比较深, 因为对象的组合方式太灵活了 , 原型链我理解也不到位(下篇博文一定得学习一下), 兼容性有关的东西又太多了, 而且”纯对象”这东西太抽象<br>这篇博客里存疑比较多 , 先把能看懂的星系简单记一下, 以后返工是肯定的了… </p>
-<p>从这个函数学到好些东西:<br>1.DOMObj.nodeType : Dom对象才有这个属性(IE低版本里没有), 比如说body是1<br>2.for in 遍历的顺序 : 结论是先遍历父类属性, 后遍历子类属性<br>3.hasOwnProperty只查询实例的属性, isPrototypeOf会查询原型链上constructor的指向(可以查询多层)<br>
+          <p>suppor()t用html和css操作来验证浏览器特性,而不是直接查userAgent<br>里边提到的好些问题我都不知道, 这篇文章也就是个摘抄, 最多算个翻译…<br>粘一遍注释学习一下吧<br>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2014/05/13/jQueryRead/jQuery-read-04-2/#more" rel="contents">
+            <a class="btn" href="/2014/05/22/jQueryRead/jQuery-read-10/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -505,8 +507,8 @@
             
               
                 
-                <a class="post-title-link" href="/2014/05/12/jQueryRead/jQuery-read-04-1/" itemprop="url">
-                  jQuery源码阅读4-1:类型判断 type()方法
+                <a class="post-title-link" href="/2014/05/20/jQueryRead/jQuery-read-08-2/" itemprop="url">
+                  jQuery源码阅读8-2:属性操作val(),removeAttr()
                 </a>
               
             
@@ -519,8 +521,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2014-05-12T23:42:00+08:00" content="2014-05-12">
-              2014-05-12
+            <time itemprop="dateCreated" datetime="2014-05-20T22:06:00+08:00" content="2014-05-20">
+              2014-05-20
             </time>
           </span>
 
@@ -549,8 +551,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2014/05/12/jQueryRead/jQuery-read-04-1/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/12/jQueryRead/jQuery-read-04-1/" itemprop="commentsCount"></span>
+                <a href="/2014/05/20/jQueryRead/jQuery-read-08-2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/20/jQueryRead/jQuery-read-08-2/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -574,11 +576,10 @@
 
       
         
-          <p>js里类型判断是个比较麻烦的事儿,<br>原生的api不够准确 , 比如typeof 来判断数据类型，只能区分基本类型”number”,”string”,”undefined”,”boolean”,”object”实测再加上”function”, 太过笼统<br>所以jQuery自己弄了个type()方法来返回具体类型 , 源码里调用了n多次 应该算是个比较重要的工具函数了</p>
-<p>类型判断是个比较大的话题,一回说不清楚, 慢慢拆 慢慢看</p>
-<p>还是先看用法:<br>
+          <p>属性操作是比较独立的一块,<br>这次说下prop相关的, 和属性必须用的access 下次说更麻烦一点的attr,val 还有css相关的</p>
+<p>以prop的一次操作为例, 调用顺序是: fn.prop -&gt; access -&gt; jQuery.prop<br>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2014/05/12/jQueryRead/jQuery-read-04-1/#more" rel="contents">
+            <a class="btn" href="/2014/05/20/jQueryRead/jQuery-read-08-2/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -629,8 +630,8 @@
             
               
                 
-                <a class="post-title-link" href="/2014/05/11/jQueryRead/jQuery-read-03/" itemprop="url">
-                  jQuery源码阅读3:each()方法
+                <a class="post-title-link" href="/2014/05/20/jQueryRead/jQuery-read-09/" itemprop="url">
+                  jQuery源码阅读9:css操作
                 </a>
               
             
@@ -643,8 +644,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2014-05-11T22:59:00+08:00" content="2014-05-11">
-              2014-05-11
+            <time itemprop="dateCreated" datetime="2014-05-20T22:06:00+08:00" content="2014-05-20">
+              2014-05-20
             </time>
           </span>
 
@@ -673,8 +674,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2014/05/11/jQueryRead/jQuery-read-03/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/11/jQueryRead/jQuery-read-03/" itemprop="commentsCount"></span>
+                <a href="/2014/05/20/jQueryRead/jQuery-read-09/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/20/jQueryRead/jQuery-read-09/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -698,11 +699,9 @@
 
       
         
-          <p>1.each有俩形式, 一是$.each的静态方法, 二是$(“XX”).each的原型方法.<br>内部实现是一份代码, $(“XX”)each会经过选择器包装对象, 而后调用$.each静态方法</p>
-<p>2.具体实现上 each会处理两种情况, 一是处理对象, 二是处理数组类数组<br>都是callback.call( each内部遍历的当前项也就是替换this指针项, key, value )</p>
-<p>3.$.each静态方法, 对于内部调用 接收第三个参数, 这个参数用于callback.apply, 其余和第2点一样<br>
+          <p>css操作是一大块, 核心操作里有关兼容性的问题太多太杂<br>先记下来以后一个一个看吧<br>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2014/05/11/jQueryRead/jQuery-read-03/#more" rel="contents">
+            <a class="btn" href="/2014/05/20/jQueryRead/jQuery-read-09/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -753,8 +752,8 @@
             
               
                 
-                <a class="post-title-link" href="/2014/05/08/jQueryRead/jQuery-read-02/" itemprop="url">
-                  jQuery源码阅读2:用extend()和fn.extend()扩展方法
+                <a class="post-title-link" href="/2014/05/19/jQueryRead/jQuery-read-08-1/" itemprop="url">
+                  jQuery源码阅读8-1:属性操作prop()和access()
                 </a>
               
             
@@ -767,8 +766,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2014-05-08T21:55:00+08:00" content="2014-05-08">
-              2014-05-08
+            <time itemprop="dateCreated" datetime="2014-05-19T22:39:00+08:00" content="2014-05-19">
+              2014-05-19
             </time>
           </span>
 
@@ -797,8 +796,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2014/05/08/jQueryRead/jQuery-read-02/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/08/jQueryRead/jQuery-read-02/" itemprop="commentsCount"></span>
+                <a href="/2014/05/19/jQueryRead/jQuery-read-08-1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/19/jQueryRead/jQuery-read-08-1/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -822,9 +821,10 @@
 
       
         
-          <p>jQuery对象生成出来了, 下一步就是往里加方法 , 主要用的是extend()方法:<br>还是拆一下代码, 仅分析最简单的流程, 说明下工作原理.<br>
+          <p>属性操作是比较独立的一块,<br>这次说下prop相关的, 和属性必须用的access 下次说更麻烦一点的attr,val 还有css相关的</p>
+<p>以prop的一次操作为例, 调用顺序是: fn.prop -&gt; access -&gt; jQuery.prop<br>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2014/05/08/jQueryRead/jQuery-read-02/#more" rel="contents">
+            <a class="btn" href="/2014/05/19/jQueryRead/jQuery-read-08-1/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -858,7 +858,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -899,7 +899,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">21</span>
+              <span class="site-state-item-count">30</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>

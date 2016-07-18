@@ -1,0 +1,641 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="ruantao1989" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="三天前BAE上mongo的collections都被他们系统删了, 三天了也没给个回复, 这会儿突然能用了 不知道是不是回光返照…这篇文章早写好了也发不上来 以后全部数据我都写程序定期导出, BAE的运维太吓人了 慎用BAE啊…
+书归正传: 和原生的事件委托类似, 也是在父级dom上绑定事件处理函数, 利用事件冒泡, 父级接收事件并判断是不是该相应委托.jQ的事件实际上是存在缓存里的, 父级dom">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jQuery源码阅读13-4:事件委托delegate流程">
+<meta property="og:url" content="http://ruantao1989.github.io/2014/06/10/jQueryRead/jQuery-read-13-4/index.html">
+<meta property="og:site_name" content="ruantao1989">
+<meta property="og:description" content="三天前BAE上mongo的collections都被他们系统删了, 三天了也没给个回复, 这会儿突然能用了 不知道是不是回光返照…这篇文章早写好了也发不上来 以后全部数据我都写程序定期导出, BAE的运维太吓人了 慎用BAE啊…
+书归正传: 和原生的事件委托类似, 也是在父级dom上绑定事件处理函数, 利用事件冒泡, 父级接收事件并判断是不是该相应委托.jQ的事件实际上是存在缓存里的, 父级dom">
+<meta property="og:updated_time" content="2016-07-18T09:33:17.273Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="jQuery源码阅读13-4:事件委托delegate流程">
+<meta name="twitter:description" content="三天前BAE上mongo的collections都被他们系统删了, 三天了也没给个回复, 这会儿突然能用了 不知道是不是回光返照…这篇文章早写好了也发不上来 以后全部数据我都写程序定期导出, BAE的运维太吓人了 慎用BAE啊…
+书归正传: 和原生的事件委托类似, 也是在父级dom上绑定事件处理函数, 利用事件冒泡, 父级接收事件并判断是不是该相应委托.jQ的事件实际上是存在缓存里的, 父级dom">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://ruantao1989.github.io/2014/06/10/jQueryRead/jQuery-read-13-4/"/>
+
+  <title> jQuery源码阅读13-4:事件委托delegate流程 | ruantao1989 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">ruantao1989</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                jQuery源码阅读13-4:事件委托delegate流程
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2014-06-10T21:36:00+08:00" content="2014-06-10">
+              2014-06-10
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/jQuery源码阅读/" itemprop="url" rel="index">
+                    <span itemprop="name">jQuery源码阅读</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2014/06/10/jQueryRead/jQuery-read-13-4/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/06/10/jQueryRead/jQuery-read-13-4/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>三天前BAE上mongo的collections都被他们系统删了, 三天了也没给个回复, 这会儿突然能用了 不知道是不是回光返照…<br>这篇文章早写好了也发不上来 以后全部数据我都写程序定期导出, BAE的运维太吓人了 慎用BAE啊…</p>
+<p>书归正传: 和原生的事件委托类似, 也是在父级dom上绑定事件处理函数, 利用事件冒泡, 父级接收事件并判断是不是该相应委托.<br>jQ的事件实际上是存在缓存里的, 父级dom接收到事件后, 会从缓存里拿到包装好的事件队列, 然后靠jQ.Event实例处理事件<br><a id="more"></a></p>
+<h2 id="委托示例"><a href="#委托示例" class="headerlink" title="委托示例:"></a>委托示例:</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * 博文作者:ruantao1989&#123;@&#125;gmail.com</div><div class="line"> * 引自博客:ruantao.duapp.com/blog</div><div class="line"> */</div><div class="line"><span class="comment">//最简单实例: "接收委托的元素".delegate("被委托元素","事件类型",data&#123;&#125;,fn)</span></div><div class="line"><span class="comment">//d3是最内层, 外层是d2, 最外层是d1. 事件冒泡顺序d3==&gt; d2==&gt; d1</span></div><div class="line"><span class="comment">//为指定元素d2(属于被选元素d1),添加事件委托</span></div><div class="line">$(<span class="string">".d1"</span>).delegate(<span class="string">".d2,.d3"</span>, <span class="string">"click"</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="comment">//$(this).css('background-color', 'black');</span></div><div class="line">    alert(<span class="string">"id==&gt;"</span>+<span class="keyword">this</span>.className);</div><div class="line">&#125;);</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">undelegate_click</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    $(<span class="string">".d1"</span>).undelegate(<span class="string">"click"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="零"><a href="#零" class="headerlink" title="零:"></a>零:</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">jQuery.fn.extend(&#123;</div><div class="line">    <span class="comment">//live和die在1.9+的版本里被废除了</span></div><div class="line">    live: <span class="function"><span class="keyword">function</span>(<span class="params"> types, data, fn </span>) </span>&#123;</div><div class="line">        <span class="comment">//this.context默认是document, 也就是默认是把所有live()委托到document上</span></div><div class="line">        <span class="comment">//这个我觉得是废除live的主要原因: 要是太多个元素都委托在document上, 性能反倒会有问题</span></div><div class="line">        jQuery( <span class="keyword">this</span>.context ).on( types, <span class="keyword">this</span>.selector, data, fn );</div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">    &#125;,</div><div class="line">    die: <span class="function"><span class="keyword">function</span>(<span class="params"> types, fn </span>) </span>&#123;</div><div class="line">        jQuery( <span class="keyword">this</span>.context ).off( types, <span class="keyword">this</span>.selector || <span class="string">"**"</span>, fn );</div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">    &#125;,</div><div class="line">    <span class="comment">//==&gt;源码3588行</span></div><div class="line">    delegate: <span class="function"><span class="keyword">function</span>(<span class="params"> selector, types, data, fn </span>) </span>&#123;</div><div class="line">        <span class="comment">//相当于on("事件类型","被委托选择器",data&#123;&#125;,fn)</span></div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.on( types, selector, data, fn );</div><div class="line">    &#125;,</div><div class="line">    undelegate: <span class="function"><span class="keyword">function</span>(<span class="params"> selector, types, fn </span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="built_in">arguments</span>.length === <span class="number">1</span> ? </div><div class="line">            <span class="keyword">this</span>.off( selector, <span class="string">"**"</span> ) <span class="comment">//传入: "命名空间"</span></div><div class="line">            : <span class="keyword">this</span>.off( types, selector || <span class="string">"**"</span>, fn );<span class="comment">//( selector, types [, fn] )</span></div><div class="line">    &#125;,</div><div class="line">    <span class="comment">//相比bind, 传给on()的第二个参数(也就是selector) 不为null时, 是启动委托模式</span></div><div class="line">    <span class="comment">/*bind: function( types, data, fn ) &#123;</span></div><div class="line">        return this.on( types, null, data, fn );</div><div class="line">    &#125;,</div><div class="line">    unbind: function( types, fn ) &#123;</div><div class="line">        return this.off( types, null, fn );</div><div class="line">    &#125;,*/</div></pre></td></tr></table></figure>
+<h2 id="一"><a href="#一" class="headerlink" title="一:"></a>一:</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//第一步</span></div><div class="line">jQuery.fn.extend(&#123;</div><div class="line">    on: <span class="function"><span class="keyword">function</span>(<span class="params"> types, selector, data, fn, <span class="comment">/*INTERNAL*/</span> one </span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> origFn, type;</div><div class="line"> </div><div class="line">        <span class="comment">//types是对象, 和委托没什么关系</span></div><div class="line">        <span class="keyword">if</span> ( <span class="keyword">typeof</span> types === <span class="string">"object"</span> ) &#123;</div><div class="line">            ...</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//一般情况下 data是事件处理函数, fn一般是undefined</span></div><div class="line">        <span class="keyword">if</span> ( data == <span class="literal">null</span> &amp;&amp; fn == <span class="literal">null</span> ) &#123;</div><div class="line">            ...</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> ( fn == <span class="literal">null</span> ) &#123;</div><div class="line">            <span class="comment">//这里是常用的情况:</span></div><div class="line">            <span class="comment">//选择器是字串</span></div><div class="line">            <span class="keyword">if</span> ( <span class="keyword">typeof</span> selector === <span class="string">"string"</span> ) &#123;</div><div class="line">                <span class="comment">//传参格式为( "事件类型", "选择器字串", "事件处理函数" )</span></div><div class="line">                fn = data;</div><div class="line">                data = <span class="literal">undefined</span>;<span class="comment">//把传参还原, 处理函数本该在fn上, data由于没有指定需要清空</span></div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                ...</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">         </div><div class="line">        <span class="keyword">if</span> ( fn === <span class="literal">false</span> ) &#123;</div><div class="line">            <span class="comment">//处理函数是false就返回false</span></div><div class="line">            fn = returnFalse;</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> ( !fn ) &#123;</div><div class="line">            <span class="comment">//到这还没有处理函数, 就说不过去了, 直接不予处理</span></div><div class="line">            <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//one()的情况</span></div><div class="line">        <span class="keyword">if</span> ( one === <span class="number">1</span> ) &#123;</div><div class="line">            ...</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//最终遍历add()</span></div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.each( <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">            <span class="comment">//传参( 被委托dom, "事件类型", 处理函数, data对象, "选择器" )</span></div><div class="line">            jQuery.event.add( <span class="keyword">this</span>, types, fn, data, selector );</div><div class="line">        &#125;);</div><div class="line">    &#125;,</div></pre></td></tr></table></figure>
+<h2 id="二"><a href="#二" class="headerlink" title="二:"></a>二:</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//==&gt;源码2642行</span></div><div class="line"><span class="comment">//第二步</span></div><div class="line">add: <span class="function"><span class="keyword">function</span>(<span class="params"> elem, types, handler, data, selector </span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">var</span> elemData, eventHandle, events,</div><div class="line">            t, tns, type, namespaces, handleObj,</div><div class="line">            handleObjIn, handlers, special;</div><div class="line"> </div><div class="line">        <span class="comment">//nodeType不对,没指定事件类型,没有处理函数,缓存不上的,都直接返回</span></div><div class="line">        <span class="comment">//其中elemData是调用jQuery.data生成的缓存, 如果是在dom元素上缓存, 会生成一个id关联jQuery.cache中的对应id的对象(具体过程jQ阅读-11详细分析过)</span></div><div class="line">        <span class="comment">//此处elemData是jQuery.cache[对应id]的对象</span></div><div class="line">        <span class="keyword">if</span> ( elem.nodeType === <span class="number">3</span> || elem.nodeType === <span class="number">8</span> || !types || !handler || !(elemData = jQuery._data( elem )) ) &#123;</div><div class="line">            <span class="keyword">return</span>;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//传入已被jQ.event对象处理过的handler</span></div><div class="line">        <span class="keyword">if</span> ( handler.handler ) &#123;</div><div class="line">            ...</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//没有guid就分配</span></div><div class="line">        <span class="keyword">if</span> ( !handler.guid ) &#123;</div><div class="line">            handler.guid = jQuery.guid++;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//下边这部分对elemData的处理,实际上就是对cache中此对象缓存的处理</span></div><div class="line">        <span class="comment">//elemData.events是缓存的事件数组,之前有可能有已缓存的事件</span></div><div class="line">        events = elemData.events;</div><div class="line">        <span class="keyword">if</span> ( !events ) &#123;</div><div class="line">            elemData.events = events = &#123;&#125;;</div><div class="line">        &#125;</div><div class="line">        eventHandle = elemData.handle;</div><div class="line">        <span class="keyword">if</span> ( !eventHandle ) &#123;</div><div class="line">            elemData.handle = eventHandle = <span class="function"><span class="keyword">function</span>(<span class="params"> e </span>) </span>&#123;</div><div class="line">                <span class="comment">//绑定事件的处理函数实际上使用了jQuery.event.dispatch</span></div><div class="line">                <span class="keyword">return</span> <span class="keyword">typeof</span> jQuery !== <span class="string">"undefined"</span> &amp;&amp; (!e || jQuery.event.triggered !== e.type) ?</div><div class="line">                    jQuery.event.dispatch.apply( eventHandle.elem, <span class="built_in">arguments</span> ) :</div><div class="line">                    <span class="literal">undefined</span>;</div><div class="line">            &#125;;</div><div class="line">            eventHandle.elem = elem;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">// Handle multiple events separated by a space</span></div><div class="line">        <span class="comment">// jQuery(...).bind("mouseover mouseout", fn);</span></div><div class="line">        types = jQuery.trim( hoverHack(types) ).split( <span class="string">" "</span> );</div><div class="line">        <span class="keyword">for</span> ( t = <span class="number">0</span>; t &lt; types.length; t++ ) &#123;</div><div class="line">            <span class="comment">//正则筛选出事件的命名空间和事件, 如 click.ns ,过正则就是["clcik.ns", "clcik", "ns"]</span></div><div class="line">            tns = rtypenamespace.exec( types[t] ) || [];</div><div class="line">            type = tns[<span class="number">1</span>];</div><div class="line">            namespaces = ( tns[<span class="number">2</span>] || <span class="string">""</span> ).split( <span class="string">"."</span> ).sort();</div><div class="line"> </div><div class="line">            <span class="comment">//是否需要special处理, 类似之前的钩子</span></div><div class="line">            <span class="comment">//special对象包括如下属性:</span></div><div class="line">            <span class="comment">//&#123;beforeunload: Object,,blur: Object,focus: Object,focusin: Object,focusout: Object,load: Object,mouseenter: Object,mouseleave: Object&#125;</span></div><div class="line">            special = jQuery.event.special[ type ] || &#123;&#125;;</div><div class="line">            <span class="comment">//其中一个对象的结构如下:</span></div><div class="line">            <span class="comment">//mouseenter: Object</span></div><div class="line">            <span class="comment">// -bindType: "mouseover"</span></div><div class="line">            <span class="comment">// -delegateType: "mouseover"</span></div><div class="line">            <span class="comment">// -handle: function ( event ) &#123;</span></div><div class="line">            <span class="comment">// -__proto__: Object</span></div><div class="line">            <span class="comment">// 如果传来selector,就优先检查special.delegateType, </span></div><div class="line">            <span class="comment">//没传来就用special.bindType, 都没有就还用原事件类型type</span></div><div class="line">            type = ( selector ? special.delegateType : special.bindType ) || type;</div><div class="line">            <span class="comment">//根据修正的delegateType或bindType,再查一次是否需要特殊处理</span></div><div class="line">            special = jQuery.event.special[ type ] || &#123;&#125;;</div><div class="line"> </div><div class="line">            <span class="comment">//把所有和事件相关的参数,都组装进handleObjIn对象</span></div><div class="line">            handleObj = jQuery.extend(&#123;</div><div class="line">                type: type,<span class="comment">//事件类型</span></div><div class="line">                origType: tns[<span class="number">1</span>],<span class="comment">//未修正之前的事件类型</span></div><div class="line">                data: data,<span class="comment">//第(2)种用法, 传来的参数对象</span></div><div class="line">                handler: handler,<span class="comment">//事件处理函数</span></div><div class="line">                guid: handler.guid,<span class="comment">//唯一id</span></div><div class="line">                selector: selector,</div><div class="line">                needsContext: selector &amp;&amp; jQuery.expr.match.needsContext.test( selector ),</div><div class="line">                namespace: namespaces.join(<span class="string">"."</span>)<span class="comment">//命名空间转回字串</span></div><div class="line">            &#125;, handleObjIn );</div><div class="line"> </div><div class="line">            <span class="comment">//尝试取出事件对应的处理函数</span></div><div class="line">            handlers = events[ type ];</div><div class="line">            <span class="keyword">if</span> ( !handlers ) &#123;</div><div class="line">                <span class="comment">//如果没取到, 就是要写入一个新的handlers</span></div><div class="line">                handlers = events[ type ] = [];</div><div class="line">                handlers.delegateCount = <span class="number">0</span>;</div><div class="line"> </div><div class="line">                <span class="comment">//非special的情况,直接</span></div><div class="line">                <span class="keyword">if</span> ( !special.setup || special.setup.call( elem, data, namespaces, eventHandle ) === <span class="literal">false</span> ) &#123;</div><div class="line">                    <span class="comment">//绑定事件</span></div><div class="line">                    <span class="comment">//这的eventHandle是jQuery.event.dispatch.apply( eventHandle.elem, arguments ),通过dispatch分发的</span></div><div class="line">                    <span class="keyword">if</span> ( elem.addEventListener ) &#123;</div><div class="line">                        elem.addEventListener( type, eventHandle, <span class="literal">false</span> );</div><div class="line">                    <span class="comment">//做兼容处理</span></div><div class="line">                    &#125; <span class="keyword">else</span> <span class="keyword">if</span> ( elem.attachEvent ) &#123;</div><div class="line">                        elem.attachEvent( <span class="string">"on"</span> + type, eventHandle );</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line"> </div><div class="line">            <span class="keyword">if</span> ( special.add ) &#123;</div><div class="line">                ...</div><div class="line">            &#125;</div><div class="line"> </div><div class="line">            <span class="comment">//不论是delegate()还是on(), selector参数有值的, 就是有委托,</span></div><div class="line">            <span class="keyword">if</span> ( selector ) &#123;</div><div class="line">                <span class="comment">//通过delegateCount来控制插入的位置</span></div><div class="line">                handlers.splice( handlers.delegateCount++, <span class="number">0</span>, handleObj );</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                handlers.push( handleObj );</div><div class="line">            &#125;</div><div class="line"> </div><div class="line">            <span class="comment">//global里的标记,记录某个事件是不是存在</span></div><div class="line">            jQuery.event.global[ type ] = <span class="literal">true</span>;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">// Nullify elem to prevent memory leaks in IE</span></div><div class="line">        elem = <span class="literal">null</span>;</div><div class="line">    &#125;,</div></pre></td></tr></table></figure>
+<h2 id="三"><a href="#三" class="headerlink" title="三:"></a>三:</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * 博文作者:ruantao1989&#123;@&#125;gmail.com</div><div class="line"> * 引自博客:ruantao.duapp.com/blog</div><div class="line"> */</div><div class="line">    <span class="comment">//==&gt;源码2985行</span></div><div class="line">    <span class="comment">//第三步</span></div><div class="line">    dispatch: <span class="function"><span class="keyword">function</span>(<span class="params"> event </span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="comment">//经过fix修复过的jQ.Event实例, 里边属性都修复过了, 也包装了原生事件对象 </span></div><div class="line">        event = jQuery.event.fix( event || <span class="built_in">window</span>.event );</div><div class="line"> </div><div class="line">        <span class="keyword">var</span> i, j, cur, ret, selMatch, matched, matches, handleObj, sel, related,</div><div class="line">            <span class="comment">//取出在add时放入cache的缓存对象,的events属性, 的事件属性数组, 没有就是[]</span></div><div class="line">            <span class="comment">//jQuery.cache</span></div><div class="line">            <span class="comment">// --Object</span></div><div class="line">            <span class="comment">// ----1: Object</span></div><div class="line">            <span class="comment">// ------events: Object</span></div><div class="line">            <span class="comment">// ------click: Array[1]</span></div><div class="line">            handlers = ( (jQuery._data( <span class="keyword">this</span>, <span class="string">"events"</span> ) || &#123;&#125; )[ event.type ] || []),</div><div class="line">            <span class="comment">//拿到委托数目</span></div><div class="line">            delegateCount = handlers.delegateCount,</div><div class="line">            <span class="comment">//转成真实数组</span></div><div class="line">            args = core_slice.call( <span class="built_in">arguments</span> ),</div><div class="line">            run_all = !event.exclusive &amp;&amp; !event.namespace,</div><div class="line">            <span class="comment">//是否需要特殊处理</span></div><div class="line">            special = jQuery.event.special[ event.type ] || &#123;&#125;,</div><div class="line">            <span class="comment">//执行队列</span></div><div class="line">            handlerQueue = [];</div><div class="line"> </div><div class="line">        <span class="comment">//jQuery.event.fix过的event对象, 原生事件对象只读</span></div><div class="line">        args[<span class="number">0</span>] = event;</div><div class="line">        <span class="comment">//事件的委托是当前dom, 因为子元素冒泡上来, 设置过委托的dom会接受此事件</span></div><div class="line">        event.delegateTarget = <span class="keyword">this</span>;</div><div class="line"> </div><div class="line">        <span class="comment">//特殊处理里如果有preDispatch钩子, 就执行, 返回false就有问题, 直接return. </span></div><div class="line">        <span class="comment">//这个钩子应该是预留的 我在源码里没找到</span></div><div class="line">        <span class="keyword">if</span> ( special.preDispatch &amp;&amp; special.preDispatch.call( <span class="keyword">this</span>, event ) === <span class="literal">false</span> ) &#123;</div><div class="line">            <span class="keyword">return</span>;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//有事件委托, 且事件是点击事件</span></div><div class="line">        <span class="keyword">if</span> ( delegateCount &amp;&amp; !(event.button &amp;&amp; event.type === <span class="string">"click"</span>) ) &#123;</div><div class="line">            <span class="comment">//cur是事件源, 如果事件源不是当前dom, 则向上追溯, 直到cur就是当前接收事件的dom</span></div><div class="line">            <span class="keyword">for</span> ( cur = event.target; cur != <span class="keyword">this</span>; cur = cur.parentNode || <span class="keyword">this</span> ) &#123;</div><div class="line"> </div><div class="line">                <span class="comment">//未被disable, 或不是"cilck"(后一个判断是个兼容处理)</span></div><div class="line">                <span class="keyword">if</span> ( cur.disabled !== <span class="literal">true</span> || event.type !== <span class="string">"click"</span> ) &#123;</div><div class="line">                    selMatch = &#123;&#125;;</div><div class="line">                    matches = [];</div><div class="line">                    <span class="keyword">for</span> ( i = <span class="number">0</span>; i &lt; delegateCount; i++ ) &#123;</div><div class="line">                        <span class="comment">//取出缓存中的一个事件处理函数</span></div><div class="line">                        handleObj = handlers[ i ];</div><div class="line">                        <span class="comment">//绑定时的选择器</span></div><div class="line">                        sel = handleObj.selector;</div><div class="line"> </div><div class="line">                        <span class="comment">//尝试去selMatch数组里取</span></div><div class="line">                        <span class="keyword">if</span> ( selMatch[ sel ] === <span class="literal">undefined</span> ) &#123;</div><div class="line">                            <span class="comment">//通过选择器拿到对应结果的个数, 目的是检验是否有对应的dom存在</span></div><div class="line">                            selMatch[ sel ] = handleObj.needsContext ?</div><div class="line">                                jQuery( sel, <span class="keyword">this</span> ).index( cur ) &gt;= <span class="number">0</span> :</div><div class="line">                                jQuery.find( sel, <span class="keyword">this</span>, <span class="literal">null</span>, [ cur ] ).length;</div><div class="line">                        &#125;</div><div class="line">                        <span class="comment">//把匹配项放入matches</span></div><div class="line">                        <span class="keyword">if</span> ( selMatch[ sel ] ) &#123;</div><div class="line">                            matches.push( handleObj );</div><div class="line">                        &#125;</div><div class="line">                    &#125;</div><div class="line">                    <span class="comment">//如果matches有值,就放入handlerQueue待执行</span></div><div class="line">                    <span class="keyword">if</span> ( matches.length ) &#123;</div><div class="line">                        <span class="comment">//遍历matches对象, 组装&#123;elem:, matches:&#125;对象</span></div><div class="line">                        <span class="comment">//这样就把委托对象, 和受委托的多个事件插入handlerQueue了</span></div><div class="line">                        handlerQueue.push(&#123; elem: cur, matches: matches &#125;);</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//没有事件委托的话</span></div><div class="line">        <span class="keyword">if</span> ( handlers.length &gt; delegateCount ) &#123;</div><div class="line">            <span class="comment">//执行队列里push进对象 &#123;elem:dom对象, matches:执行数组副本&#125;</span></div><div class="line">            handlerQueue.push(&#123; elem: <span class="keyword">this</span>, matches: handlers.slice( delegateCount ) &#125;);</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//遍历执行队列(event没有停止传播) 终于到执行了...</span></div><div class="line">        <span class="keyword">for</span> ( i = <span class="number">0</span>; i &lt; handlerQueue.length &amp;&amp; !event.isPropagationStopped(); i++ ) &#123;</div><div class="line">            <span class="comment">//取出队列中的一项</span></div><div class="line">            matched = handlerQueue[ i ];</div><div class="line">            event.currentTarget = matched.elem;</div><div class="line"> </div><div class="line">            <span class="keyword">for</span> ( j = <span class="number">0</span>; j &lt; matched.matches.length &amp;&amp; !event.isImmediatePropagationStopped(); j++ ) &#123;</div><div class="line">                <span class="comment">//具体执行函数, 在cache上的引用</span></div><div class="line">                handleObj = matched.matches[ j ];</div><div class="line"> </div><div class="line">                <span class="comment">// Triggered event must either 1) be non-exclusive and have no namespace, or</span></div><div class="line">                <span class="comment">// 2) have namespace(s) a subset or equal to those in the bound event (both can have no namespace).</span></div><div class="line">                <span class="keyword">if</span> ( run_all || (!event.namespace &amp;&amp; !handleObj.namespace) || event.namespace_re &amp;&amp; event.namespace_re.test( handleObj.namespace ) ) &#123;</div><div class="line">                    <span class="comment">//第(2)种用法, 指定data</span></div><div class="line">                    event.data = handleObj.data;</div><div class="line">                    <span class="comment">//在实践对象里增加一个handleObj的引用</span></div><div class="line">                    event.handleObj = handleObj;</div><div class="line">                    <span class="comment">//核心</span></div><div class="line">                    <span class="comment">//(jQuery.event.special[ handleObj.origType ] || &#123;&#125;).handle是执行看特殊处理原始事件类型.handle</span></div><div class="line">                    <span class="comment">//没有就handleObj.handler.apply( matched.elem这个Dom对象, args );</span></div><div class="line">                    <span class="comment">//handleObj.handler是最开始传入的alert(), args是相应的jQ.Event实例</span></div><div class="line">                    ret = ( (jQuery.event.special[ handleObj.origType ] || &#123;&#125;).handle || handleObj.handler )</div><div class="line">                            .apply( matched.elem, args );</div><div class="line"> </div><div class="line">                    <span class="comment">//事件处理函数中有返回值,需记录</span></div><div class="line">                    <span class="keyword">if</span> ( ret !== <span class="literal">undefined</span> ) &#123;</div><div class="line">                        event.result = ret;</div><div class="line">                        <span class="comment">//如果在事件处理函数中返回false就阻止默认事件, 阻止传播</span></div><div class="line">                        <span class="keyword">if</span> ( ret === <span class="literal">false</span> ) &#123;</div><div class="line">                            event.preventDefault();</div><div class="line">                            event.stopPropagation();</div><div class="line">                        &#125;</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//如果有特殊的后处理, 在执行</span></div><div class="line">        <span class="keyword">if</span> ( special.postDispatch ) &#123;</div><div class="line">            special.postDispatch.call( <span class="keyword">this</span>, event );</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//返回: 事件处理函数中有返回值</span></div><div class="line">        <span class="keyword">return</span> event.result;</div><div class="line">    &#125;,</div></pre></td></tr></table></figure>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014/06/01/jQueryRead/jQuery-read-13-3/" rel="next" title="jQuery源码阅读13-3:事件trigger流程">
+                <i class="fa fa-chevron-left"></i> jQuery源码阅读13-3:事件trigger流程
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/06/12/css/ie-overflow-bug/" rel="prev" title="ie6,7中overflow:hidden的bug">
+                ie6,7中overflow:hidden的bug <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2014/06/10/jQueryRead/jQuery-read-13-4/"
+           data-title="jQuery源码阅读13-4:事件委托delegate流程" data-url="http://ruantao1989.github.io/2014/06/10/jQueryRead/jQuery-read-13-4/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars2.githubusercontent.com/u/1949437?v=3&s=460"
+               alt="ruantao1989" />
+          <p class="site-author-name" itemprop="name">ruantao1989</p>
+          <p class="site-description motion-element" itemprop="description">思行合一</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">30</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#委托示例"><span class="nav-number">1.</span> <span class="nav-text">委托示例:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#零"><span class="nav-number">2.</span> <span class="nav-text">零:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一"><span class="nav-number">3.</span> <span class="nav-text">一:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二"><span class="nav-number">4.</span> <span class="nav-text">二:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三"><span class="nav-number">5.</span> <span class="nav-text">三:</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ruantao1989</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"ruantao1989"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

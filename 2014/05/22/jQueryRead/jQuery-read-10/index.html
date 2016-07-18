@@ -1,0 +1,633 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="ruantao1989" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="suppor()t用html和css操作来验证浏览器特性,而不是直接查userAgent里边提到的好些问题我都不知道, 这篇文章也就是个摘抄, 最多算个翻译…粘一遍注释学习一下吧">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jQuery源码阅读10:浏览器检测support()">
+<meta property="og:url" content="http://ruantao1989.github.io/2014/05/22/jQueryRead/jQuery-read-10/index.html">
+<meta property="og:site_name" content="ruantao1989">
+<meta property="og:description" content="suppor()t用html和css操作来验证浏览器特性,而不是直接查userAgent里边提到的好些问题我都不知道, 这篇文章也就是个摘抄, 最多算个翻译…粘一遍注释学习一下吧">
+<meta property="og:updated_time" content="2016-07-18T09:13:06.100Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="jQuery源码阅读10:浏览器检测support()">
+<meta name="twitter:description" content="suppor()t用html和css操作来验证浏览器特性,而不是直接查userAgent里边提到的好些问题我都不知道, 这篇文章也就是个摘抄, 最多算个翻译…粘一遍注释学习一下吧">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://ruantao1989.github.io/2014/05/22/jQueryRead/jQuery-read-10/"/>
+
+  <title> jQuery源码阅读10:浏览器检测support() | ruantao1989 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">ruantao1989</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                jQuery源码阅读10:浏览器检测support()
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2014-05-22T22:46:00+08:00" content="2014-05-22">
+              2014-05-22
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/jQuery源码阅读/" itemprop="url" rel="index">
+                    <span itemprop="name">jQuery源码阅读</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2014/05/22/jQueryRead/jQuery-read-10/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/22/jQueryRead/jQuery-read-10/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>suppor()t用html和css操作来验证浏览器特性,而不是直接查userAgent<br>里边提到的好些问题我都不知道, 这篇文章也就是个摘抄, 最多算个翻译…<br>粘一遍注释学习一下吧<br><a id="more"></a></p>
+<h2 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div><div class="line">202</div><div class="line">203</div><div class="line">204</div><div class="line">205</div><div class="line">206</div><div class="line">207</div><div class="line">208</div><div class="line">209</div><div class="line">210</div><div class="line">211</div><div class="line">212</div><div class="line">213</div><div class="line">214</div><div class="line">215</div><div class="line">216</div><div class="line">217</div><div class="line">218</div><div class="line">219</div><div class="line">220</div><div class="line">221</div><div class="line">222</div><div class="line">223</div><div class="line">224</div><div class="line">225</div><div class="line">226</div><div class="line">227</div><div class="line">228</div><div class="line">229</div><div class="line">230</div><div class="line">231</div><div class="line">232</div><div class="line">233</div><div class="line">234</div><div class="line">235</div><div class="line">236</div><div class="line">237</div><div class="line">238</div><div class="line">239</div><div class="line">240</div><div class="line">241</div><div class="line">242</div><div class="line">243</div><div class="line">244</div><div class="line">245</div><div class="line">246</div><div class="line">247</div><div class="line">248</div><div class="line">249</div><div class="line">250</div><div class="line">251</div><div class="line">252</div><div class="line">253</div><div class="line">254</div><div class="line">255</div><div class="line">256</div><div class="line">257</div><div class="line">258</div><div class="line">259</div><div class="line">260</div><div class="line">261</div><div class="line">262</div><div class="line">263</div><div class="line">264</div><div class="line">265</div><div class="line">266</div><div class="line">267</div><div class="line">268</div><div class="line">269</div><div class="line">270</div><div class="line">271</div><div class="line">272</div><div class="line">273</div><div class="line">274</div><div class="line">275</div><div class="line">276</div><div class="line">277</div><div class="line">278</div><div class="line">279</div><div class="line">280</div><div class="line">281</div><div class="line">282</div><div class="line">283</div><div class="line">284</div><div class="line">285</div><div class="line">286</div><div class="line">287</div><div class="line">288</div><div class="line">289</div><div class="line">290</div><div class="line">291</div><div class="line">292</div><div class="line">293</div><div class="line">294</div><div class="line">295</div><div class="line">296</div><div class="line">297</div><div class="line">298</div><div class="line">299</div></pre></td><td class="code"><pre><div class="line">jQuery.support = (<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> support,</div><div class="line">        all,</div><div class="line">        a,</div><div class="line">        select,</div><div class="line">        opt,</div><div class="line">        input,</div><div class="line">        fragment,</div><div class="line">        eventName,</div><div class="line">        i,</div><div class="line">        isSupported,</div><div class="line">        clickFn,</div><div class="line">        div = <span class="built_in">document</span>.createElement(<span class="string">"div"</span>);<span class="comment">//创建一个测试用的div</span></div><div class="line"> </div><div class="line">    <span class="comment">//class值,只有ie67能写进去</span></div><div class="line">    div.setAttribute( <span class="string">"className"</span>, <span class="string">"t"</span> );</div><div class="line">    <span class="comment">//插入测试innerHtml</span></div><div class="line">    <span class="comment">//头一个空格ie会去掉</span></div><div class="line">    <span class="comment">//&lt;table&gt;中ie会自动填上&lt;tbody&gt;</span></div><div class="line">    <span class="comment">//href里的'/a'会被ie去掉</span></div><div class="line">    div.innerHTML = <span class="string">"  &lt;link/&gt;&lt;table&gt;&lt;/table&gt;&lt;a href='/a'&gt;a&lt;/a&gt;&lt;input type='checkbox'/&gt;"</span>;</div><div class="line"> </div><div class="line">    <span class="comment">//获取刚刚创建的全部</span></div><div class="line">    all = div.getElementsByTagName(<span class="string">"*"</span>);</div><div class="line">    a = div.getElementsByTagName(<span class="string">"a"</span>)[ <span class="number">0</span> ];</div><div class="line">    <span class="keyword">if</span> ( !all || !a || !all.length ) &#123;</div><div class="line">        <span class="comment">//这都没有就不用继续测了</span></div><div class="line">        <span class="keyword">return</span> &#123;&#125;;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="comment">// First batch of tests</span></div><div class="line">    <span class="comment">//创建select 里边插入一个option</span></div><div class="line">    select = <span class="built_in">document</span>.createElement(<span class="string">"select"</span>);</div><div class="line">    opt = select.appendChild( <span class="built_in">document</span>.createElement(<span class="string">"option"</span>) );</div><div class="line">    input = div.getElementsByTagName(<span class="string">"input"</span>)[ <span class="number">0</span> ];</div><div class="line"> </div><div class="line">    <span class="comment">// cssText：设置样式</span></div><div class="line">    <span class="comment">// 说明：在IE中最后一个分号会被删掉,可以添加一个分号来解决这个问题</span></div><div class="line">    <span class="comment">// 例如: Element.style.cssText += ’;width:100px;height:100px;top:100px;left:100px;’</span></div><div class="line">    a.style.cssText = <span class="string">"top:1px;float:left;opacity:.5"</span>;</div><div class="line"> </div><div class="line">    <span class="comment">//创建测试结果对象</span></div><div class="line">    support = &#123;</div><div class="line"> </div><div class="line">        <span class="comment">// 检测节点类型是否为文本节点 成功返回true，失败返回false</span></div><div class="line">        <span class="comment">// 使用innerHTML，IE会自动剔除HTML代码头部的空白符</span></div><div class="line">        leadingWhitespace: ( div.firstChild.nodeType === <span class="number">3</span> ),</div><div class="line"> </div><div class="line">        <span class="comment">// 验证是否存在tbody标签，不存在返回true，存在返回false</span></div><div class="line">        <span class="comment">// 确保tbody元素不会自动插入（IE6~7会在&lt;table&gt;&lt;/table&gt;自动插入的空tbody）</span></div><div class="line">        tbody: !div.getElementsByTagName(<span class="string">"tbody"</span>).length,</div><div class="line"> </div><div class="line">        <span class="comment">// 验证innerHTML插入链接元素是否可被序列化，成功则返回true，失败返回false</span></div><div class="line">        <span class="comment">// 所谓序列化是指：可被读取的一种存储标准，在IE6~8中返回false。</span></div><div class="line">        htmlSerialize: !!div.getElementsByTagName(<span class="string">"link"</span>).length,</div><div class="line"> </div><div class="line">        <span class="comment">// 验证getAttribute("style")是否返回元素的行内样式，成功返回true,失败返回false</span></div><div class="line">        <span class="comment">// 在IE6~8中为false，因为他用cssText代替 </span></div><div class="line">        style: <span class="regexp">/top/</span>.test( a.getAttribute(<span class="string">"style"</span>) ),</div><div class="line"> </div><div class="line">        <span class="comment">// 验证getAttribute("href")返回值是否原封不动，成功返回true，失败返回false</span></div><div class="line">        <span class="comment">// 在IE6~7中会返回false，因为他的URL已常规化。</span></div><div class="line">        hrefNormalized: ( a.getAttribute(<span class="string">"href"</span>) === <span class="string">"/a"</span> ),</div><div class="line"> </div><div class="line">        <span class="comment">// 验证浏览器是否能正确解析opacity,成功返回true,失败返回false</span></div><div class="line">        <span class="comment">// 在IE6~8中返回false，因为他用alpha滤镜代替。</span></div><div class="line">        opacity: <span class="regexp">/^0.5/</span>.test( a.style.opacity ),</div><div class="line"> </div><div class="line">        <span class="comment">// 验证cssFloat是否存在，成功返回true，失败返回false</span></div><div class="line">        <span class="comment">// 在IE6~8中返回false,他用styleFloat代替</span></div><div class="line">        cssFloat: !!a.style.cssFloat,</div><div class="line"> </div><div class="line">        <span class="comment">// 验证checkbox的默认value是否为'on',成功返回true,失败返回false</span></div><div class="line">        <span class="comment">// WebKit默认为'' 空字符串 </span></div><div class="line">        checkOn: ( input.value === <span class="string">"on"</span> ),</div><div class="line"> </div><div class="line">        <span class="comment">// 验证创建的select元素的第一个option元素是否会默认选中, 成功返回true，失败返回false</span></div><div class="line">        <span class="comment">// FF，Chrome返回true,IE6~10返回false</span></div><div class="line">        <span class="comment">// 注意:option元素的父元素不一定是select，也有可能是optgroup</span></div><div class="line">        optSelected: opt.selected,</div><div class="line"> </div><div class="line">        <span class="comment">// 验证一些属性是否支持使用get/setAttribute方法，不支持返回true，支持返回false</span></div><div class="line">        <span class="comment">// 通过setAttribute添加class值是否成功来检测,IE6~7支持，其他浏览器不支持 </span></div><div class="line">        getSetAttribute: div.className !== <span class="string">"t"</span>,</div><div class="line"> </div><div class="line">        <span class="comment">// 验证创建form的enctype属性是否存在，存在返回true，不存在返回fasle(IE6~9,均存在)</span></div><div class="line">        <span class="comment">// enctype:设置表单的MIME编码,默认编码格式是application/x-www-form-urlencoded,不能用于文件上传；multipart/form-data，才能完整的传递文件数据</span></div><div class="line">        enctype: !!<span class="built_in">document</span>.createElement(<span class="string">"form"</span>).enctype,</div><div class="line"> </div><div class="line">        <span class="comment">// 验证是否支持html5节点复制，成功返回ture，失败返回false</span></div><div class="line">        <span class="comment">// 失败：复制节点cloneNode(true).innerHTML返回一个空字符串</span></div><div class="line">        html5Clone: <span class="built_in">document</span>.createElement(<span class="string">"nav"</span>).cloneNode( <span class="literal">true</span> ).outerHTML !== <span class="string">"&lt;:nav&gt;&lt;/:nav&gt;"</span>,</div><div class="line"> </div><div class="line">        <span class="comment">// 验证页面和浏览器是否以W3C CSS盒式模型来渲染，而非怪异模式下。IE6~7的怪癖模式会返回false</span></div><div class="line">        boxModel: ( <span class="built_in">document</span>.compatMode === <span class="string">"CSS1Compat"</span> ),</div><div class="line"> </div><div class="line">        <span class="comment">//这些值一句话两句话判断不过来, 之后的代码会修改</span></div><div class="line">        submitBubbles: <span class="literal">true</span>,</div><div class="line">        changeBubbles: <span class="literal">true</span>,</div><div class="line">        focusinBubbles: <span class="literal">false</span>,</div><div class="line">        deleteExpando: <span class="literal">true</span>,</div><div class="line">        noCloneEvent: <span class="literal">true</span>,</div><div class="line">        inlineBlockNeedsLayout: <span class="literal">false</span>,</div><div class="line">        shrinkWrapBlocks: <span class="literal">false</span>,</div><div class="line">        reliableMarginRight: <span class="literal">true</span>,</div><div class="line">        boxSizingReliable: <span class="literal">true</span>,</div><div class="line">        pixelPosition: <span class="literal">false</span></div><div class="line">    &#125;;</div><div class="line"> </div><div class="line">    <span class="comment">// 检测单选框选中状态能否正确克隆</span></div><div class="line">    <span class="comment">// 在IE6~9中会返回false,无法正确克隆</span></div><div class="line">    <span class="comment">// (1) 设置checkbox的checked为true</span></div><div class="line">    input.checked = <span class="literal">true</span>;</div><div class="line">    <span class="comment">// (2) cloneNode克隆（复制）一份checkbox，获取他的checked值</span></div><div class="line">    support.noCloneChecked = input.cloneNode( <span class="literal">true</span> ).checked;</div><div class="line"> </div><div class="line">    <span class="comment">// 检测select元素设置为disabled后，其所有option子元素是否也会被设置为disabled        </span></div><div class="line">    <span class="comment">// (1)禁用下拉列表</span></div><div class="line">    select.disabled = <span class="literal">true</span>;</div><div class="line">    <span class="comment">// (2)获取下拉列表子元素的disabled是否为true</span></div><div class="line">    <span class="comment">// 测试：IE FF Chrome Safair Opera 的opt.disabled都为false，说明option不会被设置为disabled</span></div><div class="line">    <span class="comment">// 其他：部分webkit会被设置为disabled,需要老版本的chrome支持。</span></div><div class="line">    support.optDisabled = !opt.disabled;</div><div class="line"> </div><div class="line">    <span class="comment">// Support: IE&lt;9</span></div><div class="line">    <span class="comment">// 检测是否能删除附加在DOM Element 上的属性或数据</span></div><div class="line">    <span class="comment">// 在IE6~7中返回false,若事先声明这个属性，那么在IE8返回true，否者返回false </span></div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        <span class="keyword">delete</span> div.test;</div><div class="line">    &#125; <span class="keyword">catch</span>( e ) &#123;</div><div class="line">        support.deleteExpando = <span class="literal">false</span>;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="keyword">if</span> ( !div.addEventListener &amp;&amp; div.attachEvent &amp;&amp; div.fireEvent ) &#123;</div><div class="line">        div.attachEvent( <span class="string">"onclick"</span>, clickFn = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">            <span class="comment">// Cloning a node shouldn't copy over any</span></div><div class="line">            <span class="comment">// bound event handlers (IE does this)</span></div><div class="line">            support.noCloneEvent = <span class="literal">false</span>;</div><div class="line">        &#125;);</div><div class="line">        div.cloneNode( <span class="literal">true</span> ).fireEvent(<span class="string">"onclick"</span>);</div><div class="line">        div.detachEvent( <span class="string">"onclick"</span>, clickFn );</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="comment">// 检测input元素被设置为radio类型后，是否仍然保持原先的值 保持成功返回true，失败返回false</span></div><div class="line">    <span class="comment">// 在IE6~9和opera中返回false，其他返回true</span></div><div class="line">    input = <span class="built_in">document</span>.createElement(<span class="string">"input"</span>);</div><div class="line">    input.value = <span class="string">"t"</span>;</div><div class="line">    input.setAttribute( <span class="string">"type"</span>, <span class="string">"radio"</span> );</div><div class="line">    <span class="comment">//IE返回on</span></div><div class="line">    support.radioValue = input.value === <span class="string">"t"</span>;</div><div class="line"> </div><div class="line">    input.setAttribute( <span class="string">"checked"</span>, <span class="string">"checked"</span> );</div><div class="line"> </div><div class="line">    <span class="comment">// 先“选中”然后在“名称”,顺序要点，在老版本的chroem16和safair 下有兼容问题</span></div><div class="line">    input.setAttribute( <span class="string">"name"</span>, <span class="string">"t"</span> );</div><div class="line"> </div><div class="line">    div.appendChild( input );</div><div class="line">    fragment = <span class="built_in">document</span>.createDocumentFragment();</div><div class="line">    fragment.appendChild( div.lastChild );</div><div class="line"> </div><div class="line">    <span class="comment">// 检测fragment中的checkbox的选中状态能否被复制 成功返回true,失败返回false</span></div><div class="line">    <span class="comment">// 在IE6~7中 失败返回false</span></div><div class="line">    <span class="comment">// 其他：（1） safair下 若先设置"名称"后"选中"返回true</span></div><div class="line">    <span class="comment">// 其他：（2） safair下 若先设置"选中"后"名称"返回false</span></div><div class="line">    support.checkClone = fragment.cloneNode( <span class="literal">true</span> ).cloneNode( <span class="literal">true</span> ).lastChild.checked;</div><div class="line"> </div><div class="line">    <span class="comment">// 检测(使用setAttribute)被添加到DOM中的checkbox是否仍然保留原先的选中状态 成功返回true,失败返回false</span></div><div class="line">    <span class="comment">// 在IE6~7中，返回false</span></div><div class="line">    <span class="comment">// 其他：（1） safair下 若先未设置"名称"，返回true</span></div><div class="line">    <span class="comment">// 其他：（2） safair下 若设置"名称"，则返回false </span></div><div class="line">    support.appendChecked = input.checked;</div><div class="line"> </div><div class="line">    fragment.removeChild( input );</div><div class="line">    fragment.appendChild( div );</div><div class="line"> </div><div class="line">    <span class="comment">// IE9-10 clones events bound via attachEvent, but they don't trigger with .click()</span></div><div class="line">    <span class="comment">// 检测克隆 DOM Element 是否会连同Element一起克隆(复制),成功返回false，失败返回true</span></div><div class="line">    <span class="comment">// IE6~8克隆会复制事件,标准浏览器返回false</span></div><div class="line">    <span class="keyword">if</span> ( div.attachEvent ) &#123;</div><div class="line">        <span class="keyword">for</span> ( i <span class="keyword">in</span> &#123;</div><div class="line">            submit: <span class="literal">true</span>,</div><div class="line">            change: <span class="literal">true</span>,</div><div class="line">            focusin: <span class="literal">true</span></div><div class="line">        &#125;) &#123;</div><div class="line">            eventName = <span class="string">"on"</span> + i;</div><div class="line">            isSupported = ( eventName <span class="keyword">in</span> div );</div><div class="line">            <span class="keyword">if</span> ( !isSupported ) &#123;</div><div class="line">                div.setAttribute( eventName, <span class="string">"return;"</span> );</div><div class="line">                isSupported = ( <span class="keyword">typeof</span> div[ eventName ] === <span class="string">"function"</span> );</div><div class="line">            &#125;</div><div class="line">            support[ i + <span class="string">"Bubbles"</span> ] = isSupported;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="comment">// 页面加载完成之后开始执行</span></div><div class="line">    jQuery(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> container, div, tds, marginDiv,</div><div class="line">            <span class="comment">// 声明保存一种样式（目的是重置样式）</span></div><div class="line">            divReset = <span class="string">"padding:0;margin:0;border:0;display:block;overflow:hidden;"</span>,</div><div class="line">            body = <span class="built_in">document</span>.getElementsByTagName(<span class="string">"body"</span>)[<span class="number">0</span>];</div><div class="line"> </div><div class="line">        <span class="keyword">if</span> ( !body ) &#123;</div><div class="line">            <span class="comment">// 框架的页面没有body元素，返回空值</span></div><div class="line">            <span class="keyword">return</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="comment">//创建dom,设置css</span></div><div class="line">        container = <span class="built_in">document</span>.createElement(<span class="string">"div"</span>);</div><div class="line">        container.style.cssText = <span class="string">"visibility:hidden;border:0;width:0;height:0;position:static;top:0;margin-top:1px"</span>;</div><div class="line">        body.insertBefore( container, body.firstChild );</div><div class="line"> </div><div class="line">        <span class="comment">// Construct the test element</span></div><div class="line">        div = <span class="built_in">document</span>.createElement(<span class="string">"div"</span>);</div><div class="line">        container.appendChild( div );</div><div class="line"> </div><div class="line">         </div><div class="line">        <span class="comment">// (only IE 8 fails this test)</span></div><div class="line">        <span class="comment">// 插入table表格</span></div><div class="line">        div.innerHTML = <span class="string">"&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;t&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;"</span>;</div><div class="line">        <span class="comment">// 获取TD</span></div><div class="line">        tds = div.getElementsByTagName(<span class="string">"td"</span>);</div><div class="line">        tds[ <span class="number">0</span> ].style.cssText = <span class="string">"padding:0;margin:0;border:0;display:none"</span>;</div><div class="line">        <span class="comment">// 检测none状态下，offsetHeight值是否正确,正确返回true，失败返回false</span></div><div class="line">        <span class="comment">// 在IE6~8下返回false</span></div><div class="line">        isSupported = ( tds[ <span class="number">0</span> ].offsetHeight === <span class="number">0</span> );</div><div class="line">        <span class="comment">// 检测TD初始化，相邻的td的隐藏，offsetHeight值是否正确,正确返回true，失败返回false</span></div><div class="line">        <span class="comment">// 在IE6~8返回false</span></div><div class="line">        <span class="comment">// 设置TD[0]display(显示)初始化,相邻的td隐藏</span></div><div class="line">        tds[ <span class="number">0</span> ].style.display = <span class="string">""</span>;</div><div class="line">        tds[ <span class="number">1</span> ].style.display = <span class="string">"none"</span>;</div><div class="line"> </div><div class="line">        support.reliableHiddenOffsets = isSupported &amp;&amp; ( tds[ <span class="number">0</span> ].offsetHeight === <span class="number">0</span> );</div><div class="line"> </div><div class="line">        <span class="comment">// Check box-sizing and margin behavior</span></div><div class="line">        div.innerHTML = <span class="string">""</span>;</div><div class="line">        div.style.cssText = <span class="string">"box-sizing:border-box;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;padding:1px;border:1px;display:block;width:4px;margin-top:1%;position:absolute;top:1%;"</span>;</div><div class="line">        <span class="comment">// 检测是否符盒模型(通过offsetWidth来判断)</span></div><div class="line">        <span class="comment">// 在IE6~7中返回false 返回值为6</span></div><div class="line">        support.boxSizing = ( div.offsetWidth === <span class="number">4</span> );</div><div class="line">        support.doesNotIncludeMarginInBodyOffset = ( body.offsetTop !== <span class="number">1</span> );</div><div class="line"> </div><div class="line">        <span class="comment">// 未来判断(向上检测)</span></div><div class="line">        <span class="comment">// 判断是否支持getComputedStyle方法 </span></div><div class="line">        <span class="comment">// getComputedStyle:获取当前元素所有最终使用的CSS属性值,返回的是一个CSS样式声明对象</span></div><div class="line">        <span class="keyword">if</span> ( <span class="built_in">window</span>.getComputedStyle ) &#123;</div><div class="line">            <span class="comment">// 检测图层定位（像素位置）是否有误,正确返回false 错误返回true</span></div><div class="line">            support.pixelPosition = ( <span class="built_in">window</span>.getComputedStyle( div, <span class="literal">null</span> ) || &#123;&#125; ).top !== <span class="string">"1%"</span>;</div><div class="line">            <span class="comment">// 检测盒模型是否可靠</span></div><div class="line">            support.boxSizingReliable = ( <span class="built_in">window</span>.getComputedStyle( div, <span class="literal">null</span> ) || &#123; width: <span class="string">"4px"</span> &#125; ).width === <span class="string">"4px"</span>;</div><div class="line"> </div><div class="line">            <span class="comment">// 为处理某个BUG存在,块级元素margin right兼容问题</span></div><div class="line">            <span class="comment">// webkit 返回错误的值</span></div><div class="line">            <span class="comment">// 创建一个div元素</span></div><div class="line">            marginDiv = <span class="built_in">document</span>.createElement(<span class="string">"div"</span>);</div><div class="line">            <span class="comment">// 样式声明或（重置)</span></div><div class="line">            marginDiv.style.cssText = div.style.cssText = divReset;</div><div class="line">            marginDiv.style.marginRight = marginDiv.style.width = <span class="string">"0"</span>;</div><div class="line">            div.style.width = <span class="string">"1px"</span>;</div><div class="line">            div.appendChild( marginDiv );</div><div class="line">            support.reliableMarginRight =</div><div class="line">                !<span class="built_in">parseFloat</span>( ( <span class="built_in">window</span>.getComputedStyle( marginDiv, <span class="literal">null</span> ) || &#123;&#125; ).marginRight );</div><div class="line">        &#125;</div><div class="line">        <span class="comment">// FF不支持zoom 检测IE6~7 版本</span></div><div class="line">        <span class="keyword">if</span> ( <span class="keyword">typeof</span> div.style.zoom !== <span class="string">"undefined"</span> ) &#123;</div><div class="line">            <span class="comment">// Check if natively block-level elements act like inline-block</span></div><div class="line">            <span class="comment">// elements when setting their display to 'inline' and giving</span></div><div class="line">            <span class="comment">// them layout</span></div><div class="line">            <span class="comment">// (IE &lt; 8 does this)</span></div><div class="line">            div.innerHTML = <span class="string">""</span>;</div><div class="line">            div.style.cssText = divReset + <span class="string">"width:1px;padding:1px;display:inline;zoom:1"</span>;</div><div class="line">            <span class="comment">// 检测IE6~7下，块元素在display:inline并拥有layout属性，是否会按inline-block显示</span></div><div class="line">            support.inlineBlockNeedsLayout = ( div.offsetWidth === <span class="number">3</span> );</div><div class="line"> </div><div class="line">            <span class="comment">// 检测父元素拥有layout属性和固定的width/height，是否会被子元素撑大。成功返回true失败,返回false</span></div><div class="line">            <span class="comment">// 在IE6中返回true，(值是7) </span></div><div class="line">            div.style.display = <span class="string">"block"</span>;</div><div class="line">            div.style.overflow = <span class="string">"visible"</span>;</div><div class="line">            div.innerHTML = <span class="string">"&lt;div&gt;&lt;/div&gt;"</span>;</div><div class="line">            div.firstChild.style.width = <span class="string">"5px"</span>;</div><div class="line">            support.shrinkWrapBlocks = ( div.offsetWidth !== <span class="number">3</span> );</div><div class="line"> </div><div class="line">            container.style.zoom = <span class="number">1</span>;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//删除对象, 释放内存</span></div><div class="line">        body.removeChild( container );</div><div class="line">        container = div = tds = marginDiv = <span class="literal">null</span>;</div><div class="line">    &#125;);</div><div class="line"> </div><div class="line">    <span class="comment">// IE下，创建DOM Element对象，如果没有append到页面中，刷新页面，这部分内存是不会回收的</span></div><div class="line">    <span class="comment">// 不需要的DOM Element，需要做结束清理</span></div><div class="line">    <span class="comment">// 释放dom元素占用的内存 </span></div><div class="line">    <span class="comment">// 释放DOM Element对象,垃圾清理，内存回收</span></div><div class="line">    fragment.removeChild( div );</div><div class="line">    all = a = select = opt = input = fragment = div = <span class="literal">null</span>;</div><div class="line"> </div><div class="line">    <span class="keyword">return</span> support;</div><div class="line">&#125;)();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014/05/20/jQueryRead/jQuery-read-08-2/" rel="next" title="jQuery源码阅读8-2:属性操作val(),removeAttr()">
+                <i class="fa fa-chevron-left"></i> jQuery源码阅读8-2:属性操作val(),removeAttr()
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/05/24/jQueryRead/jQuery-read-11/" rel="prev" title="jQuery源码阅读11:数据缓存data()">
+                jQuery源码阅读11:数据缓存data() <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2014/05/22/jQueryRead/jQuery-read-10/"
+           data-title="jQuery源码阅读10:浏览器检测support()" data-url="http://ruantao1989.github.io/2014/05/22/jQueryRead/jQuery-read-10/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars2.githubusercontent.com/u/1949437?v=3&s=460"
+               alt="ruantao1989" />
+          <p class="site-author-name" itemprop="name">ruantao1989</p>
+          <p class="site-description motion-element" itemprop="description">思行合一</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">30</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#源码"><span class="nav-number">1.</span> <span class="nav-text">源码</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ruantao1989</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"ruantao1989"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

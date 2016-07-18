@@ -1,0 +1,645 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="ruantao1989" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="Event这个摸块大概用了1千行, 占源代码的1/9, 我知道代码量挺大 但是没想到就看一个绑定过程(边跟边记)就得花五六个小时…挺好的周末夜晚就这样到凌晨1点了…这篇按时间顺序 说说jQ事件绑定还有event对象fix的流程
+事件这块结构大概是这样:1.外层: fn里有on,bind,live这些常用的接口2.中间层: 上述接口会调用jQuery.event对象中的基础方法, 如add(). j">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jQuery源码阅读13-1:事件绑定流程">
+<meta property="og:url" content="http://ruantao1989.github.io/2014/05/31/jQueryRead/jQuery-read-13-1/index.html">
+<meta property="og:site_name" content="ruantao1989">
+<meta property="og:description" content="Event这个摸块大概用了1千行, 占源代码的1/9, 我知道代码量挺大 但是没想到就看一个绑定过程(边跟边记)就得花五六个小时…挺好的周末夜晚就这样到凌晨1点了…这篇按时间顺序 说说jQ事件绑定还有event对象fix的流程
+事件这块结构大概是这样:1.外层: fn里有on,bind,live这些常用的接口2.中间层: 上述接口会调用jQuery.event对象中的基础方法, 如add(). j">
+<meta property="og:updated_time" content="2016-07-18T09:25:32.843Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="jQuery源码阅读13-1:事件绑定流程">
+<meta name="twitter:description" content="Event这个摸块大概用了1千行, 占源代码的1/9, 我知道代码量挺大 但是没想到就看一个绑定过程(边跟边记)就得花五六个小时…挺好的周末夜晚就这样到凌晨1点了…这篇按时间顺序 说说jQ事件绑定还有event对象fix的流程
+事件这块结构大概是这样:1.外层: fn里有on,bind,live这些常用的接口2.中间层: 上述接口会调用jQuery.event对象中的基础方法, 如add(). j">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://ruantao1989.github.io/2014/05/31/jQueryRead/jQuery-read-13-1/"/>
+
+  <title> jQuery源码阅读13-1:事件绑定流程 | ruantao1989 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">ruantao1989</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                jQuery源码阅读13-1:事件绑定流程
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2014-05-31T01:19:00+08:00" content="2014-05-31">
+              2014-05-31
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/jQuery源码阅读/" itemprop="url" rel="index">
+                    <span itemprop="name">jQuery源码阅读</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2014/05/31/jQueryRead/jQuery-read-13-1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/31/jQueryRead/jQuery-read-13-1/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Event这个摸块大概用了1千行, 占源代码的1/9, 我知道代码量挺大 但是没想到就看一个绑定过程(边跟边记)就得花五六个小时…挺好的周末夜晚就这样到凌晨1点了…<br>这篇按时间顺序 说说jQ事件绑定还有event对象fix的流程</p>
+<p>事件这块结构大概是这样:<br>1.外层: fn里有on,bind,live这些常用的接口<br>2.中间层: 上述接口会调用jQuery.event对象中的基础方法, 如add(). jQuery.event对象只是真正的执行者, 主要负责做(1)data缓存, (2)做兼容,  (3)最终生成jQuery.Event实例 (4)dispatch执行<br>3.内层: jQuery.Event实例包装原生事件对象, 记录扩展的data, 记录执行函数结果等<br><a id="more"></a></p>
+<p>绑定事件的核心就是用elem.addEventListener或elem.attachEvent绑定这个执行函数:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jQuery.event.dispatch.apply( eventHandle.elem, <span class="built_in">arguments</span> )</div></pre></td></tr></table></figure></p>
+<p>触发时, 通过elem从cache中取出原生事件对象 并加工成jQ.Event实例, 放入执行队列, 通过此实例扩展data或带回执行结果.</p>
+<h2 id="零-绑定的几种形式"><a href="#零-绑定的几种形式" class="headerlink" title="零: 绑定的几种形式"></a>零: 绑定的几种形式</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * 博文作者:ruantao1989&#123;@&#125;gmail.com</div><div class="line"> * 引自博客:ruantao.duapp.com/blog</div><div class="line"> */</div><div class="line"><span class="comment">//1普通用法,给选择出来的dom添加事件</span></div><div class="line">$(<span class="string">"p"</span>).on(<span class="string">"click"</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    alert( $(<span class="keyword">this</span>).text() );</div><div class="line">&#125;);</div><div class="line"><span class="comment">//2添加事件的同时,可以传入一个参数</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">myHandler</span>(<span class="params">event</span>) </span>&#123;</div><div class="line">    alert(event.data.foo);</div><div class="line">&#125;</div><div class="line">$(<span class="string">"p"</span>).on(<span class="string">"click"</span>, &#123;foo: <span class="string">"bar"</span>&#125;, myHandler)</div><div class="line"><span class="comment">//3第二个参数传false,阻止默认事件</span></div><div class="line">$(<span class="string">"p"</span>).on(<span class="string">"click"</span>, <span class="literal">false</span>)</div></pre></td></tr></table></figure>
+<h2 id="一-对外接口-fn-on"><a href="#一-对外接口-fn-on" class="headerlink" title="一: 对外接口 fn.on"></a>一: 对外接口 fn.on</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//==&gt;源码3485行</span></div><div class="line">jQuery.fn.extend(&#123;</div><div class="line">    <span class="comment">//第一步</span></div><div class="line">    on: <span class="function"><span class="keyword">function</span>(<span class="params"> types, selector, data, fn, <span class="comment">/*INTERNAL*/</span> one </span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> origFn, type;</div><div class="line"> </div><div class="line">        <span class="comment">//事件类型可以传入一个types或handlers对象</span></div><div class="line">        <span class="keyword">if</span> ( <span class="keyword">typeof</span> types === <span class="string">"object"</span> ) &#123;</div><div class="line">            <span class="comment">// ( types-Object, selector, data )</span></div><div class="line">            <span class="keyword">if</span> ( <span class="keyword">typeof</span> selector !== <span class="string">"string"</span> ) &#123; <span class="comment">// &amp;&amp; selector != null</span></div><div class="line">                <span class="comment">// ( types-Object, data )</span></div><div class="line">                data = data || selector;</div><div class="line">                selector = <span class="literal">undefined</span>;</div><div class="line">            &#125;</div><div class="line">            <span class="comment">//遍历事件类型对象, 逐个on上</span></div><div class="line">            <span class="keyword">for</span> ( type <span class="keyword">in</span> types ) &#123;</div><div class="line">                <span class="keyword">this</span>.on( type, selector, data, types[ type ], one );</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="keyword">if</span> ( data == <span class="literal">null</span> &amp;&amp; fn == <span class="literal">null</span> ) &#123;</div><div class="line">            <span class="comment">//第(1)种用法, 如.on("click", function()&#123;alert( $(this).text() );&#125;);</span></div><div class="line">            fn = selector;<span class="comment">//fn赋值为第二个参数(事件处理函数)</span></div><div class="line">            data = selector = <span class="literal">undefined</span>;<span class="comment">//data,selector,one这仨都是undefined</span></div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> ( fn == <span class="literal">null</span> ) &#123;</div><div class="line">            <span class="keyword">if</span> ( <span class="keyword">typeof</span> selector === <span class="string">"string"</span> ) &#123;</div><div class="line">                <span class="comment">// ( types, selector, fn )</span></div><div class="line">                fn = data;</div><div class="line">                data = <span class="literal">undefined</span>;</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                <span class="comment">// ( types, data, fn )</span></div><div class="line">                fn = data;</div><div class="line">                data = selector;</div><div class="line">                selector = <span class="literal">undefined</span>;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="comment">//第(3)种用法, fn就是return false</span></div><div class="line">        <span class="keyword">if</span> ( fn === <span class="literal">false</span> ) &#123;</div><div class="line">            fn = returnFalse;</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> ( !fn ) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//fn.one时候为1,触发一次就off掉</span></div><div class="line">        <span class="keyword">if</span> ( one === <span class="number">1</span> ) &#123;</div><div class="line">            origFn = fn;</div><div class="line">            fn = <span class="function"><span class="keyword">function</span>(<span class="params"> event </span>) </span>&#123;</div><div class="line">                <span class="comment">// Can use an empty set, since event contains the info</span></div><div class="line">                jQuery().off( event );</div><div class="line">                <span class="keyword">return</span> origFn.apply( <span class="keyword">this</span>, <span class="built_in">arguments</span> );</div><div class="line">            &#125;;</div><div class="line">            <span class="comment">// Use same guid so caller can remove using origFn</span></div><div class="line">            fn.guid = origFn.guid || ( origFn.guid = jQuery.guid++ );</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//处理好各个参数之后, 遍历当前对象, 都执行jQuery.event.add事件添加</span></div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.each( <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">            jQuery.event.add( <span class="keyword">this</span>, types, fn, data, selector );</div><div class="line">        &#125;);</div><div class="line">    &#125;,</div></pre></td></tr></table></figure>
+<h2 id="二-event-add实现绑定-其实初始化时候-event做了很多兼容性的预处理-在这个时间点之前-这些这个本文最后贴出来"><a href="#二-event-add实现绑定-其实初始化时候-event做了很多兼容性的预处理-在这个时间点之前-这些这个本文最后贴出来" class="headerlink" title="二: event.add实现绑定 (其实初始化时候, event做了很多兼容性的预处理, 在这个时间点之前, 这些这个本文最后贴出来)"></a>二: event.add实现绑定 (其实初始化时候, event做了很多兼容性的预处理, 在这个时间点之前, 这些这个本文最后贴出来)</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * 博文作者:ruantao1989&#123;@&#125;gmail.com</div><div class="line"> * 引自博客:ruantao.duapp.com/blog</div><div class="line"> */</div><div class="line"><span class="comment">//==&gt;源码2642行</span></div><div class="line">jQuery.event = &#123;</div><div class="line">    <span class="comment">//第二步</span></div><div class="line">    add: <span class="function"><span class="keyword">function</span>(<span class="params"> elem, types, handler, data, selector </span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">var</span> elemData, eventHandle, events,</div><div class="line">            t, tns, type, namespaces, handleObj,</div><div class="line">            handleObjIn, handlers, special;</div><div class="line"> </div><div class="line">        <span class="comment">//nodeType不对,没指定事件类型,没有处理函数,缓存不上的,都直接返回</span></div><div class="line">        <span class="comment">//其中elemData是调用jQuery.data生成的缓存, 如果是在dom元素上缓存, 会生成一个id关联jQuery.cache中的对应id的对象(具体过程jQ阅读-11详细分析过)</span></div><div class="line">        <span class="comment">//此处elemData是jQuery.cache[对应id]的对象</span></div><div class="line">        <span class="keyword">if</span> ( elem.nodeType === <span class="number">3</span> || elem.nodeType === <span class="number">8</span> || !types || !handler || !(elemData = jQuery._data( elem )) ) &#123;</div><div class="line">            <span class="keyword">return</span>;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//传入的处理函数,如果有.handler属性</span></div><div class="line">        <span class="keyword">if</span> ( handler.handler ) &#123;</div><div class="line">            handleObjIn = handler;</div><div class="line">            handler = handleObjIn.handler;</div><div class="line">            selector = handleObjIn.selector;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//处理函数handler如果没有guid就给分配一个</span></div><div class="line">        <span class="comment">//handler是function, 在实例上直接加guid属性</span></div><div class="line">        <span class="keyword">if</span> ( !handler.guid ) &#123;</div><div class="line">            handler.guid = jQuery.guid++;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//下边这部分对elemData的处理,实际上就是对cache中此对象缓存的处理</span></div><div class="line">        <span class="comment">//elemData.events是缓存的事件数组,之前有可能有已缓存的事件</span></div><div class="line">        events = elemData.events;</div><div class="line">        <span class="keyword">if</span> ( !events ) &#123;</div><div class="line">            <span class="comment">//之前没有缓存对象, 创建一个空对象, 刚刚undefined的events也置成空的</span></div><div class="line">            elemData.events = events = &#123;&#125;;</div><div class="line">        &#125;</div><div class="line">        <span class="comment">//elemData.handle是缓存对象里保存dom元素信息的, 触发时使用</span></div><div class="line">        eventHandle = elemData.handle;</div><div class="line">        <span class="keyword">if</span> ( !eventHandle ) &#123;</div><div class="line">            <span class="comment">//要是之前没有, 就添加一个</span></div><div class="line">            <span class="comment">//此处是核心</span></div><div class="line">            elemData.handle = eventHandle = <span class="function"><span class="keyword">function</span>(<span class="params"> e </span>) </span>&#123;</div><div class="line">                <span class="comment">// Discard the second event of a jQuery.event.trigger() and</span></div><div class="line">                <span class="comment">// when an event is called after a page has unloaded</span></div><div class="line">                <span class="keyword">return</span> <span class="keyword">typeof</span> jQuery !== <span class="string">"undefined"</span> &amp;&amp; (!e || jQuery.event.triggered !== e.type) ?</div><div class="line">                    <span class="comment">//绑定事件的处理函数实际上使用了jQuery.event.dispatch</span></div><div class="line">                    jQuery.event.dispatch.apply( eventHandle.elem, <span class="built_in">arguments</span> ) :</div><div class="line">                    <span class="literal">undefined</span>;</div><div class="line">            &#125;;</div><div class="line">            <span class="comment">//官方注释:添加元素进来,是为了防止低内存时候的IE non-native events</span></div><div class="line">            eventHandle.elem = elem;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//传来的多个事件类型(字串,如("mouseover mouseout",function())), 在这转成数组</span></div><div class="line">        types = jQuery.trim( hoverHack(types) ).split( <span class="string">" "</span> );</div><div class="line">        <span class="keyword">for</span> ( t = <span class="number">0</span>; t &lt; types.length; t++ ) &#123;</div><div class="line">            <span class="comment">//正则筛选出事件的命名空间和事件, 如 click.ns ,过正则就是["clcik.ns", "clcik", "ns"]</span></div><div class="line">            tns = rtypenamespace.exec( types[t] ) || [];</div><div class="line">            type = tns[<span class="number">1</span>];</div><div class="line">            namespaces = ( tns[<span class="number">2</span>] || <span class="string">""</span> ).split( <span class="string">"."</span> ).sort();</div><div class="line"> </div><div class="line">            <span class="comment">//是否需要special处理, 类似之前的钩子</span></div><div class="line">            <span class="comment">//special对象包括如下属性:</span></div><div class="line">            <span class="comment">//&#123;beforeunload: Object,,blur: Object,focus: Object,focusin: Object,focusout: Object,load: Object,mouseenter: Object,mouseleave: Object&#125;</span></div><div class="line">            special = jQuery.event.special[ type ] || &#123;&#125;;</div><div class="line">            <span class="comment">//其中一个对象的结构如下:</span></div><div class="line">            <span class="comment">//mouseenter: Object</span></div><div class="line">            <span class="comment">// -bindType: "mouseover"</span></div><div class="line">            <span class="comment">// -delegateType: "mouseover"</span></div><div class="line">            <span class="comment">// -handle: function ( event ) &#123;</span></div><div class="line">            <span class="comment">// -__proto__: Object</span></div><div class="line">            <span class="comment">// 如果传来selector,就优先检查special.delegateType, </span></div><div class="line">            <span class="comment">//没传来就用special.bindType, 都没有就还用原事件类型type</span></div><div class="line">            type = ( selector ? special.delegateType : special.bindType ) || type;</div><div class="line">            <span class="comment">//根据修正的delegateType或bindType,再查一次是否需要特殊处理</span></div><div class="line">            special = jQuery.event.special[ type ] || &#123;&#125;;</div><div class="line"> </div><div class="line">            <span class="comment">//把所有和事件相关的参数,都组装进handleObjIn对象</span></div><div class="line">            handleObj = jQuery.extend(&#123;</div><div class="line">                type: type,<span class="comment">//事件类型</span></div><div class="line">                origType: tns[<span class="number">1</span>],<span class="comment">//未修正之前的事件类型</span></div><div class="line">                data: data,<span class="comment">//第(2)种用法, 传来的参数对象</span></div><div class="line">                handler: handler,<span class="comment">//事件处理函数</span></div><div class="line">                guid: handler.guid,<span class="comment">//唯一id</span></div><div class="line">                selector: selector,</div><div class="line">                needsContext: selector &amp;&amp; jQuery.expr.match.needsContext.test( selector ),</div><div class="line">                namespace: namespaces.join(<span class="string">"."</span>)<span class="comment">//命名空间转回字串</span></div><div class="line">            &#125;, handleObjIn );</div><div class="line"> </div><div class="line">            <span class="comment">//尝试取出事件对应的处理函数</span></div><div class="line">            handlers = events[ type ];</div><div class="line">            <span class="keyword">if</span> ( !handlers ) &#123;</div><div class="line">                <span class="comment">//如果没取到, 就是要写入一个新的handlers</span></div><div class="line">                handlers = events[ type ] = [];</div><div class="line">                handlers.delegateCount = <span class="number">0</span>;</div><div class="line"> </div><div class="line">                <span class="comment">//非special的情况,直接</span></div><div class="line">                <span class="keyword">if</span> ( !special.setup || special.setup.call( elem, data, namespaces, eventHandle ) === <span class="literal">false</span> ) &#123;</div><div class="line">                    <span class="comment">//绑定事件</span></div><div class="line">                    <span class="comment">//这的eventHandle是jQuery.event.dispatch.apply( eventHandle.elem, arguments ),通过dispatch分发的</span></div><div class="line">                    <span class="keyword">if</span> ( elem.addEventListener ) &#123;</div><div class="line">                        elem.addEventListener( type, eventHandle, <span class="literal">false</span> );</div><div class="line">                    <span class="comment">//做兼容处理</span></div><div class="line">                    &#125; <span class="keyword">else</span> <span class="keyword">if</span> ( elem.attachEvent ) &#123;</div><div class="line">                        elem.attachEvent( <span class="string">"on"</span> + type, eventHandle );</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line"> </div><div class="line">            <span class="keyword">if</span> ( special.add ) &#123;</div><div class="line">                special.add.call( elem, handleObj );</div><div class="line"> </div><div class="line">                <span class="keyword">if</span> ( !handleObj.handler.guid ) &#123;</div><div class="line">                    handleObj.handler.guid = handler.guid;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line"> </div><div class="line">            <span class="comment">// Add to the element's handler list, delegates in front</span></div><div class="line">            <span class="keyword">if</span> ( selector ) &#123;</div><div class="line">                handlers.splice( handlers.delegateCount++, <span class="number">0</span>, handleObj );</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                handlers.push( handleObj );</div><div class="line">            &#125;</div><div class="line"> </div><div class="line">            <span class="comment">//global初始化为&#123;&#125;, 在这对该type做个标记, 触发事件时候判断用</span></div><div class="line">            jQuery.event.global[ type ] = <span class="literal">true</span>;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//防止IE不能释环引用过来的对象</span></div><div class="line">        elem = <span class="literal">null</span>;</div><div class="line">    &#125;,</div></pre></td></tr></table></figure>
+<h2 id="三-event-dispatch事件触发"><a href="#三-event-dispatch事件触发" class="headerlink" title="三: event.dispatch事件触发"></a>三: event.dispatch事件触发</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * 博文作者:ruantao1989&#123;@&#125;gmail.com</div><div class="line"> * 引自博客:ruantao.duapp.com/blog</div><div class="line"> */</div><div class="line"><span class="comment">//==&gt;源码2985行</span></div><div class="line">    <span class="comment">//第三步</span></div><div class="line">    dispatch: <span class="function"><span class="keyword">function</span>(<span class="params"> event </span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="comment">//经过fix修复过的jQ.Event实例, 里边属性都修复过了, 也包装了原生事件对象 </span></div><div class="line">        event = jQuery.event.fix( event || <span class="built_in">window</span>.event );</div><div class="line"> </div><div class="line">        <span class="keyword">var</span> i, j, cur, ret, selMatch, matched, matches, handleObj, sel, related,</div><div class="line">            <span class="comment">//取出在add时放入cache的缓存对象,的events属性, 的事件属性数组, 没有就是[]</span></div><div class="line">            <span class="comment">//jQuery.cache</span></div><div class="line">            <span class="comment">// --Object</span></div><div class="line">            <span class="comment">// ----1: Object</span></div><div class="line">            <span class="comment">// ------events: Object</span></div><div class="line">            <span class="comment">// ------click: Array[1]</span></div><div class="line">            handlers = ( (jQuery._data( <span class="keyword">this</span>, <span class="string">"events"</span> ) || &#123;&#125; )[ event.type ] || []),</div><div class="line">            <span class="comment">//拿到委托数目</span></div><div class="line">            delegateCount = handlers.delegateCount,</div><div class="line">            <span class="comment">//转成真实数组</span></div><div class="line">            args = core_slice.call( <span class="built_in">arguments</span> ),</div><div class="line">            run_all = !event.exclusive &amp;&amp; !event.namespace,</div><div class="line">            <span class="comment">//是否需要特殊处理</span></div><div class="line">            special = jQuery.event.special[ event.type ] || &#123;&#125;,</div><div class="line">            <span class="comment">//执行队列</span></div><div class="line">            handlerQueue = [];</div><div class="line"> </div><div class="line">        <span class="comment">//jQuery.event.fix过的event对象, 原生事件对象只读</span></div><div class="line">        args[<span class="number">0</span>] = event;</div><div class="line">        event.delegateTarget = <span class="keyword">this</span>;</div><div class="line"> </div><div class="line">        <span class="comment">//特殊处理里如果有preDispatch钩子, 就执行, 返回false就有问题, 直接return. </span></div><div class="line">        <span class="comment">//这个钩子应该是预留的 我在源码里没找到</span></div><div class="line">        <span class="keyword">if</span> ( special.preDispatch &amp;&amp; special.preDispatch.call( <span class="keyword">this</span>, event ) === <span class="literal">false</span> ) &#123;</div><div class="line">            <span class="keyword">return</span>;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//有事件委托的话, 这个等看委托时候再分析</span></div><div class="line">        <span class="keyword">if</span> ( delegateCount &amp;&amp; !(event.button &amp;&amp; event.type === <span class="string">"click"</span>) ) &#123;</div><div class="line"> </div><div class="line">            <span class="keyword">for</span> ( cur = event.target; cur != <span class="keyword">this</span>; cur = cur.parentNode || <span class="keyword">this</span> ) &#123;</div><div class="line"> </div><div class="line">                <span class="comment">// Don't process clicks (ONLY) on disabled elements (#6911, #8165, #11382, #11764)</span></div><div class="line">                <span class="keyword">if</span> ( cur.disabled !== <span class="literal">true</span> || event.type !== <span class="string">"click"</span> ) &#123;</div><div class="line">                    selMatch = &#123;&#125;;</div><div class="line">                    matches = [];</div><div class="line">                    <span class="keyword">for</span> ( i = <span class="number">0</span>; i &lt; delegateCount; i++ ) &#123;</div><div class="line">                        handleObj = handlers[ i ];</div><div class="line">                        sel = handleObj.selector;</div><div class="line"> </div><div class="line">                        <span class="keyword">if</span> ( selMatch[ sel ] === <span class="literal">undefined</span> ) &#123;</div><div class="line">                            selMatch[ sel ] = handleObj.needsContext ?</div><div class="line">                                jQuery( sel, <span class="keyword">this</span> ).index( cur ) &gt;= <span class="number">0</span> :</div><div class="line">                                jQuery.find( sel, <span class="keyword">this</span>, <span class="literal">null</span>, [ cur ] ).length;</div><div class="line">                        &#125;</div><div class="line">                        <span class="keyword">if</span> ( selMatch[ sel ] ) &#123;</div><div class="line">                            matches.push( handleObj );</div><div class="line">                        &#125;</div><div class="line">                    &#125;</div><div class="line">                    <span class="keyword">if</span> ( matches.length ) &#123;</div><div class="line">                        handlerQueue.push(&#123; elem: cur, matches: matches &#125;);</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//没有事件委托的话</span></div><div class="line">        <span class="keyword">if</span> ( handlers.length &gt; delegateCount ) &#123;</div><div class="line">            <span class="comment">//执行队列里push进对象 &#123;elem:dom对象, matches:执行数组副本&#125;</span></div><div class="line">            handlerQueue.push(&#123; elem: <span class="keyword">this</span>, matches: handlers.slice( delegateCount ) &#125;);</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//遍历执行队列(event没有停止传播) 终于到执行了...</span></div><div class="line">        <span class="keyword">for</span> ( i = <span class="number">0</span>; i &lt; handlerQueue.length &amp;&amp; !event.isPropagationStopped(); i++ ) &#123;</div><div class="line">            <span class="comment">//取出队列中的一项</span></div><div class="line">            matched = handlerQueue[ i ];</div><div class="line">            event.currentTarget = matched.elem;</div><div class="line"> </div><div class="line">            <span class="keyword">for</span> ( j = <span class="number">0</span>; j &lt; matched.matches.length &amp;&amp; !event.isImmediatePropagationStopped(); j++ ) &#123;</div><div class="line">                <span class="comment">//具体执行函数, 在cache上的引用</span></div><div class="line">                handleObj = matched.matches[ j ];</div><div class="line"> </div><div class="line">                <span class="comment">// Triggered event must either 1) be non-exclusive and have no namespace, or</span></div><div class="line">                <span class="comment">// 2) have namespace(s) a subset or equal to those in the bound event (both can have no namespace).</span></div><div class="line">                <span class="keyword">if</span> ( run_all || (!event.namespace &amp;&amp; !handleObj.namespace) || event.namespace_re &amp;&amp; event.namespace_re.test( handleObj.namespace ) ) &#123;</div><div class="line">                    <span class="comment">//第(2)种用法, 指定data</span></div><div class="line">                    event.data = handleObj.data;</div><div class="line">                    <span class="comment">//在实践对象里增加一个handleObj的引用</span></div><div class="line">                    event.handleObj = handleObj;</div><div class="line">                    <span class="comment">//核心</span></div><div class="line">                    <span class="comment">//(jQuery.event.special[ handleObj.origType ] || &#123;&#125;).handle是执行看特殊处理原始事件类型.handle</span></div><div class="line">                    <span class="comment">//没有就handleObj.handler.apply( matched.elem这个Dom对象, args );</span></div><div class="line">                    <span class="comment">//handleObj.handler是最开始传入的alert(), args是相应的jQ.Event实例</span></div><div class="line">                    ret = ( (jQuery.event.special[ handleObj.origType ] || &#123;&#125;).handle || handleObj.handler )</div><div class="line">                            .apply( matched.elem, args );</div><div class="line"> </div><div class="line">                    <span class="comment">//事件处理函数中有返回值,需记录</span></div><div class="line">                    <span class="keyword">if</span> ( ret !== <span class="literal">undefined</span> ) &#123;</div><div class="line">                        event.result = ret;</div><div class="line">                        <span class="comment">//如果在事件处理函数中返回false就阻止默认事件, 阻止传播</span></div><div class="line">                        <span class="keyword">if</span> ( ret === <span class="literal">false</span> ) &#123;</div><div class="line">                            event.preventDefault();</div><div class="line">                            event.stopPropagation();</div><div class="line">                        &#125;</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//如果有特殊的后处理, 在执行</span></div><div class="line">        <span class="keyword">if</span> ( special.postDispatch ) &#123;</div><div class="line">            special.postDispatch.call( <span class="keyword">this</span>, event );</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//返回: 事件处理函数中有返回值</span></div><div class="line">        <span class="keyword">return</span> event.result;</div><div class="line">    &#125;,</div></pre></td></tr></table></figure>
+<h2 id="四-jQ-Event对象和对原生对象的修复-这个出现时间点其实在第三步的中间-这样写比较清楚"><a href="#四-jQ-Event对象和对原生对象的修复-这个出现时间点其实在第三步的中间-这样写比较清楚" class="headerlink" title="四: jQ.Event对象和对原生对象的修复 ( 这个出现时间点其实在第三步的中间 这样写比较清楚 )"></a>四: jQ.Event对象和对原生对象的修复 ( 这个出现时间点其实在第三步的中间 这样写比较清楚 )</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * 博文作者:ruantao1989&#123;@&#125;gmail.com</div><div class="line"> * 引自博客:ruantao.duapp.com/blog</div><div class="line"> */</div><div class="line">    <span class="comment">//==&gt;源码3241行</span></div><div class="line">    <span class="comment">//jQ自定义event的构造函数</span></div><div class="line">    jQuery.Event = <span class="function"><span class="keyword">function</span>(<span class="params"> src, props </span>) </span>&#123;</div><div class="line">        <span class="comment">//无new的工厂</span></div><div class="line">        <span class="keyword">if</span> ( !(<span class="keyword">this</span> <span class="keyword">instanceof</span> jQuery.Event) ) &#123;</div><div class="line">            <span class="comment">//一来能省new, 二来能省return</span></div><div class="line">            <span class="keyword">return</span> <span class="keyword">new</span> jQuery.Event( src, props );</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//往实例里写参数</span></div><div class="line">        <span class="keyword">if</span> ( src &amp;&amp; src.type ) &#123;</div><div class="line">            <span class="comment">//原生事件对象包装在originalEvent属性里</span></div><div class="line">            <span class="keyword">this</span>.originalEvent = src;</div><div class="line">            <span class="comment">//单独抽出原生对象的类型</span></div><div class="line">            <span class="keyword">this</span>.type = src.type;</div><div class="line"> </div><div class="line">            <span class="comment">// Events bubbling up the document may have been marked as prevented</span></div><div class="line">            <span class="comment">// by a handler lower down the tree; reflect the correct value.</span></div><div class="line">            <span class="comment">//是否阻止默认事件标志, 做兼容判断, 留个回调返回 true/false</span></div><div class="line">            <span class="keyword">this</span>.isDefaultPrevented = ( src.defaultPrevented || src.returnValue === <span class="literal">false</span> ||</div><div class="line">                src.getPreventDefault &amp;&amp; src.getPreventDefault() ) ? returnTrue : returnFalse;</div><div class="line"> </div><div class="line">        <span class="comment">// Event type</span></div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">this</span>.type = src;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//如果传入props数组则合并</span></div><div class="line">        <span class="keyword">if</span> ( props ) &#123;</div><div class="line">            jQuery.extend( <span class="keyword">this</span>, props );</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//原生事件对象中没有时间戳的, 填一个时间戳</span></div><div class="line">        <span class="keyword">this</span>.timeStamp = src &amp;&amp; src.timeStamp || jQuery.now();</div><div class="line"> </div><div class="line">        <span class="comment">//实例中添加属性jQuery.expando唯一id : true</span></div><div class="line">        <span class="keyword">this</span>[ jQuery.expando ] = <span class="literal">true</span>;</div><div class="line">    &#125;;</div><div class="line">    <span class="comment">//==&gt;源码3130行</span></div><div class="line">    fix: <span class="function"><span class="keyword">function</span>(<span class="params"> event </span>) </span>&#123;</div><div class="line">        <span class="comment">//检查event对象中,存不存在唯一id:jQuery.expando</span></div><div class="line">        <span class="keyword">if</span> ( event[ jQuery.expando ] ) &#123;</div><div class="line">            <span class="keyword">return</span> event;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">// Create a writable copy of the event object and normalize some properties</span></div><div class="line">        <span class="keyword">var</span> i, prop,</div><div class="line">            originalEvent = event,<span class="comment">//原始事件对象</span></div><div class="line">            fixHook = jQuery.event.fixHooks[ event.type ] || &#123;&#125;,<span class="comment">//检查是否需要hook</span></div><div class="line">            <span class="comment">//如果有钩子,则使用钩子的props+jQuery.event.props, 否者使用jQuery.event.props</span></div><div class="line">            copy = fixHook.props ? <span class="keyword">this</span>.props.concat( fixHook.props ) : <span class="keyword">this</span>.props;</div><div class="line"> </div><div class="line">        <span class="comment">//通过jQuery.Event这个工厂, 生成一个实例</span></div><div class="line">        event = jQuery.Event( originalEvent );</div><div class="line"> </div><div class="line">        <span class="comment">//遍历copy</span></div><div class="line">        <span class="keyword">for</span> ( i = copy.length; i; ) &#123;</div><div class="line">            prop = copy[ --i ];</div><div class="line">            <span class="comment">//把原生event对象中的需要处理的属性, 逐个拷贝进jQ的event实例(比如screenX,screenY这种杂七杂八的属性 以备后用)</span></div><div class="line">            event[ prop ] = originalEvent[ prop ];</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//处理IE中没有event.target属性</span></div><div class="line">        <span class="keyword">if</span> ( !event.target ) &#123;</div><div class="line">            event.target = originalEvent.srcElement || <span class="built_in">document</span>;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//处理Safari下的一个bug: #504</span></div><div class="line">        <span class="keyword">if</span> ( event.target.nodeType === <span class="number">3</span> ) &#123;</div><div class="line">            event.target = event.target.parentNode;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//如果event.metaKey没有,metaKey应该为false(IE678的mouse/key事件)</span></div><div class="line">        event.metaKey = !!event.metaKey;</div><div class="line"> </div><div class="line">        <span class="comment">//如果有fixHook.filter还得调一次fixHook.filter( event, originalEvent ), </span></div><div class="line">        <span class="comment">//真正的执行钩子, 如做clientX,clientY换算, 左右按键的兼容性等, 执行完会返回一个修正过的event对象</span></div><div class="line">        <span class="comment">//详见mouseHooks和keyHooks</span></div><div class="line">        <span class="keyword">return</span> fixHook.filter? fixHook.filter( event, originalEvent ) : event;</div><div class="line">    &#125;,</div></pre></td></tr></table></figure>
+<h2 id="附-special处理"><a href="#附-special处理" class="headerlink" title="附: special处理"></a>附: special处理</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//==&gt;源码3639行</span></div><div class="line">    <span class="comment">//下边这些事件都需要修正,</span></div><div class="line">    jQuery.each( (<span class="string">"blur focus focusin focusout load resize scroll unload click dblclick "</span> +</div><div class="line">        <span class="string">"mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave "</span> +</div><div class="line">        <span class="string">"change select submit keydown keypress keyup error contextmenu"</span>).split(<span class="string">" "</span>), <span class="function"><span class="keyword">function</span>(<span class="params"> i, name </span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="comment">//改写事件处理, 比如jQuery.fn.blur改为 = function(data, fn)&#123;...&#125;</span></div><div class="line">        jQuery.fn[ name ] = <span class="function"><span class="keyword">function</span>(<span class="params"> data, fn </span>) </span>&#123;</div><div class="line">            <span class="keyword">if</span> ( fn == <span class="literal">null</span> ) &#123;</div><div class="line">                fn = data;</div><div class="line">                data = <span class="literal">null</span>;</div><div class="line">            &#125;</div><div class="line"> </div><div class="line">            <span class="keyword">return</span> <span class="built_in">arguments</span>.length &gt; <span class="number">0</span> ?</div><div class="line">                <span class="keyword">this</span>.on( name, <span class="literal">null</span>, data, fn ) :</div><div class="line">                <span class="keyword">this</span>.trigger( name );</div><div class="line">        &#125;;</div><div class="line">        <span class="comment">//创建fixHooks, 初始化为&#123;&#125;, 以下逐个添加 , jQuery.event.fix中调用</span></div><div class="line">        <span class="comment">// rkeyEvent = /^key/, 以"key"开头</span></div><div class="line">        <span class="keyword">if</span> ( rkeyEvent.test( name ) ) &#123;</div><div class="line">            jQuery.event.fixHooks[ name ] = jQuery.event.keyHooks;</div><div class="line">        &#125;</div><div class="line">        <span class="comment">//rmouseEvent = /^(?:mouse|contextmenu)|click/, mouse开头或左右键,</span></div><div class="line">        <span class="keyword">if</span> ( rmouseEvent.test( name ) ) &#123;</div><div class="line">            <span class="comment">//如jQuery.event.fixHooks.click = jQuery.event.mouseHooks;</span></div><div class="line">            jQuery.event.fixHooks[ name ] = jQuery.event.mouseHooks;</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">    <span class="comment">//==&gt;源码3085行</span></div><div class="line">    keyHooks: &#123;</div><div class="line">        props: <span class="string">"char charCode key keyCode"</span>.split(<span class="string">" "</span>),</div><div class="line">        filter: <span class="function"><span class="keyword">function</span>(<span class="params"> event, original </span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="comment">// Add which for key events</span></div><div class="line">            <span class="keyword">if</span> ( event.which == <span class="literal">null</span> ) &#123;</div><div class="line">                event.which = original.charCode != <span class="literal">null</span> ? original.charCode : original.keyCode;</div><div class="line">            &#125;</div><div class="line"> </div><div class="line">            <span class="keyword">return</span> event;</div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line">    mouseHooks: &#123;</div><div class="line">        props: <span class="string">"button buttons clientX clientY fromElement offsetX offsetY pageX pageY screenX screenY toElement"</span>.split(<span class="string">" "</span>),</div><div class="line">        filter: <span class="function"><span class="keyword">function</span>(<span class="params"> event, original </span>) </span>&#123;</div><div class="line">            <span class="keyword">var</span> eventDoc, doc, body,</div><div class="line">                button = original.button,</div><div class="line">                fromElement = original.fromElement;</div><div class="line"> </div><div class="line">            <span class="comment">//根据兼容性计算event.pageX和event.pageY</span></div><div class="line">            <span class="keyword">if</span> ( event.pageX == <span class="literal">null</span> &amp;&amp; original.clientX != <span class="literal">null</span> ) &#123;</div><div class="line">                eventDoc = event.target.ownerDocument || <span class="built_in">document</span>;</div><div class="line">                doc = eventDoc.documentElement;</div><div class="line">                body = eventDoc.body;</div><div class="line"> </div><div class="line">                event.pageX = original.clientX + ( doc &amp;&amp; doc.scrollLeft || body &amp;&amp; body.scrollLeft || <span class="number">0</span> ) - ( doc &amp;&amp; doc.clientLeft || body &amp;&amp; body.clientLeft || <span class="number">0</span> );</div><div class="line">                event.pageY = original.clientY + ( doc &amp;&amp; doc.scrollTop  || body &amp;&amp; body.scrollTop  || <span class="number">0</span> ) - ( doc &amp;&amp; doc.clientTop  || body &amp;&amp; body.clientTop  || <span class="number">0</span> );</div><div class="line">            &#125;</div><div class="line"> </div><div class="line">            <span class="comment">//增加event.relatedTarget,不知道干嘛用的</span></div><div class="line">            <span class="keyword">if</span> ( !event.relatedTarget &amp;&amp; fromElement ) &#123;</div><div class="line">                event.relatedTarget = fromElement === event.target ? original.toElement : fromElement;</div><div class="line">            &#125;</div><div class="line"> </div><div class="line">            <span class="comment">//event.which是鼠标按键 1 === 左键; 2 === 中键; 3 === 右键</span></div><div class="line">            <span class="keyword">if</span> ( !event.which &amp;&amp; button !== <span class="literal">undefined</span> ) &#123;</div><div class="line">                event.which = ( button &amp; <span class="number">1</span> ? <span class="number">1</span> : ( button &amp; <span class="number">2</span> ? <span class="number">3</span> : ( button &amp; <span class="number">4</span> ? <span class="number">2</span> : <span class="number">0</span> ) ) );</div><div class="line">            &#125;</div><div class="line"> </div><div class="line">            <span class="keyword">return</span> event;</div><div class="line">        &#125;</div><div class="line">    &#125;,</div></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//==&gt;源码3164行</span></div><div class="line">special: &#123;</div><div class="line">    load: &#123;</div><div class="line">        <span class="comment">// Prevent triggered image.load events from bubbling to window.load</span></div><div class="line">        noBubble: <span class="literal">true</span></div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    focus: &#123;</div><div class="line">        delegateType: <span class="string">"focusin"</span></div><div class="line">    &#125;,</div><div class="line">    blur: &#123;</div><div class="line">        delegateType: <span class="string">"focusout"</span></div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    beforeunload: &#123;</div><div class="line">        setup: <span class="function"><span class="keyword">function</span>(<span class="params"> data, namespaces, eventHandle </span>) </span>&#123;</div><div class="line">            <span class="comment">// We only want to do this special case on windows</span></div><div class="line">            <span class="keyword">if</span> ( jQuery.isWindow( <span class="keyword">this</span> ) ) &#123;</div><div class="line">                <span class="keyword">this</span>.onbeforeunload = eventHandle;</div><div class="line">            &#125;</div><div class="line">        &#125;,</div><div class="line"> </div><div class="line">        teardown: <span class="function"><span class="keyword">function</span>(<span class="params"> namespaces, eventHandle </span>) </span>&#123;</div><div class="line">            <span class="keyword">if</span> ( <span class="keyword">this</span>.onbeforeunload === eventHandle ) &#123;</div><div class="line">                <span class="keyword">this</span>.onbeforeunload = <span class="literal">null</span>;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;,</div><div class="line"><span class="comment">//==&gt;源码3324行</span></div><div class="line"><span class="comment">//特殊事件处理</span></div><div class="line"><span class="comment">//把mouseenter修正为"mouseover", mouseleave修正为"mouseout"</span></div><div class="line">jQuery.each(&#123;</div><div class="line">    mouseenter: <span class="string">"mouseover"</span>,</div><div class="line">    mouseleave: <span class="string">"mouseout"</span></div><div class="line">&#125;, <span class="function"><span class="keyword">function</span>(<span class="params"> orig, fix </span>) </span>&#123;</div><div class="line">    <span class="comment">//jQuery.event.special[mouseover] 和 jQuery.event.special[mouseout]</span></div><div class="line">    jQuery.event.special[ orig ] = &#123;</div><div class="line">        delegateType: fix,</div><div class="line">        bindType: fix,</div><div class="line"> </div><div class="line">        handle: <span class="function"><span class="keyword">function</span>(<span class="params"> event </span>) </span>&#123;</div><div class="line">            <span class="keyword">var</span> ret,</div><div class="line">                target = <span class="keyword">this</span>,</div><div class="line">                related = event.relatedTarget,</div><div class="line">                handleObj = event.handleObj,</div><div class="line">                selector = handleObj.selector;</div><div class="line"> </div><div class="line">            <span class="comment">//mousenter/leave事件,如果没有related, 或target不包含related, 要修改event</span></div><div class="line">            <span class="keyword">if</span> ( !related || (related !== target &amp;&amp; !jQuery.contains( target, related )) ) &#123;</div><div class="line">                event.type = handleObj.origType;</div><div class="line">                ret = handleObj.handler.apply( <span class="keyword">this</span>, <span class="built_in">arguments</span> );</div><div class="line">                event.type = fix;</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">return</span> ret;</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line">&#125;);</div><div class="line"><span class="comment">// IE submit delegation</span></div><div class="line"><span class="keyword">if</span> ( !jQuery.support.submitBubbles ) &#123;</div><div class="line"> </div><div class="line">    jQuery.event.special.submit = &#123;</div><div class="line">        setup: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">            <span class="comment">// Only need this for delegated form submit events</span></div><div class="line">            <span class="keyword">if</span> ( jQuery.nodeName( <span class="keyword">this</span>, <span class="string">"form"</span> ) ) &#123;</div><div class="line">                <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">            &#125;</div><div class="line"> </div><div class="line">            <span class="comment">// Lazy-add a submit handler when a descendant form may potentially be submitted</span></div><div class="line">            jQuery.event.add( <span class="keyword">this</span>, <span class="string">"click._submit keypress._submit"</span>, <span class="function"><span class="keyword">function</span>(<span class="params"> e </span>) </span>&#123;</div><div class="line">                <span class="comment">// Node name check avoids a VML-related crash in IE (#9807)</span></div><div class="line">                <span class="keyword">var</span> elem = e.target,</div><div class="line">                    form = jQuery.nodeName( elem, <span class="string">"input"</span> ) || jQuery.nodeName( elem, <span class="string">"button"</span> ) ? elem.form : <span class="literal">undefined</span>;</div><div class="line">                <span class="keyword">if</span> ( form &amp;&amp; !jQuery._data( form, <span class="string">"_submit_attached"</span> ) ) &#123;</div><div class="line">                    jQuery.event.add( form, <span class="string">"submit._submit"</span>, <span class="function"><span class="keyword">function</span>(<span class="params"> event </span>) </span>&#123;</div><div class="line">                        event._submit_bubble = <span class="literal">true</span>;</div><div class="line">                    &#125;);</div><div class="line">                    jQuery._data( form, <span class="string">"_submit_attached"</span>, <span class="literal">true</span> );</div><div class="line">                &#125;</div><div class="line">            &#125;);</div><div class="line">            <span class="comment">// return undefined since we don't need an event listener</span></div><div class="line">        &#125;,</div><div class="line"> </div><div class="line">        postDispatch: <span class="function"><span class="keyword">function</span>(<span class="params"> event </span>) </span>&#123;</div><div class="line">            <span class="comment">// If form was submitted by the user, bubble the event up the tree</span></div><div class="line">            <span class="keyword">if</span> ( event._submit_bubble ) &#123;</div><div class="line">                <span class="keyword">delete</span> event._submit_bubble;</div><div class="line">                <span class="keyword">if</span> ( <span class="keyword">this</span>.parentNode &amp;&amp; !event.isTrigger ) &#123;</div><div class="line">                    jQuery.event.simulate( <span class="string">"submit"</span>, <span class="keyword">this</span>.parentNode, event, <span class="literal">true</span> );</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;,</div><div class="line"> </div><div class="line">        teardown: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">            <span class="comment">// Only need this for delegated form submit events</span></div><div class="line">            <span class="keyword">if</span> ( jQuery.nodeName( <span class="keyword">this</span>, <span class="string">"form"</span> ) ) &#123;</div><div class="line">                <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">            &#125;</div><div class="line"> </div><div class="line">            <span class="comment">// Remove delegated handlers; cleanData eventually reaps submit handlers attached above</span></div><div class="line">            jQuery.event.remove( <span class="keyword">this</span>, <span class="string">"._submit"</span> );</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line">&#125;</div><div class="line"><span class="comment">// IE change delegation and checkbox/radio fix</span></div><div class="line"><span class="keyword">if</span> ( !jQuery.support.changeBubbles ) &#123;</div><div class="line"> </div><div class="line">    jQuery.event.special.change = &#123;</div><div class="line"> </div><div class="line">        setup: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="keyword">if</span> ( rformElems.test( <span class="keyword">this</span>.nodeName ) ) &#123;</div><div class="line">                <span class="comment">// IE doesn't fire change on a check/radio until blur; trigger it on click</span></div><div class="line">                <span class="comment">// after a propertychange. Eat the blur-change in special.change.handle.</span></div><div class="line">                <span class="comment">// This still fires onchange a second time for check/radio after blur.</span></div><div class="line">                <span class="keyword">if</span> ( <span class="keyword">this</span>.type === <span class="string">"checkbox"</span> || <span class="keyword">this</span>.type === <span class="string">"radio"</span> ) &#123;</div><div class="line">                    jQuery.event.add( <span class="keyword">this</span>, <span class="string">"propertychange._change"</span>, <span class="function"><span class="keyword">function</span>(<span class="params"> event </span>) </span>&#123;</div><div class="line">                        <span class="keyword">if</span> ( event.originalEvent.propertyName === <span class="string">"checked"</span> ) &#123;</div><div class="line">                            <span class="keyword">this</span>._just_changed = <span class="literal">true</span>;</div><div class="line">                        &#125;</div><div class="line">                    &#125;);</div><div class="line">                    jQuery.event.add( <span class="keyword">this</span>, <span class="string">"click._change"</span>, <span class="function"><span class="keyword">function</span>(<span class="params"> event </span>) </span>&#123;</div><div class="line">                        <span class="keyword">if</span> ( <span class="keyword">this</span>._just_changed &amp;&amp; !event.isTrigger ) &#123;</div><div class="line">                            <span class="keyword">this</span>._just_changed = <span class="literal">false</span>;</div><div class="line">                        &#125;</div><div class="line">                        <span class="comment">// Allow triggered, simulated change events (#11500)</span></div><div class="line">                        jQuery.event.simulate( <span class="string">"change"</span>, <span class="keyword">this</span>, event, <span class="literal">true</span> );</div><div class="line">                    &#125;);</div><div class="line">                &#125;</div><div class="line">                <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">            &#125;</div><div class="line">            <span class="comment">// Delegated event; lazy-add a change handler on descendant inputs</span></div><div class="line">            jQuery.event.add( <span class="keyword">this</span>, <span class="string">"beforeactivate._change"</span>, <span class="function"><span class="keyword">function</span>(<span class="params"> e </span>) </span>&#123;</div><div class="line">                <span class="keyword">var</span> elem = e.target;</div><div class="line"> </div><div class="line">                <span class="keyword">if</span> ( rformElems.test( elem.nodeName ) &amp;&amp; !jQuery._data( elem, <span class="string">"_change_attached"</span> ) ) &#123;</div><div class="line">                    jQuery.event.add( elem, <span class="string">"change._change"</span>, <span class="function"><span class="keyword">function</span>(<span class="params"> event </span>) </span>&#123;</div><div class="line">                        <span class="keyword">if</span> ( <span class="keyword">this</span>.parentNode &amp;&amp; !event.isSimulated &amp;&amp; !event.isTrigger ) &#123;</div><div class="line">                            jQuery.event.simulate( <span class="string">"change"</span>, <span class="keyword">this</span>.parentNode, event, <span class="literal">true</span> );</div><div class="line">                        &#125;</div><div class="line">                    &#125;);</div><div class="line">                    jQuery._data( elem, <span class="string">"_change_attached"</span>, <span class="literal">true</span> );</div><div class="line">                &#125;</div><div class="line">            &#125;);</div><div class="line">        &#125;,</div><div class="line"> </div><div class="line">        handle: <span class="function"><span class="keyword">function</span>(<span class="params"> event </span>) </span>&#123;</div><div class="line">            <span class="keyword">var</span> elem = event.target;</div><div class="line"> </div><div class="line">            <span class="comment">// Swallow native change events from checkbox/radio, we already triggered them above</span></div><div class="line">            <span class="keyword">if</span> ( <span class="keyword">this</span> !== elem || event.isSimulated || event.isTrigger || (elem.type !== <span class="string">"radio"</span> &amp;&amp; elem.type !== <span class="string">"checkbox"</span>) ) &#123;</div><div class="line">                <span class="keyword">return</span> event.handleObj.handler.apply( <span class="keyword">this</span>, <span class="built_in">arguments</span> );</div><div class="line">            &#125;</div><div class="line">        &#125;,</div><div class="line"> </div><div class="line">        teardown: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">            jQuery.event.remove( <span class="keyword">this</span>, <span class="string">"._change"</span> );</div><div class="line"> </div><div class="line">            <span class="keyword">return</span> !rformElems.test( <span class="keyword">this</span>.nodeName );</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line">&#125;</div><div class="line"><span class="comment">// Create "bubbling" focus and blur events</span></div><div class="line"><span class="keyword">if</span> ( !jQuery.support.focusinBubbles ) &#123;</div><div class="line">    jQuery.each(&#123; focus: <span class="string">"focusin"</span>, blur: <span class="string">"focusout"</span> &#125;, <span class="function"><span class="keyword">function</span>(<span class="params"> orig, fix </span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="comment">// Attach a single capturing handler while someone wants focusin/focusout</span></div><div class="line">        <span class="keyword">var</span> attaches = <span class="number">0</span>,</div><div class="line">            handler = <span class="function"><span class="keyword">function</span>(<span class="params"> event </span>) </span>&#123;</div><div class="line">                jQuery.event.simulate( fix, event.target, jQuery.event.fix( event ), <span class="literal">true</span> );</div><div class="line">            &#125;;</div><div class="line"> </div><div class="line">        jQuery.event.special[ fix ] = &#123;</div><div class="line">            setup: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">                <span class="keyword">if</span> ( attaches++ === <span class="number">0</span> ) &#123;</div><div class="line">                    <span class="built_in">document</span>.addEventListener( orig, handler, <span class="literal">true</span> );</div><div class="line">                &#125;</div><div class="line">            &#125;,</div><div class="line">            teardown: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">                <span class="keyword">if</span> ( --attaches === <span class="number">0</span> ) &#123;</div><div class="line">                    <span class="built_in">document</span>.removeEventListener( orig, handler, <span class="literal">true</span> );</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;;</div><div class="line">    &#125;);</div><div class="line">&#125;</div><div class="line"><span class="comment">//==&gt;源码2632行</span></div><div class="line">hoverHack = <span class="function"><span class="keyword">function</span>(<span class="params"> events </span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> jQuery.event.special.hover ? events : events.replace( rhoverHack, <span class="string">"mouseenter$1 mouseleave$1"</span> );</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014/05/24/jQueryRead/jQuery-read-12-2/" rel="next" title="jQuery源码阅读12-2:回调队列$.Deferred对象">
+                <i class="fa fa-chevron-left"></i> jQuery源码阅读12-2:回调队列$.Deferred对象
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/05/31/jQueryRead/jQuery-read-13-2/" rel="prev" title="jQuery源码阅读13-2:事件删除流程">
+                jQuery源码阅读13-2:事件删除流程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2014/05/31/jQueryRead/jQuery-read-13-1/"
+           data-title="jQuery源码阅读13-1:事件绑定流程" data-url="http://ruantao1989.github.io/2014/05/31/jQueryRead/jQuery-read-13-1/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars2.githubusercontent.com/u/1949437?v=3&s=460"
+               alt="ruantao1989" />
+          <p class="site-author-name" itemprop="name">ruantao1989</p>
+          <p class="site-description motion-element" itemprop="description">思行合一</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">30</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#零-绑定的几种形式"><span class="nav-number">1.</span> <span class="nav-text">零: 绑定的几种形式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一-对外接口-fn-on"><span class="nav-number">2.</span> <span class="nav-text">一: 对外接口 fn.on</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-event-add实现绑定-其实初始化时候-event做了很多兼容性的预处理-在这个时间点之前-这些这个本文最后贴出来"><span class="nav-number">3.</span> <span class="nav-text">二: event.add实现绑定 (其实初始化时候, event做了很多兼容性的预处理, 在这个时间点之前, 这些这个本文最后贴出来)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三-event-dispatch事件触发"><span class="nav-number">4.</span> <span class="nav-text">三: event.dispatch事件触发</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四-jQ-Event对象和对原生对象的修复-这个出现时间点其实在第三步的中间-这样写比较清楚"><span class="nav-number">5.</span> <span class="nav-text">四: jQ.Event对象和对原生对象的修复 ( 这个出现时间点其实在第三步的中间 这样写比较清楚 )</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#附-special处理"><span class="nav-number">6.</span> <span class="nav-text">附: special处理</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ruantao1989</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"ruantao1989"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

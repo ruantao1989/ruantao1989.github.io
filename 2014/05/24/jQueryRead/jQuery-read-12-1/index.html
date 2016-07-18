@@ -1,0 +1,636 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="ruantao1989" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="Deferred这个东西异常nb, 应该是jQuery中异步处理的核心因为没有实现这种东西的经验, 所以不太好理解, 好多代码看不出目的性有点儿操作系统里任务控制的感觉, 还得弄个状态机 三四种运行状态循环 管理运行状态什么的…“回调队列”这个专题被迫拆成两部分吧, 先读简单的Callbacks队列">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jQuery源码阅读12-1:回调队列$.Callback对象">
+<meta property="og:url" content="http://ruantao1989.github.io/2014/05/24/jQueryRead/jQuery-read-12-1/index.html">
+<meta property="og:site_name" content="ruantao1989">
+<meta property="og:description" content="Deferred这个东西异常nb, 应该是jQuery中异步处理的核心因为没有实现这种东西的经验, 所以不太好理解, 好多代码看不出目的性有点儿操作系统里任务控制的感觉, 还得弄个状态机 三四种运行状态循环 管理运行状态什么的…“回调队列”这个专题被迫拆成两部分吧, 先读简单的Callbacks队列">
+<meta property="og:updated_time" content="2016-07-18T09:18:50.445Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="jQuery源码阅读12-1:回调队列$.Callback对象">
+<meta name="twitter:description" content="Deferred这个东西异常nb, 应该是jQuery中异步处理的核心因为没有实现这种东西的经验, 所以不太好理解, 好多代码看不出目的性有点儿操作系统里任务控制的感觉, 还得弄个状态机 三四种运行状态循环 管理运行状态什么的…“回调队列”这个专题被迫拆成两部分吧, 先读简单的Callbacks队列">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://ruantao1989.github.io/2014/05/24/jQueryRead/jQuery-read-12-1/"/>
+
+  <title> jQuery源码阅读12-1:回调队列$.Callback对象 | ruantao1989 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">ruantao1989</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                jQuery源码阅读12-1:回调队列$.Callback对象
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2014-05-24T13:39:00+08:00" content="2014-05-24">
+              2014-05-24
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/jQuery源码阅读/" itemprop="url" rel="index">
+                    <span itemprop="name">jQuery源码阅读</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2014/05/24/jQueryRead/jQuery-read-12-1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/24/jQueryRead/jQuery-read-12-1/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Deferred这个东西异常nb, 应该是jQuery中异步处理的核心<br>因为没有实现这种东西的经验, 所以不太好理解, 好多代码看不出目的性<br>有点儿操作系统里任务控制的感觉, 还得弄个状态机 三四种运行状态循环 管理运行状态什么的…<br>“回调队列”这个专题被迫拆成两部分吧, 先读简单的Callbacks队列<br><a id="more"></a></p>
+<h2 id="一-用法示例"><a href="#一-用法示例" class="headerlink" title="一:用法示例:"></a>一:用法示例:</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//具体执行</span></div><div class="line"><span class="built_in">window</span>.blog = <span class="string">"/blog"</span></div><div class="line"><span class="keyword">var</span> foo = <span class="function"><span class="keyword">function</span>(<span class="params">value1, value2</span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'foo:'</span> + value1 + <span class="string">','</span> + value2 + <span class="keyword">this</span>.blog); <span class="comment">//默认this是Callbacks实例</span></div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> bar = <span class="function"><span class="keyword">function</span>(<span class="params">value1, value2</span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'bar:'</span> + value1 + <span class="string">','</span> + value2);</div><div class="line">&#125;</div><div class="line"><span class="comment">//创建Callbacks对象</span></div><div class="line"><span class="keyword">var</span> callbacks = $.Callbacks();</div><div class="line"><span class="comment">//1.加到队列</span></div><div class="line">callbacks.add(foo);</div><div class="line">callbacks.add(bar);</div><div class="line"><span class="comment">//2.清空队列</span></div><div class="line"><span class="comment">//callbacks.empty();</span></div><div class="line"><span class="comment">//3.判断是否在队列之中</span></div><div class="line"><span class="built_in">console</span>.log(<span class="string">"has foo==&gt;"</span> + callbacks.has(foo));</div><div class="line"><span class="built_in">console</span>.log(<span class="string">"has bar==&gt;"</span> + callbacks.has(bar));</div><div class="line">callbacks.fire(<span class="string">"ruantao"</span>, <span class="string">"duapp.com"</span>);</div><div class="line"><span class="comment">//4.查看是否被触发过</span></div><div class="line"><span class="built_in">console</span>.log(<span class="string">"have been fired==&gt;"</span> + callbacks.fired());</div><div class="line"><span class="comment">//5.更换作用域</span></div><div class="line"><span class="keyword">var</span> Obj = &#123;</div><div class="line">    blog: <span class="string">"/blog IN Obj"</span></div><div class="line">&#125;</div><div class="line">callbacks.fireWith(Obj, [<span class="string">'foo'</span>, <span class="string">'bar'</span>]);</div><div class="line"><span class="comment">//6.删除</span></div><div class="line">callbacks.remove(foo);<span class="comment">//接收数组</span></div><div class="line"><span class="comment">//7.锁定回调</span></div><div class="line">callbacks.lock();</div><div class="line">callbacks.fire();</div><div class="line"><span class="built_in">console</span>.log(<span class="string">"have been locked==&gt;"</span> + callbacks.locked());</div><div class="line"><span class="comment">//8.$.Callbacks(接受参数);</span></div><div class="line"><span class="keyword">var</span> callbacks = $.Callbacks(<span class="string">'unique memory'</span>);</div></pre></td></tr></table></figure>
+<h2 id="二-用Callback实现观察者模式"><a href="#二-用Callback实现观察者模式" class="headerlink" title="二:用Callback实现观察者模式"></a>二:用Callback实现观察者模式</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//官方文档里推荐的观察者模式: </span></div><div class="line"><span class="keyword">var</span> topics = &#123;&#125;;</div><div class="line">jQuery.Topic = <span class="function"><span class="keyword">function</span>(<span class="params"> id </span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> callbacks,</div><div class="line">        method,</div><div class="line">        topic = id &amp;&amp; topics[ id ];</div><div class="line">    <span class="keyword">if</span> ( !topic ) &#123;</div><div class="line">        callbacks = jQuery.Callbacks();</div><div class="line">        topic = &#123;</div><div class="line">            publish: callbacks.fire,</div><div class="line">            subscribe: callbacks.add,</div><div class="line">            unsubscribe: callbacks.remove</div><div class="line">        &#125;;</div><div class="line">        <span class="keyword">if</span> ( id ) &#123;</div><div class="line">            topics[ id ] = topic;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> topic;</div><div class="line">&#125;;</div><div class="line"><span class="comment">//很漂亮的发布,订阅</span></div><div class="line"><span class="comment">// Subscribers</span></div><div class="line">$.Topic( <span class="string">"mailArrived"</span> ).subscribe( fn1 );</div><div class="line">$.Topic( <span class="string">"mailArrived"</span> ).subscribe( fn2 );</div><div class="line">$.Topic( <span class="string">"mailSent"</span> ).subscribe( fn1 );</div><div class="line"><span class="comment">// Publisher</span></div><div class="line">$.Topic( <span class="string">"mailArrived"</span> ).publish( <span class="string">"hello world!"</span> );</div><div class="line">$.Topic( <span class="string">"mailSent"</span> ).publish( <span class="string">"woo! mail!"</span> );</div><div class="line"><span class="comment">// Here, "hello world!" gets pushed to fn1 and fn2</span></div><div class="line"><span class="comment">// when the "mailArrived" notification is published</span></div><div class="line"><span class="comment">// with "woo! mail!" also being pushed to fn1 when</span></div><div class="line"><span class="comment">// the "mailSent" notification is published. </span></div><div class="line"><span class="comment">/*</span></div><div class="line">output:</div><div class="line">hello world!</div><div class="line">fn2 says: hello world!</div><div class="line">woo! mail!</div><div class="line">*/</div></pre></td></tr></table></figure>
+<h2 id="三-源码阅读"><a href="#三-源码阅读" class="headerlink" title="三:源码阅读"></a>三:源码阅读</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div><div class="line">202</div><div class="line">203</div><div class="line">204</div><div class="line">205</div><div class="line">206</div><div class="line">207</div><div class="line">208</div><div class="line">209</div><div class="line">210</div><div class="line">211</div><div class="line">212</div><div class="line">213</div><div class="line">214</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//==&gt;源码908行</span></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 博文作者:ruantao1989&#123;@&#125;gmail.com</div><div class="line"> * 引自博客:ruantao.duapp.com/blog</div><div class="line"> */</div><div class="line"><span class="keyword">var</span> optionsCache = &#123;&#125;;</div><div class="line"><span class="comment">//把选项字串组装成对象,对应参数为true</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">createOptions</span>(<span class="params"> options </span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> object = optionsCache[ options ] = &#123;&#125;;</div><div class="line">    jQuery.each( options.split( core_rspace ), <span class="function"><span class="keyword">function</span>(<span class="params"> _, flag </span>) </span>&#123;</div><div class="line">        object[ flag ] = <span class="literal">true</span>;</div><div class="line">    &#125;);</div><div class="line">    <span class="keyword">return</span> object;</div><div class="line">&#125;</div><div class="line"> </div><div class="line"><span class="comment">//==&gt;源码941行</span></div><div class="line"><span class="comment">// once: 确保这个回调列表只执行一次(像一个递延 Deferred). </span></div><div class="line"><span class="comment">// memory: 保持以前的值和将添加到这个列表的后面的最新的值立即执行调用任何回调 (像一个递延 Deferred). </span></div><div class="line"><span class="comment">// unique: 确保一次只能添加一个回调(所以有没有在列表中的重复). </span></div><div class="line"><span class="comment">// stopOnFalse: 当一个回调返回false 时中断调用 </span></div><div class="line"><span class="comment">// 默认情况下，回调列表将像事件的回调列表中可以多次触发。</span></div><div class="line">jQuery.Callbacks = <span class="function"><span class="keyword">function</span>(<span class="params"> options </span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="comment">//$.Callbacks接受('unique memory')参数, 转成options对象, 如 options&#123;unique:true,memory:true&#125;</span></div><div class="line">    options = <span class="keyword">typeof</span> options === <span class="string">"string"</span> ?</div><div class="line">        ( optionsCache[ options ] || createOptions( options ) ) :</div><div class="line">        jQuery.extend( &#123;&#125;, options );</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> <span class="comment">//最后触发的值(for non-forgettable lists),会记录上次运行到哪</span></div><div class="line">        memory,</div><div class="line">        <span class="comment">//队列是否已经执行</span></div><div class="line">        fired,</div><div class="line">        <span class="comment">//队列是否正在运行</span></div><div class="line">        firing,</div><div class="line">        <span class="comment">//Callbacks列表运行时，开始循环的第一个回调函数(used internally by add and fireWith)</span></div><div class="line">        firingStart,</div><div class="line">        <span class="comment">//触发回调列表的长度</span></div><div class="line">        firingLength,</div><div class="line">        <span class="comment">//当前正在运行的Callbacks的索引下标</span></div><div class="line">        firingIndex,</div><div class="line">        <span class="comment">//回调函数列表</span></div><div class="line">        list = [],</div><div class="line">        <span class="comment">//有once=&gt;fasle, 没once=&gt;[], 这个stack是运行期间动态加进来的东西,fire末尾会统一处理</span></div><div class="line">        stack = !options.once &amp;&amp; [],</div><div class="line">        <span class="comment">//执行触发,核心处理过程</span></div><div class="line">        fire = <span class="function"><span class="keyword">function</span>(<span class="params"> data </span>) </span>&#123;</div><div class="line">            <span class="comment">//开memory模式, 且有[ context, args.slice ? args.slice() : args ]</span></div><div class="line">            memory = options.memory &amp;&amp; data;</div><div class="line">            <span class="comment">//标记为已触发</span></div><div class="line">            fired = <span class="literal">true</span>;</div><div class="line">            <span class="comment">//之前有firingStart就沿用(memory模式会记录起始位置), 要不就是0</span></div><div class="line">            firingIndex = firingStart || <span class="number">0</span>;</div><div class="line">            <span class="comment">//清零</span></div><div class="line">            firingStart = <span class="number">0</span>;</div><div class="line">            <span class="comment">//本次运行的队列长度</span></div><div class="line">            firingLength = list.length;</div><div class="line">            <span class="comment">//标记为正在运行</span></div><div class="line">            firing = <span class="literal">true</span>;</div><div class="line">            <span class="comment">//</span></div><div class="line">            <span class="keyword">for</span> ( ; list &amp;&amp; firingIndex &lt; firingLength; firingIndex++ ) &#123;</div><div class="line">                <span class="comment">//data数据结构: [ context, args.slice?args.slice():args ]</span></div><div class="line">                <span class="keyword">if</span> ( list[ firingIndex ].apply( data[ <span class="number">0</span> ], data[ <span class="number">1</span> ] ) === <span class="literal">false</span> &amp;&amp; options.stopOnFalse ) &#123;</div><div class="line">                    <span class="comment">//如果是stopOnFalse模式, 且回调返回false, 就停止运行</span></div><div class="line">                    memory = <span class="literal">false</span>; <span class="comment">//关闭memory模式</span></div><div class="line">                    <span class="keyword">break</span>;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            <span class="comment">//运行结束</span></div><div class="line">            firing = <span class="literal">false</span>;</div><div class="line">            <span class="comment">//非disable</span></div><div class="line">            <span class="keyword">if</span> ( list ) &#123;</div><div class="line">                <span class="comment">//stack有值, 这个数组应该是在运行期间加入进来的,遍历出列</span></div><div class="line">                <span class="keyword">if</span> ( stack ) &#123;</div><div class="line">                    <span class="keyword">if</span> ( stack.length ) &#123;</div><div class="line">                        <span class="comment">//出列</span></div><div class="line">                        fire( stack.shift() );</div><div class="line">                    &#125;</div><div class="line">                <span class="comment">//非once模式  </span></div><div class="line">                &#125; <span class="keyword">else</span> <span class="keyword">if</span> ( memory ) &#123;</div><div class="line">                    list = [];</div><div class="line">                &#125; <span class="keyword">else</span> &#123;</div><div class="line">                    self.disable();</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;,</div><div class="line">        <span class="comment">//jQuery.Callbacks()所返回的对象</span></div><div class="line">        self = &#123;</div><div class="line">            <span class="comment">//加入队列</span></div><div class="line">            add: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">                <span class="comment">//list在创建对象是初始化为[],此处检查未被disable</span></div><div class="line">                <span class="keyword">if</span> ( list ) &#123;</div><div class="line">                    <span class="comment">//当前的队列长度</span></div><div class="line">                    <span class="keyword">var</span> start = list.length;</div><div class="line">                    <span class="comment">//闭包保存函数</span></div><div class="line">                    (<span class="function"><span class="keyword">function</span> <span class="title">add</span>(<span class="params"> args </span>) </span>&#123;</div><div class="line">                        jQuery.each( args, <span class="function"><span class="keyword">function</span>(<span class="params"> _, arg </span>) </span>&#123;</div><div class="line">                            <span class="comment">//遍历传参的类型</span></div><div class="line">                            <span class="keyword">var</span> type = jQuery.type( arg );</div><div class="line">                            <span class="comment">//是否传入一个函数</span></div><div class="line">                            <span class="keyword">if</span> ( type === <span class="string">"function"</span> ) &#123;</div><div class="line">                                <span class="comment">//如果是unique模式,列表中已有的就不要加入列表了</span></div><div class="line">                                <span class="keyword">if</span> ( !options.unique || !self.has( arg ) ) &#123;</div><div class="line">                                    <span class="comment">//入列</span></div><div class="line">                                    list.push( arg );</div><div class="line">                                &#125;</div><div class="line">                            <span class="comment">//非函数,检查是否是类数组</span></div><div class="line">                            &#125; <span class="keyword">else</span> <span class="keyword">if</span> ( arg &amp;&amp; arg.length &amp;&amp; type !== <span class="string">"string"</span> ) &#123;</div><div class="line">                                <span class="comment">//要是类数组, 再迭代一次</span></div><div class="line">                                add( arg );</div><div class="line">                            &#125;</div><div class="line">                        &#125;);</div><div class="line">                    &#125;)( <span class="built_in">arguments</span> );</div><div class="line">                    <span class="comment">//队列这时如果正在运行,用firingLength记录队列长度</span></div><div class="line">                    <span class="keyword">if</span> ( firing ) &#123;</div><div class="line">                        firingLength = list.length;</div><div class="line">                    <span class="comment">//未运行,且在memory模式下</span></div><div class="line">                    &#125; <span class="keyword">else</span> <span class="keyword">if</span> ( memory ) &#123;</div><div class="line">                        <span class="comment">//firingStart改为当前队列末尾,memory模式在这里记录循环的起始点</span></div><div class="line">                        firingStart = start;</div><div class="line">                        fire( memory );</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">                <span class="comment">//链式,返回self</span></div><div class="line">                <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">            &#125;,</div><div class="line">            <span class="comment">// Remove a callback from the list</span></div><div class="line">            remove: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">                <span class="comment">//检查未被disable</span></div><div class="line">                <span class="keyword">if</span> ( list ) &#123;</div><div class="line">                    jQuery.each( <span class="built_in">arguments</span>, <span class="function"><span class="keyword">function</span>(<span class="params"> _, arg </span>) </span>&#123;</div><div class="line">                        <span class="keyword">var</span> index;</div><div class="line">                        <span class="comment">//队列中存在此函数</span></div><div class="line">                        <span class="keyword">while</span>( ( index = jQuery.inArray( arg, list, index ) ) &gt; <span class="number">-1</span> ) &#123;</div><div class="line">                            <span class="comment">//删除该元素</span></div><div class="line">                            list.splice( index, <span class="number">1</span> );</div><div class="line">                            <span class="comment">//如果正在运行,需处理length</span></div><div class="line">                            <span class="keyword">if</span> ( firing ) &#123;</div><div class="line">                                <span class="comment">//因为减1了,判断长度</span></div><div class="line">                                <span class="keyword">if</span> ( index &lt;= firingLength ) &#123;</div><div class="line">                                    firingLength--;</div><div class="line">                                &#125;</div><div class="line">                                <span class="keyword">if</span> ( index &lt;= firingIndex ) &#123;</div><div class="line">                                    firingIndex--;</div><div class="line">                                &#125;</div><div class="line">                            &#125;</div><div class="line">                        &#125;</div><div class="line">                    &#125;);</div><div class="line">                &#125;</div><div class="line">                <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">            &#125;,</div><div class="line">            <span class="comment">//检查队列中有无</span></div><div class="line">            has: <span class="function"><span class="keyword">function</span>(<span class="params"> fn </span>) </span>&#123;</div><div class="line">                <span class="keyword">return</span> jQuery.inArray( fn, list ) &gt; <span class="number">-1</span>;</div><div class="line">            &#125;,</div><div class="line">            <span class="comment">//清空全部,这个比较暴力,那几个length也没处理</span></div><div class="line">            empty: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">                list = [];</div><div class="line">                <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">            &#125;,</div><div class="line">            <span class="comment">//禁止, add,remove都是检查if(list)的</span></div><div class="line">            disable: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">                list = stack = memory = <span class="literal">undefined</span>;</div><div class="line">                <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">            &#125;,</div><div class="line">            <span class="comment">//是否被禁</span></div><div class="line">            disabled: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">                <span class="keyword">return</span> !list;</div><div class="line">            &#125;,</div><div class="line">            <span class="comment">//锁定,仅把stack置空</span></div><div class="line">            lock: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">                stack = <span class="literal">undefined</span>;</div><div class="line">                <span class="comment">//非memory模式直接disable</span></div><div class="line">                <span class="keyword">if</span> ( !memory ) &#123;</div><div class="line">                    self.disable();</div><div class="line">                &#125;</div><div class="line">                <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">            &#125;,</div><div class="line">            <span class="comment">//是否被锁</span></div><div class="line">            locked: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">                <span class="keyword">return</span> !stack;</div><div class="line">            &#125;,</div><div class="line">            <span class="comment">//执行触发,可以更换作用域</span></div><div class="line">            fireWith: <span class="function"><span class="keyword">function</span>(<span class="params"> context, args </span>) </span>&#123;</div><div class="line">                args = args || [];</div><div class="line">                <span class="comment">//args[]的第一个元素是作用域, 往后:</span></div><div class="line">                <span class="comment">//如果有args.slice,就是数组的话,返回副本</span></div><div class="line">                <span class="comment">//非数组就是本身</span></div><div class="line">                args = [ context, args.slice ? args.slice() : args ];</div><div class="line">                <span class="comment">//非disable 且 </span></div><div class="line">                <span class="comment">//如果运行过了, 必须要有stack(也就是非锁定,非once),将上下文环境和参数存储</span></div><div class="line">                <span class="keyword">if</span> ( list &amp;&amp; ( !fired || stack ) ) &#123;</div><div class="line">                    <span class="keyword">if</span> ( firing ) &#123;</div><div class="line">                        <span class="comment">//正在运行, 就入stack列,在Callback.fire的末尾会执行</span></div><div class="line">                        stack.push( args );</div><div class="line">                    &#125; <span class="keyword">else</span> &#123;</div><div class="line">                        <span class="comment">//没运行着,直接fire</span></div><div class="line">                        fire( args );</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">                <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">            &#125;,</div><div class="line">            <span class="comment">//运行, 作用域是this, 也就是self实例</span></div><div class="line">            fire: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">                self.fireWith( <span class="keyword">this</span>, <span class="built_in">arguments</span> );</div><div class="line">                <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">            &#125;,</div><div class="line">            <span class="comment">//检查标志位,是否已被触发</span></div><div class="line">            fired: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">                <span class="keyword">return</span> !!fired;</div><div class="line">            &#125;</div><div class="line">        &#125;;</div><div class="line"> </div><div class="line">    <span class="keyword">return</span> self;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014/05/24/jQueryRead/jQuery-read-11/" rel="next" title="jQuery源码阅读11:数据缓存data()">
+                <i class="fa fa-chevron-left"></i> jQuery源码阅读11:数据缓存data()
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/05/24/jQueryRead/jQuery-read-12-2/" rel="prev" title="jQuery源码阅读12-2:回调队列$.Deferred对象">
+                jQuery源码阅读12-2:回调队列$.Deferred对象 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2014/05/24/jQueryRead/jQuery-read-12-1/"
+           data-title="jQuery源码阅读12-1:回调队列$.Callback对象" data-url="http://ruantao1989.github.io/2014/05/24/jQueryRead/jQuery-read-12-1/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars2.githubusercontent.com/u/1949437?v=3&s=460"
+               alt="ruantao1989" />
+          <p class="site-author-name" itemprop="name">ruantao1989</p>
+          <p class="site-description motion-element" itemprop="description">思行合一</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">30</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-用法示例"><span class="nav-number">1.</span> <span class="nav-text">一:用法示例:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-用Callback实现观察者模式"><span class="nav-number">2.</span> <span class="nav-text">二:用Callback实现观察者模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三-源码阅读"><span class="nav-number">3.</span> <span class="nav-text">三:源码阅读</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ruantao1989</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"ruantao1989"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

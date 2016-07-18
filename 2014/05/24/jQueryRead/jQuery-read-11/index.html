@@ -1,0 +1,642 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="ruantao1989" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="读event之前, 核心方法里还有data和queue没读,先把基础方法里的障碍扫清吧
+1:data可以把目标数据绑定在dom元素上,或者js对象里  (1).对于dom元素: 程序生成一个uuid关联数据和缓存, 把id写进对象, 把要缓存的数据缓存在jQuery.cache对象里  (2).对于js对象:直接在此对象中增加一个名为jQuery/\d+/的对象, 把要缓存的数据放入此对象2:缓存">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jQuery源码阅读11:数据缓存data()">
+<meta property="og:url" content="http://ruantao1989.github.io/2014/05/24/jQueryRead/jQuery-read-11/index.html">
+<meta property="og:site_name" content="ruantao1989">
+<meta property="og:description" content="读event之前, 核心方法里还有data和queue没读,先把基础方法里的障碍扫清吧
+1:data可以把目标数据绑定在dom元素上,或者js对象里  (1).对于dom元素: 程序生成一个uuid关联数据和缓存, 把id写进对象, 把要缓存的数据缓存在jQuery.cache对象里  (2).对于js对象:直接在此对象中增加一个名为jQuery/\d+/的对象, 把要缓存的数据放入此对象2:缓存">
+<meta property="og:updated_time" content="2016-07-18T09:17:07.655Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="jQuery源码阅读11:数据缓存data()">
+<meta name="twitter:description" content="读event之前, 核心方法里还有data和queue没读,先把基础方法里的障碍扫清吧
+1:data可以把目标数据绑定在dom元素上,或者js对象里  (1).对于dom元素: 程序生成一个uuid关联数据和缓存, 把id写进对象, 把要缓存的数据缓存在jQuery.cache对象里  (2).对于js对象:直接在此对象中增加一个名为jQuery/\d+/的对象, 把要缓存的数据放入此对象2:缓存">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://ruantao1989.github.io/2014/05/24/jQueryRead/jQuery-read-11/"/>
+
+  <title> jQuery源码阅读11:数据缓存data() | ruantao1989 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">ruantao1989</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                jQuery源码阅读11:数据缓存data()
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2014-05-24T12:39:00+08:00" content="2014-05-24">
+              2014-05-24
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/jQuery源码阅读/" itemprop="url" rel="index">
+                    <span itemprop="name">jQuery源码阅读</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2014/05/24/jQueryRead/jQuery-read-11/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/24/jQueryRead/jQuery-read-11/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>读event之前, 核心方法里还有data和queue没读,先把基础方法里的障碍扫清吧</p>
+<p>1:data可以把目标数据绑定在dom元素上,或者js对象里<br>  (1).对于dom元素: 程序生成一个uuid关联数据和缓存, 把id写进对象, 把要缓存的数据缓存在jQuery.cache对象里<br>  (2).对于js对象:直接在此对象中增加一个名为jQuery/\d+/的对象, 把要缓存的数据放入此对象<br>2:缓存机制自身也用data缓存数据,提高效率</p>
+<p>这点儿代码看了好几个小时才看明白, 读懂之后发现其实缓存机制道理不复杂 就是流程太多太绕<br>总感觉对js对象缓存的处理是后加进来的, 做了一大堆追加判断 原有逻辑一下就复杂了<br>要是我写 有可能写两套逻辑单独处理, 但是那样维护又比较麻烦</p>
+<p>所以有感而发:再nb的人写傻大全的代码也避免不了臃肿…<br><a id="more"></a></p>
+<h2 id="一-用法-缓存数据绑定在dom元素上或js对象里"><a href="#一-用法-缓存数据绑定在dom元素上或js对象里" class="headerlink" title="一:用法:缓存数据绑定在dom元素上或js对象里"></a>一:用法:缓存数据绑定在dom元素上或js对象里</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//1往dom里缓存数据</span></div><div class="line">$(<span class="string">"#t1"</span>).data(<span class="string">"dataObj"</span>, &#123; num: <span class="number">1</span>, blog: <span class="string">"ruantao.duapp.com/blog"</span> &#125;);</div><div class="line">$(<span class="string">"#t1"</span>).data(<span class="string">"dataObj"</span>);<span class="comment">//以对象形式返回全部缓存</span></div><div class="line">$(<span class="string">"#t1"</span>).data(<span class="string">"dataObj"</span>).blog;<span class="comment">//指定的字串</span></div><div class="line"><span class="comment">//内部是这么找到的</span></div><div class="line">$.cache[ $(<span class="string">"#t1"</span>)[<span class="number">0</span>][jQuery.expando] ];</div><div class="line"> </div><div class="line"><span class="comment">//2往js对象里缓存数据</span></div><div class="line"><span class="keyword">var</span> obj = &#123;&#125;;</div><div class="line">jQuery.data(obj,<span class="string">"datat"</span>,&#123; num: <span class="number">2</span>, blog: <span class="string">"ruantao.duapp.com"</span> &#125;);</div><div class="line">jQuery.data(obj,<span class="string">"datat"</span>);</div><div class="line"><span class="comment">//内部是这么找到的</span></div><div class="line">obj[jQuery.expando].data;</div><div class="line"><span class="comment">//obj的数据结构如下:</span></div><div class="line"><span class="comment">//Object &#123;jQuery1831004071167088113725: Object&#125;</span></div><div class="line"><span class="comment">// -jQuery1831004071167088113725: Object</span></div><div class="line"><span class="comment">//     --data: Object</span></div><div class="line"><span class="comment">//     --toJSON: function () &#123;&#125;</span></div><div class="line"><span class="comment">//     --__proto__: Object</span></div><div class="line"><span class="comment">// -__proto__: Object</span></div></pre></td></tr></table></figure>
+<h2 id="二-jQuery对象的data"><a href="#二-jQuery对象的data" class="headerlink" title="二:jQuery对象的data()"></a>二:jQuery对象的data()</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div><div class="line">202</div><div class="line">203</div><div class="line">204</div><div class="line">205</div><div class="line">206</div><div class="line">207</div><div class="line">208</div><div class="line">209</div><div class="line">210</div><div class="line">211</div><div class="line">212</div><div class="line">213</div><div class="line">214</div><div class="line">215</div><div class="line">216</div><div class="line">217</div><div class="line">218</div><div class="line">219</div><div class="line">220</div><div class="line">221</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * 博文作者:ruantao1989@gmail.com</div><div class="line"> * 引自博客:ruantao.duapp.com/blog</div><div class="line"> */</div><div class="line">jQuery.extend(&#123;</div><div class="line">    cache: &#123;&#125;,</div><div class="line"> </div><div class="line">    deletedIds: [],</div><div class="line"> </div><div class="line">    <span class="comment">//关联dom和缓存的编号</span></div><div class="line">    uuid: <span class="number">0</span>,</div><div class="line"> </div><div class="line">    <span class="comment">//唯一标示符, "jQuery"后边跟一串数字, 比如jQuery.expando=&gt;"jQuery1831004071167088113725"</span></div><div class="line">    expando: <span class="string">"jQuery"</span> + ( jQuery.fn.jquery + <span class="built_in">Math</span>.random() ).replace( <span class="regexp">/\D/g</span>, <span class="string">""</span> ),</div><div class="line"> </div><div class="line">    <span class="comment">// The following elements throw uncatchable exceptions if you</span></div><div class="line">    <span class="comment">// attempt to add expando properties to them.</span></div><div class="line">    noData: &#123;</div><div class="line">        <span class="string">"embed"</span>: <span class="literal">true</span>,</div><div class="line">        <span class="comment">// Ban all objects except for Flash (which handle expandos)</span></div><div class="line">        <span class="string">"object"</span>: <span class="string">"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"</span>,</div><div class="line">        <span class="string">"applet"</span>: <span class="literal">true</span></div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="comment">//通过关联id,检查之前是否存有缓存</span></div><div class="line">    hasData: <span class="function"><span class="keyword">function</span>(<span class="params"> elem </span>) </span>&#123;</div><div class="line">        <span class="comment">//如果elem是dom, 就去jQuery.cache里取; </span></div><div class="line">        <span class="comment">//如果是js对象就去对象,就去此对象中取jQuery-expando对象</span></div><div class="line">        elem = elem.nodeType ? jQuery.cache[ elem[jQuery.expando] ] : elem[ jQuery.expando ];</div><div class="line">        <span class="comment">//有elem且不为空,返回true</span></div><div class="line">        <span class="keyword">return</span> !!elem &amp;&amp; !isEmptyDataObject( elem );</div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    data: <span class="function"><span class="keyword">function</span>(<span class="params"> elem, name, data, pvt <span class="comment">/* Internal Use Only */</span> </span>) </span>&#123;</div><div class="line">        <span class="comment">//不能缓存直接返回</span></div><div class="line">        <span class="keyword">if</span> ( !jQuery.acceptData( elem ) ) &#123;</div><div class="line">            <span class="keyword">return</span>;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="keyword">var</span> thisCache, ret,</div><div class="line">            internalKey = jQuery.expando,</div><div class="line">            getByName = <span class="keyword">typeof</span> name === <span class="string">"string"</span>,<span class="comment">//传入name,就是读取</span></div><div class="line"> </div><div class="line">            <span class="comment">//判断是否是dom, 官方注释:IE67不能回收添加到dom元素里的循环引用</span></div><div class="line">            isNode = elem.nodeType,</div><div class="line"> </div><div class="line">            <span class="comment">//目标是在dom上缓存的,用jQuery.cache, </span></div><div class="line">            <span class="comment">//不是dom就存在本js对象里</span></div><div class="line">            cache = isNode ? jQuery.cache : elem,</div><div class="line"> </div><div class="line">            <span class="comment">//是dom,就 dom[jQuery.expando]查出对应id, 没分配就是undefined</span></div><div class="line">            <span class="comment">//js对象就是 obj[jQuery.expando] 且 jQuery.expando</span></div><div class="line">            id = isNode ? elem[ internalKey ] : elem[ internalKey ] &amp;&amp; internalKey;</div><div class="line"> </div><div class="line">        <span class="comment">// 是读取,但是有没id没缓存数据,直接return</span></div><div class="line">        <span class="keyword">if</span> ( (!id || !cache[id] || (!pvt &amp;&amp; !cache[id].data)) &amp;&amp; getByName &amp;&amp; data === <span class="literal">undefined</span> ) &#123;</div><div class="line">            <span class="keyword">return</span>;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//写入之前,没id得分配一个</span></div><div class="line">        <span class="keyword">if</span> ( !id ) &#123;</div><div class="line">            <span class="comment">//dom元素 dom[jQuery.expando]优先用已经删掉的id, 没有的话guid++</span></div><div class="line">            <span class="keyword">if</span> ( isNode ) &#123;</div><div class="line">                elem[ internalKey ] = id = jQuery.deletedIds.pop() || jQuery.guid++;</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                <span class="comment">//js对象就直接用jQuery.expando</span></div><div class="line">                id = internalKey;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//jQuery.cache的预处理</span></div><div class="line">        <span class="keyword">if</span> ( !cache[ id ] ) &#123;</div><div class="line">            <span class="comment">//cache里没有,新建一个对象准备缓存</span></div><div class="line">            cache[ id ] = &#123;&#125;;</div><div class="line"> </div><div class="line">            <span class="comment">//对于javascript对象,</span></div><div class="line">            <span class="comment">//官方注释: 设置方法toJSON为空函数,以避免在执行JSON.stringify()时暴露缓存数据.如果一个对象定义了方法toJSON(),JSON.stringify()在序列化该对象时会调用这个方法来生成该对象的JSON元素</span></div><div class="line">            <span class="keyword">if</span> ( !isNode ) &#123;</div><div class="line">                cache[ id ].toJSON = jQuery.noop;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="keyword">if</span> ( <span class="keyword">typeof</span> name === <span class="string">"object"</span> || <span class="keyword">typeof</span> name === <span class="string">"function"</span> ) &#123;</div><div class="line">            <span class="comment">//对于名字是对象或者函数的, </span></div><div class="line">            <span class="keyword">if</span> ( pvt ) &#123;</div><div class="line">                <span class="comment">//内部</span></div><div class="line">                cache[ id ] = jQuery.extend( cache[ id ], name );</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                <span class="comment">//一般情况: 把name遍历到cache[ id ].data中</span></div><div class="line">                cache[ id ].data = jQuery.extend( cache[ id ].data, name );</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//缓存本次要用的对象, 取自jQuery.cache[id]</span></div><div class="line">        thisCache = cache[ id ];</div><div class="line"> </div><div class="line">        <span class="comment">//非内部情况下,修改目标对象</span></div><div class="line">        <span class="keyword">if</span> ( !pvt ) &#123;</div><div class="line">            <span class="keyword">if</span> ( !thisCache.data ) &#123;</div><div class="line">                thisCache.data = &#123;&#125;;</div><div class="line">            &#125;</div><div class="line">            <span class="comment">//要使用的对象指向thisCache.data, jQuery.cache数据结构大致如下</span></div><div class="line">            <span class="comment">//     Object &#123;1: Object&#125;</span></div><div class="line">            <span class="comment">//         -1: Object</span></div><div class="line">            <span class="comment">//             --data: Object ==&gt;这个才是目标对象</span></div><div class="line">            <span class="comment">//             --parsedAttrs: true</span></div><div class="line">            <span class="comment">//             --__proto__: Object</span></div><div class="line">            <span class="comment">//         -__proto__: Object</span></div><div class="line">            thisCache = thisCache.data;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//具体存储实现:</span></div><div class="line">        <span class="keyword">if</span> ( data !== <span class="literal">undefined</span> ) &#123;</div><div class="line">            <span class="comment">//存入, key需要转驼峰</span></div><div class="line">            thisCache[ jQuery.camelCase( name ) ] = data;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//读取模式</span></div><div class="line">        <span class="keyword">if</span> ( getByName ) &#123;</div><div class="line">            <span class="comment">//先去读目标对象的属性</span></div><div class="line">            ret = thisCache[ name ];</div><div class="line">            <span class="comment">//有可能读不到</span></div><div class="line">            <span class="keyword">if</span> ( ret == <span class="literal">null</span> ) &#123;</div><div class="line">                <span class="comment">//再转成驼峰试试</span></div><div class="line">                ret = thisCache[ jQuery.camelCase( name ) ];</div><div class="line">            &#125;</div><div class="line">        <span class="comment">//写入模式 </span></div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            ret = thisCache;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="keyword">return</span> ret;</div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    removeData: <span class="function"><span class="keyword">function</span>(<span class="params"> elem, name, pvt <span class="comment">/* Internal Use Only */</span> </span>) </span>&#123;</div><div class="line">        <span class="comment">//没法缓存的直接return</span></div><div class="line">        <span class="keyword">if</span> ( !jQuery.acceptData( elem ) ) &#123;</div><div class="line">            <span class="keyword">return</span>;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="keyword">var</span> thisCache, i, l,</div><div class="line">            isNode = elem.nodeType,<span class="comment">//是否是dom元素</span></div><div class="line">            <span class="comment">//dom用jQuery.cache缓存 ,js对象用自身缓存</span></div><div class="line">            cache = isNode ? jQuery.cache : elem,</div><div class="line">            <span class="comment">//dom用自身对象的jQuery.expando属性查出id, </span></div><div class="line">            <span class="comment">//js对象就用jQuery.expando</span></div><div class="line">            id = isNode ? elem[ jQuery.expando ] : jQuery.expando;</div><div class="line"> </div><div class="line">        <span class="comment">//缓存里没有id</span></div><div class="line">        <span class="keyword">if</span> ( !cache[ id ] ) &#123;</div><div class="line">            <span class="keyword">return</span>;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//传入name,也就是删除指定属性</span></div><div class="line">        <span class="keyword">if</span> ( name ) &#123;</div><div class="line">            <span class="comment">//判断pvt模式</span></div><div class="line">            thisCache = pvt ? cache[ id ] : cache[ id ].data;</div><div class="line"> </div><div class="line">            <span class="keyword">if</span> ( thisCache ) &#123;</div><div class="line">                <span class="comment">//name可以是数组</span></div><div class="line">                <span class="keyword">if</span> ( !jQuery.isArray( name ) ) &#123;</div><div class="line">                    <span class="comment">//非数组情况:</span></div><div class="line">                    <span class="keyword">if</span> ( name <span class="keyword">in</span> thisCache ) &#123;</div><div class="line">                        name = [ name ];</div><div class="line">                    &#125; <span class="keyword">else</span> &#123;</div><div class="line">                        <span class="comment">//不在名值对里, 尝试转成驼峰</span></div><div class="line">                        name = jQuery.camelCase( name );</div><div class="line">                        <span class="keyword">if</span> ( name <span class="keyword">in</span> thisCache ) &#123;</div><div class="line">                            name = [ name ];</div><div class="line">                        &#125; <span class="keyword">else</span> &#123;</div><div class="line">                            <span class="comment">//再没有的话, 按空格把字串截成数组</span></div><div class="line">                            name = name.split(<span class="string">" "</span>);</div><div class="line">                        &#125;</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">                <span class="comment">//name是数组就得遍历删除</span></div><div class="line">                <span class="keyword">for</span> ( i = <span class="number">0</span>, l = name.length; i &lt; l; i++ ) &#123;</div><div class="line">                    <span class="keyword">delete</span> thisCache[ name[i] ];</div><div class="line">                &#125;</div><div class="line"> </div><div class="line">                <span class="comment">//如果本次要用的缓存对象是空的了, 就算完了</span></div><div class="line">                <span class="keyword">if</span> ( !( pvt ? isEmptyDataObject : jQuery.isEmptyObject )( thisCache ) ) &#123;</div><div class="line">                    <span class="keyword">return</span>;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">// See jQuery.data for more information</span></div><div class="line">        <span class="keyword">if</span> ( !pvt ) &#123;</div><div class="line">            <span class="keyword">delete</span> cache[ id ].data;</div><div class="line"> </div><div class="line">            <span class="comment">//pvt要用的父对象都空了, 就是都删完了</span></div><div class="line">            <span class="keyword">if</span> ( !isEmptyDataObject( cache[ id ] ) ) &#123;</div><div class="line">                <span class="keyword">return</span>;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//之前都没return, 就是要删除全部缓存</span></div><div class="line">        <span class="keyword">if</span> ( isNode ) &#123;</div><div class="line">            jQuery.cleanData( [ elem ], <span class="literal">true</span> );</div><div class="line">        <span class="comment">//有个兼容判断是用delete删,还是直接赋null</span></div><div class="line">        <span class="comment">//Support: IE&lt;9 检测是否能删除附加在DOM Element 上的属性或数据</span></div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> ( jQuery.support.deleteExpando || cache != cache.window ) &#123;</div><div class="line">            <span class="keyword">delete</span> cache[ id ];</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            cache[ id ] = <span class="literal">null</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="comment">//内部调用的</span></div><div class="line">    _data: <span class="function"><span class="keyword">function</span>(<span class="params"> elem, name, data </span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> jQuery.data( elem, name, data, <span class="literal">true</span> );</div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="comment">//能否缓存数据</span></div><div class="line">    <span class="comment">//这个检测看不懂,用noData对象</span></div><div class="line">    acceptData: <span class="function"><span class="keyword">function</span>(<span class="params"> elem </span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> noData = elem.nodeName &amp;&amp; jQuery.noData[ elem.nodeName.toLowerCase() ];</div><div class="line">        <span class="keyword">return</span> !noData || noData !== <span class="literal">true</span> &amp;&amp; elem.getAttribute(<span class="string">"classid"</span>) === noData;</div><div class="line">    &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h2 id="三-fn-data"><a href="#三-fn-data" class="headerlink" title="三:fn.data()"></a>三:fn.data()</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * 博文作者:ruantao1989@gmail.com</div><div class="line"> * 引自博客:ruantao.duapp.com/blog</div><div class="line"> */</div><div class="line">jQuery.fn.extend(&#123;</div><div class="line">    data: <span class="function"><span class="keyword">function</span>(<span class="params"> key, value </span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> parts, part, attr, name, l,</div><div class="line">            elem = <span class="keyword">this</span>[<span class="number">0</span>],</div><div class="line">            i = <span class="number">0</span>,</div><div class="line">            data = <span class="literal">null</span>;</div><div class="line"> </div><div class="line">        <span class="comment">//$Obj.data()的话,会以对象的形式返回全部缓存数据</span></div><div class="line">        <span class="keyword">if</span> ( key === <span class="literal">undefined</span> ) &#123;</div><div class="line">            <span class="comment">//选择器拿到this的长度</span></div><div class="line">            <span class="keyword">if</span> ( <span class="keyword">this</span>.length ) &#123;</div><div class="line">                <span class="comment">//调用fn.data</span></div><div class="line">                data = jQuery.data( elem );</div><div class="line"> </div><div class="line">                <span class="comment">//以下是使用缓存:</span></div><div class="line">                <span class="comment">//优先获取data自身的缓存,名为"parsedAttrs"</span></div><div class="line">                <span class="keyword">if</span> ( elem.nodeType === <span class="number">1</span> &amp;&amp; !jQuery._data( elem, <span class="string">"parsedAttrs"</span> ) ) &#123;</div><div class="line">                    <span class="comment">//dom对象的全部属性(类数组对象)</span></div><div class="line">                    attr = elem.attributes;</div><div class="line">                    <span class="comment">//遍历属性</span></div><div class="line">                    <span class="keyword">for</span> ( l = attr.length; i &lt; l; i++ ) &#123;</div><div class="line">                        name = attr[i].name;</div><div class="line">                        <span class="comment">//处理html5形式缓存的数据</span></div><div class="line">                        <span class="keyword">if</span> ( !name.indexOf( <span class="string">"data-"</span> ) ) &#123;</div><div class="line">                            <span class="comment">//截掉data-,转为驼峰</span></div><div class="line">                            name = jQuery.camelCase( name.substring(<span class="number">5</span>) );</div><div class="line">                            <span class="comment">//兼容html5的: data-*属性</span></div><div class="line">                            dataAttr( elem, name, data[ name ] );</div><div class="line">                        &#125;</div><div class="line">                    &#125;</div><div class="line">                    <span class="comment">//写入data自身的缓存</span></div><div class="line">                    jQuery._data( elem, <span class="string">"parsedAttrs"</span>, <span class="literal">true</span> );</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line"> </div><div class="line">            <span class="keyword">return</span> data;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//key如果是对象,就遍历存储或是读取</span></div><div class="line">        <span class="keyword">if</span> ( <span class="keyword">typeof</span> key === <span class="string">"object"</span> ) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">this</span>.each(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">                jQuery.data( <span class="keyword">this</span>, key );</div><div class="line">            &#125;);</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//key是非对象,这个截取比较难理解, 查过后发现是为了处理".data(key)"循环调用</span></div><div class="line">        <span class="comment">//如果是".data(key)"则返回第一个匹配元素的指定名称数据</span></div><div class="line">        <span class="comment">//若是xxx.yyy的形式, 转成["xxx","yyy"]</span></div><div class="line">        parts = key.split( <span class="string">"."</span>, <span class="number">2</span> );</div><div class="line">        <span class="comment">//yyy转成".yyy"</span></div><div class="line">        parts[<span class="number">1</span>] = parts[<span class="number">1</span>] ? <span class="string">"."</span> + parts[<span class="number">1</span>] : <span class="string">""</span>;</div><div class="line">        <span class="comment">//part=".yyy!"</span></div><div class="line">        part = parts[<span class="number">1</span>] + <span class="string">"!"</span>;</div><div class="line"> </div><div class="line">        <span class="keyword">return</span> jQuery.access( <span class="keyword">this</span>, <span class="function"><span class="keyword">function</span>(<span class="params"> value </span>) </span>&#123;</div><div class="line">            <span class="comment">//没value就是读取</span></div><div class="line">            <span class="keyword">if</span> ( value === <span class="literal">undefined</span> ) &#123;</div><div class="line">                <span class="comment">//triggerHandler是调用trigger触发事件, "getData.yyy!"这个没闹明白, 等看过事件处理再返回头来看</span></div><div class="line">                data = <span class="keyword">this</span>.triggerHandler( <span class="string">"getData"</span> + part, [ parts[<span class="number">0</span>] ] );</div><div class="line"> </div><div class="line">                <span class="comment">//先去data读,在做html5兼容</span></div><div class="line">                <span class="keyword">if</span> ( data === <span class="literal">undefined</span> &amp;&amp; elem ) &#123;</div><div class="line">                    data = jQuery.data( elem, key );</div><div class="line">                    data = dataAttr( elem, key, data );</div><div class="line">                &#125;</div><div class="line"> </div><div class="line">                <span class="keyword">return</span> data === <span class="literal">undefined</span> &amp;&amp; parts[<span class="number">1</span>] ?</div><div class="line">                    <span class="keyword">this</span>.data( parts[<span class="number">0</span>] ) :<span class="comment">//如果是".data(key)"则返回第一个匹配元素的指定名称数据</span></div><div class="line">                    data;</div><div class="line">            &#125;</div><div class="line"> </div><div class="line">            <span class="comment">//如果有包含".data(key)"的值, 在里边写为目标值</span></div><div class="line">            parts[<span class="number">1</span>] = value;</div><div class="line">            <span class="keyword">this</span>.each(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">                <span class="keyword">var</span> self = jQuery( <span class="keyword">this</span> );</div><div class="line">                 </div><div class="line">                self.triggerHandler( <span class="string">"setData"</span> + part, parts );</div><div class="line">                <span class="comment">//触发事件,写入数据</span></div><div class="line">                jQuery.data( <span class="keyword">this</span>, key, value );</div><div class="line">                self.triggerHandler( <span class="string">"changeData"</span> + part, parts );</div><div class="line">            &#125;);</div><div class="line">        &#125;, <span class="literal">null</span>, value, <span class="built_in">arguments</span>.length &gt; <span class="number">1</span>, <span class="literal">null</span>, <span class="literal">false</span> );</div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    removeData: <span class="function"><span class="keyword">function</span>(<span class="params"> key </span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.each(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">            jQuery.removeData( <span class="keyword">this</span>, key );</div><div class="line">        &#125;);</div><div class="line">    &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h2 id="四-html5的data-兼容"><a href="#四-html5的data-兼容" class="headerlink" title="四: html5的data-*兼容"></a>四: html5的data-*兼容</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> rbrace = <span class="regexp">/(?:\&#123;[\s\S]*\&#125;|\[[\s\S]*\])$/</span> <span class="comment">//验证&#123;&#125;或者是[]</span></div><div class="line">    ,rmultiDash = <span class="regexp">/([A-Z])/g</span>; <span class="comment">//大写字母</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">dataAttr</span>(<span class="params"> elem, key, data </span>) </span>&#123;</div><div class="line">    <span class="comment">//data[name值截掉"data-"] === undefined, 证明</span></div><div class="line">    <span class="keyword">if</span> ( data === <span class="literal">undefined</span> &amp;&amp; elem.nodeType === <span class="number">1</span> ) &#123;</div><div class="line">        <span class="comment">//组装data-驼峰</span></div><div class="line">        <span class="keyword">var</span> name = <span class="string">"data-"</span> + key.replace( rmultiDash, <span class="string">"-$1"</span> ).toLowerCase();</div><div class="line">        <span class="comment">//取html5的值</span></div><div class="line">        data = elem.getAttribute( name );</div><div class="line">        <span class="comment">//有数据</span></div><div class="line">        <span class="keyword">if</span> ( <span class="keyword">typeof</span> data === <span class="string">"string"</span> ) &#123;</div><div class="line">            <span class="comment">//这个判断谁写的,ca</span></div><div class="line">            <span class="keyword">try</span> &#123;</div><div class="line">                <span class="comment">//特殊处理"true""false""null"这仨字串</span></div><div class="line">                data = data === <span class="string">"true"</span> ? <span class="literal">true</span> :</div><div class="line">                data === <span class="string">"false"</span> ? <span class="literal">false</span> :</div><div class="line">                data === <span class="string">"null"</span> ? <span class="literal">null</span> :</div><div class="line">                <span class="comment">//下边这行是数字的检测,正常数字 比如非0开头的, 是===的, 需要转数字</span></div><div class="line">                +data + <span class="string">""</span> === data ? +data :</div><div class="line">                <span class="comment">//有括号就处理json</span></div><div class="line">                rbrace.test( data ) ? jQuery.parseJSON( data ) :</div><div class="line">                <span class="comment">//过滤完了,用data</span></div><div class="line">                    data;</div><div class="line">            &#125; <span class="keyword">catch</span>( e ) &#123;&#125;</div><div class="line"> </div><div class="line">            <span class="comment">//写入</span></div><div class="line">            jQuery.data( elem, key, data );</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            data = <span class="literal">undefined</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="keyword">return</span> data;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014/05/22/jQueryRead/jQuery-read-10/" rel="next" title="jQuery源码阅读10:浏览器检测support()">
+                <i class="fa fa-chevron-left"></i> jQuery源码阅读10:浏览器检测support()
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/05/24/jQueryRead/jQuery-read-12-1/" rel="prev" title="jQuery源码阅读12-1:回调队列$.Callback对象">
+                jQuery源码阅读12-1:回调队列$.Callback对象 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2014/05/24/jQueryRead/jQuery-read-11/"
+           data-title="jQuery源码阅读11:数据缓存data()" data-url="http://ruantao1989.github.io/2014/05/24/jQueryRead/jQuery-read-11/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars2.githubusercontent.com/u/1949437?v=3&s=460"
+               alt="ruantao1989" />
+          <p class="site-author-name" itemprop="name">ruantao1989</p>
+          <p class="site-description motion-element" itemprop="description">思行合一</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">30</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-用法-缓存数据绑定在dom元素上或js对象里"><span class="nav-number">1.</span> <span class="nav-text">一:用法:缓存数据绑定在dom元素上或js对象里</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-jQuery对象的data"><span class="nav-number">2.</span> <span class="nav-text">二:jQuery对象的data()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三-fn-data"><span class="nav-number">3.</span> <span class="nav-text">三:fn.data()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四-html5的data-兼容"><span class="nav-number">4.</span> <span class="nav-text">四: html5的data-*兼容</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ruantao1989</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"ruantao1989"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
