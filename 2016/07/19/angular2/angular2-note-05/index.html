@@ -86,16 +86,19 @@
 
 
 
-<meta name="description" content="1.前几天布局时候发现这么个问题: 外层div包含内层div 仅内层div有margin(仅想对内层div做偏移), 但是这个margin值 同时也作用在了外层div上(把外层div也顶走了).2.按着hasLayout的思路, 加了个overflow：hidden或display:inline-block,或float:left解决.3.心想: 莫非chrome和ff也有hasLayout的问题">
+<meta name="description" content="ng-book这书看到一半, Angular2官网出中文教程了…看了看还是官网的教程好一些, 更简明一些
+Service和spring里的service类似, 推荐让框架自己依赖注入(光从语法看就和java一样臃肿…)">
 <meta property="og:type" content="article">
-<meta property="og:title" content="外边距叠加问题">
-<meta property="og:url" content="http://ruantao1989.github.io/2016/07/06/css/margin-collapsing/index.html">
+<meta property="og:title" content="Angular2笔记5-service">
+<meta property="og:url" content="http://ruantao1989.github.io/2016/07/19/angular2/angular2-note-05/index.html">
 <meta property="og:site_name" content="ruantao1989">
-<meta property="og:description" content="1.前几天布局时候发现这么个问题: 外层div包含内层div 仅内层div有margin(仅想对内层div做偏移), 但是这个margin值 同时也作用在了外层div上(把外层div也顶走了).2.按着hasLayout的思路, 加了个overflow：hidden或display:inline-block,或float:left解决.3.心想: 莫非chrome和ff也有hasLayout的问题">
-<meta property="og:updated_time" content="2016-07-18T09:36:54.258Z">
+<meta property="og:description" content="ng-book这书看到一半, Angular2官网出中文教程了…看了看还是官网的教程好一些, 更简明一些
+Service和spring里的service类似, 推荐让框架自己依赖注入(光从语法看就和java一样臃肿…)">
+<meta property="og:updated_time" content="2016-07-19T09:17:28.546Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="外边距叠加问题">
-<meta name="twitter:description" content="1.前几天布局时候发现这么个问题: 外层div包含内层div 仅内层div有margin(仅想对内层div做偏移), 但是这个margin值 同时也作用在了外层div上(把外层div也顶走了).2.按着hasLayout的思路, 加了个overflow：hidden或display:inline-block,或float:left解决.3.心想: 莫非chrome和ff也有hasLayout的问题">
+<meta name="twitter:title" content="Angular2笔记5-service">
+<meta name="twitter:description" content="ng-book这书看到一半, Angular2官网出中文教程了…看了看还是官网的教程好一些, 更简明一些
+Service和spring里的service类似, 推荐让框架自己依赖注入(光从语法看就和java一样臃肿…)">
 
 
 
@@ -116,9 +119,9 @@
 
 
 
-  <link rel="canonical" href="http://ruantao1989.github.io/2016/07/06/css/margin-collapsing/"/>
+  <link rel="canonical" href="http://ruantao1989.github.io/2016/07/19/angular2/angular2-note-05/"/>
 
-  <title> 外边距叠加问题 | ruantao1989 </title>
+  <title> Angular2笔记5-service | ruantao1989 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="en">
@@ -258,7 +261,7 @@
             
             
               
-                外边距叠加问题
+                Angular2笔记5-service
               
             
           </h1>
@@ -270,8 +273,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-07-06T19:42:00+08:00" content="2016-07-06">
-              2016-07-06
+            <time itemprop="dateCreated" datetime="2016-07-19T14:30:00+08:00" content="2016-07-19">
+              2016-07-19
             </time>
           </span>
 
@@ -284,8 +287,8 @@
               <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/css入门/" itemprop="url" rel="index">
-                    <span itemprop="name">css入门</span>
+                  <a href="/categories/Angular2入门/" itemprop="url" rel="index">
+                    <span itemprop="name">Angular2入门</span>
                   </a>
                 </span>
 
@@ -300,8 +303,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/07/06/css/margin-collapsing/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/06/css/margin-collapsing/" itemprop="commentsCount"></span>
+                <a href="/2016/07/19/angular2/angular2-note-05/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/19/angular2/angular2-note-05/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -324,12 +327,12 @@
       
 
       
-        <h3 id="1-前几天布局时候发现这么个问题-外层div包含内层div-仅内层div有margin-仅想对内层div做偏移-但是这个margin值-同时也作用在了外层div上-把外层div也顶走了"><a href="#1-前几天布局时候发现这么个问题-外层div包含内层div-仅内层div有margin-仅想对内层div做偏移-但是这个margin值-同时也作用在了外层div上-把外层div也顶走了" class="headerlink" title="1.前几天布局时候发现这么个问题: 外层div包含内层div 仅内层div有margin(仅想对内层div做偏移), 但是这个margin值 同时也作用在了外层div上(把外层div也顶走了)."></a>1.前几天布局时候发现这么个问题: 外层div包含内层div 仅内层div有margin(仅想对内层div做偏移), 但是这个margin值 同时也作用在了外层div上(把外层div也顶走了).</h3><h3 id="2-按着hasLayout的思路-加了个overflow：hidden或display-inline-block-或float-left解决"><a href="#2-按着hasLayout的思路-加了个overflow：hidden或display-inline-block-或float-left解决" class="headerlink" title="2.按着hasLayout的思路, 加了个overflow：hidden或display:inline-block,或float:left解决."></a>2.按着hasLayout的思路, 加了个overflow：hidden或display:inline-block,或float:left解决.</h3><h3 id="3-心想-莫非chrome和ff也有hasLayout的问题"><a href="#3-心想-莫非chrome和ff也有hasLayout的问题" class="headerlink" title="3.心想: 莫非chrome和ff也有hasLayout的问题?"></a>3.心想: 莫非chrome和ff也有hasLayout的问题?</h3><p>查了一下&lt;精通CSS&gt;, 查得这也是”外边距叠加(Collapsing margins)”的一种<br><a id="more"></a></p>
-<h3 id="4-书上原文"><a href="#4-书上原文" class="headerlink" title="4.书上原文:"></a>4.书上原文:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">当一个元素包含在另一个元素中时(假设没有内边距或边框将外边距分隔开),他们的顶和/或底部外边距会发生叠加.</div><div class="line">消化一下 也就是说触发条件是: 外部div没有padding 没有border, 而且与第一个子div之间没有任何间隔.</div></pre></td></tr></table></figure>
-<p>就是我刚遇到的情况</p>
-<p>还有比较常见的”外边距叠加”情况:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">当一个元素出现在另一个元素上边时,第一个元素的底边外边距与第二个元素的顶外边距与第二个元素的顶外边距发生叠加.</div></pre></td></tr></table></figure></p>
-<p>也就是说上边元素的margin-bottom和下边元素的margin-top合并, 这个一般都是float解决</p>
-<h3 id="5-书上的结论"><a href="#5-书上的结论" class="headerlink" title="5.书上的结论:"></a>5.书上的结论:</h3><p>行内,浮动,绝对定位没有外边距叠加.<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * 博文作者:ruantao1989&#123;@&#125;gmail.com</div><div class="line"> * 引自博客:ruantao.duapp.com/blog</div><div class="line"> */</div><div class="line"><span class="selector-class">.parent</span>&#123;</div><div class="line">    <span class="attribute">height</span>:<span class="number">100px</span>;</div><div class="line">    <span class="attribute">width</span>:<span class="number">100px</span>;</div><div class="line">    <span class="attribute">background-color</span>: red;</div><div class="line">    <span class="attribute">overflow</span>: hidden;<span class="comment">/*按hasLayout的方式都可以float:left;display:inline-block, overflow的方式相对比较好*/</span></div><div class="line">&#125;</div><div class="line"><span class="selector-class">.sub</span>&#123;</div><div class="line">    <span class="attribute">margin</span>:<span class="number">25px</span> <span class="number">25px</span>;</div><div class="line">    <span class="attribute">height</span>:<span class="number">50px</span>;</div><div class="line">    <span class="attribute">width</span>:<span class="number">50px</span>;</div><div class="line">    <span class="attribute">background-color</span>: blue;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+        <p>ng-book这书看到一半, Angular2官网出中文教程了…<br>看了看还是官网的教程好一些, 更简明一些</p>
+<p>Service和spring里的service类似, 推荐让框架自己依赖注入<br>(光从语法看就和java一样臃肿…)<br> <a id="more"></a></p>
+<h2 id="文件命名规范"><a href="#文件命名规范" class="headerlink" title="文件命名规范"></a>文件命名规范</h2><p>推荐加一级后缀名, 比如<em>.component.ts和 </em>.service.ts<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">app.component.ts</div><div class="line">app.component.css</div><div class="line"></div><div class="line">data.service.ts</div></pre></td></tr></table></figure></p>
+<h2 id="hero-service-ts"><a href="#hero-service-ts" class="headerlink" title="hero.service.ts"></a>hero.service.ts</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123; Injectable &#125; <span class="keyword">from</span> <span class="string">'@angular/core'</span>;</div><div class="line"><span class="keyword">import</span> &#123; Hero &#125; <span class="keyword">from</span> <span class="string">'./hero'</span>;</div><div class="line"><span class="keyword">import</span> &#123; HEROES &#125; <span class="keyword">from</span> <span class="string">'./mock-heroes'</span>;</div><div class="line">@Injectable()</div><div class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">HeroService</span> </span>&#123;</div><div class="line">  getHeroes() &#123;</div><div class="line">    <span class="keyword">return</span> <span class="built_in">Promise</span>.resolve(HEROES);<span class="comment">//模拟一个异步从远程获取数据的过程</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="component-ts"><a href="#component-ts" class="headerlink" title="component.ts"></a>component.ts</h2><p>“OnInit”是ng框架里的生命周期, 为了适时的注入, 所以得符合框架规范:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123; OnInit &#125; <span class="keyword">from</span> <span class="string">'@angular/core'</span>;</div><div class="line"></div><div class="line">@Component(&#123;</div><div class="line">  selector: <span class="string">'....'</span>,</div><div class="line">  template: <span class="string">``</span>,</div><div class="line">  directives: [HeroDetailComponent],<span class="comment">//子组件</span></div><div class="line">  providers: [HeroService]<span class="comment">//对应@Injectable()的依赖注入</span></div><div class="line">&#125;)</div><div class="line"><span class="comment">//OnInit是生命周期的一环</span></div><div class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">AppComponent</span> <span class="title">implements</span> <span class="title">OnInit</span> </span>&#123;</div><div class="line">  title = <span class="string">'Tour of Heroes'</span>;</div><div class="line">  heroes: Hero[];</div><div class="line">  selectedHero: Hero;</div><div class="line">  <span class="keyword">constructor</span>(private heroService: HeroService) &#123; &#125;<span class="comment">//注入, 并没有new</span></div><div class="line">  getHeroes() &#123;</div><div class="line">    <span class="keyword">this</span>.heroService.getHeroes().then(heroes =&gt; <span class="keyword">this</span>.heroes = heroes);</div><div class="line">  &#125;</div><div class="line">  ngOnInit() &#123;</div><div class="line">    <span class="comment">//让框架自己适时调用</span></div><div class="line">    <span class="keyword">this</span>.getHeroes();</div><div class="line">  &#125;</div><div class="line">  onSelect(hero: Hero) &#123; <span class="keyword">this</span>.selectedHero = hero; &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="子组件-ts"><a href="#子组件-ts" class="headerlink" title="子组件.ts"></a>子组件.ts</h2><p>声明成 输入属性<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">@Component(&#123;</div><div class="line">  ...</div><div class="line">  template: <span class="string">`</span></div><div class="line">    &lt;input [(ngModel)]="hero.name" placeholder="name"/&gt;</div><div class="line">  `</div><div class="line">&#125;)</div><div class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">HeroDetailComponent</span> </span>&#123;</div><div class="line">  @Input()</div><div class="line">  hero: Hero;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -355,17 +358,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2014/06/12/css/ie-overflow-bug/" rel="next" title="ie6,7中overflow:hidden的bug">
-                <i class="fa fa-chevron-left"></i> ie6,7中overflow:hidden的bug
+              <a href="/2016/07/12/angular2/angular2-note-04/" rel="next" title="Angular2笔记4-Form验证">
+                <i class="fa fa-chevron-left"></i> Angular2笔记4-Form验证
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/07/06/move-to-hexo/" rel="prev" title="Move to hexo">
-                Move to hexo <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -391,8 +390,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/07/06/css/margin-collapsing/"
-           data-title="外边距叠加问题" data-url="http://ruantao1989.github.io/2016/07/06/css/margin-collapsing/">
+      <div class="ds-thread" data-thread-key="2016/07/19/angular2/angular2-note-05/"
+           data-title="Angular2笔记5-service" data-url="http://ruantao1989.github.io/2016/07/19/angular2/angular2-note-05/">
       </div>
     
   </div>
@@ -437,7 +436,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">30</span>
+              <span class="site-state-item-count">31</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
@@ -483,7 +482,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-前几天布局时候发现这么个问题-外层div包含内层div-仅内层div有margin-仅想对内层div做偏移-但是这个margin值-同时也作用在了外层div上-把外层div也顶走了"><span class="nav-number">1.</span> <span class="nav-text">1.前几天布局时候发现这么个问题: 外层div包含内层div 仅内层div有margin(仅想对内层div做偏移), 但是这个margin值 同时也作用在了外层div上(把外层div也顶走了).</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-按着hasLayout的思路-加了个overflow：hidden或display-inline-block-或float-left解决"><span class="nav-number">2.</span> <span class="nav-text">2.按着hasLayout的思路, 加了个overflow：hidden或display:inline-block,或float:left解决.</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-心想-莫非chrome和ff也有hasLayout的问题"><span class="nav-number">3.</span> <span class="nav-text">3.心想: 莫非chrome和ff也有hasLayout的问题?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-书上原文"><span class="nav-number">4.</span> <span class="nav-text">4.书上原文:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-书上的结论"><span class="nav-number">5.</span> <span class="nav-text">5.书上的结论:</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#文件命名规范"><span class="nav-number">1.</span> <span class="nav-text">文件命名规范</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hero-service-ts"><span class="nav-number">2.</span> <span class="nav-text">hero.service.ts</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#component-ts"><span class="nav-number">3.</span> <span class="nav-text">component.ts</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#子组件-ts"><span class="nav-number">4.</span> <span class="nav-text">子组件.ts</span></a></li></ol></div>
             
           </div>
         </section>
