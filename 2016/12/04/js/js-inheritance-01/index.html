@@ -1,0 +1,640 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="ruantao1989" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="俩月没更新博客,10月GCT考试 11月结婚 这又连续加班半个月了, 马上又要去普吉岛蜜月, 都完事儿了就踏实了…这几天自己瞎研究了一下js的继承, 现在写的肯定会有出错的地方, 先记下来 等回头学精了再来查错.
+先从继承的宿主 也就是从对象上分, 对象的声明方式上分为:一: 使用”构造函数”模式, 二: 使用字面量声明对象,先说第二种,字面量因为没有用new, 所以只能手动去拷贝. 可玩性比较低">
+<meta property="og:type" content="article">
+<meta property="og:title" content="js继承1:apply继承和类拷贝继承">
+<meta property="og:url" content="http://ruantao1989.github.io/2016/12/04/js/js-inheritance-01/index.html">
+<meta property="og:site_name" content="ruantao1989">
+<meta property="og:description" content="俩月没更新博客,10月GCT考试 11月结婚 这又连续加班半个月了, 马上又要去普吉岛蜜月, 都完事儿了就踏实了…这几天自己瞎研究了一下js的继承, 现在写的肯定会有出错的地方, 先记下来 等回头学精了再来查错.
+先从继承的宿主 也就是从对象上分, 对象的声明方式上分为:一: 使用”构造函数”模式, 二: 使用字面量声明对象,先说第二种,字面量因为没有用new, 所以只能手动去拷贝. 可玩性比较低">
+<meta property="og:updated_time" content="2016-07-20T07:03:50.595Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="js继承1:apply继承和类拷贝继承">
+<meta name="twitter:description" content="俩月没更新博客,10月GCT考试 11月结婚 这又连续加班半个月了, 马上又要去普吉岛蜜月, 都完事儿了就踏实了…这几天自己瞎研究了一下js的继承, 现在写的肯定会有出错的地方, 先记下来 等回头学精了再来查错.
+先从继承的宿主 也就是从对象上分, 对象的声明方式上分为:一: 使用”构造函数”模式, 二: 使用字面量声明对象,先说第二种,字面量因为没有用new, 所以只能手动去拷贝. 可玩性比较低">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://ruantao1989.github.io/2016/12/04/js/js-inheritance-01/"/>
+
+  <title> js继承1:apply继承和类拷贝继承 | ruantao1989 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">ruantao1989</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                js继承1:apply继承和类拷贝继承
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2016-12-04T00:04:00+08:00" content="2016-12-04">
+              2016-12-04
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/js入门/" itemprop="url" rel="index">
+                    <span itemprop="name">js入门</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/12/04/js/js-inheritance-01/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/04/js/js-inheritance-01/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>俩月没更新博客,10月GCT考试 11月结婚 这又连续加班半个月了, 马上又要去普吉岛蜜月, 都完事儿了就踏实了…<br>这几天自己瞎研究了一下js的继承, 现在写的肯定会有出错的地方, 先记下来 等回头学精了再来查错.</p>
+<p>先从继承的宿主 也就是从对象上分, 对象的声明方式上分为:<br>一: 使用”构造函数”模式, 二: 使用字面量声明对象,<br>先说第二种,字面量因为没有用new, 所以只能手动去拷贝. 可玩性比较低, 以我现在的水平看不合适做继承.</p>
+<p>重点说第一种”构造函数”模式,<br>这种继承从具体的继承方法上分:1.apply继承: 2.类拷贝继承<br>目前实验得出的结论是:<br> <a id="more"></a></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">apply继承:</div><div class="line">	    目的是继承Dad_Class中的<span class="keyword">this</span>.XXXX , 但是继承不到Dad_Class.prototype.YYYY</div></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">类拷贝继承:</div><div class="line">	    目的是拷贝Parent_Class中prototype.YYYY, 但是继承不到Dad_Class中的<span class="keyword">this</span>.XXXX</div></pre></td></tr></table></figure>
+<p>这两种同时使用, 正好能补全全部继承的内容. 具体实现见代码:</p>
+<h2 id="一-使用”构造函数”模式"><a href="#一-使用”构造函数”模式" class="headerlink" title="一: 使用”构造函数”模式"></a>一: 使用”构造函数”模式</h2><p>利用new生成实例: this指向实例对象,实例.constructor指向父类,instanceof也可检测<br>使用prototype减少实例中的拷贝: 父类.prototype.isPrototypeOf(实例)==true<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * 博文作者:ruantao1989&#123;@&#125;gmail.com</div><div class="line"> * 引自博客:ruantao.duapp.com/blog</div><div class="line"> */</div><div class="line">//类拷贝继承: 作用是拷贝Parent_Class中prototype.YYYY</div><div class="line">//用法: copyExtend_Class(function Dad_Class()&#123;...&#125;,function Kid_Class()&#123;...&#125;);</div><div class="line">function copyExtend_Class(Parent, Child) &#123;　　　　</div><div class="line">    var p = Parent.prototype;</div><div class="line">    var c = Child.prototype;</div><div class="line">    for (var i in p) &#123;</div><div class="line">        //子类如果已存在的,则不会被父类所覆盖</div><div class="line">        if (typeof c[i] == "undefined") &#123;</div><div class="line">            c[i] = p[i];</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    c.parent = p; //增加属性,指明父类</div><div class="line">&#125;emMatcher": "$tsc-watch"</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * 博文作者:ruantao1989&#123;@&#125;gmail.com</div><div class="line"> * 引自博客:ruantao.duapp.com/blog</div><div class="line"> */</div><div class="line"><span class="comment">//父类</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Dad_Class</span>(<span class="params">arg</span>) </span>&#123;</div><div class="line">    <span class="comment">//this的属性:apply能继承,copyExtend_Class拷贝不到</span></div><div class="line">    <span class="keyword">this</span>.str = <span class="string">"dad_"</span> + arg;</div><div class="line">    <span class="keyword">this</span>.array = [<span class="string">"dad_0_ruantao"</span>, <span class="string">"dad_1_duapp"</span>, <span class="string">"dad_2_com"</span>];</div><div class="line">    <span class="keyword">this</span>.obj = &#123;</div><div class="line">        key: <span class="string">"dad_value_ruantao.duapp.com"</span></div><div class="line">    &#125;;</div><div class="line">    <span class="keyword">this</span>.functionInThis = <span class="function"><span class="keyword">function</span>(<span class="params">str</span>) </span>&#123;</div><div class="line">        alert(<span class="keyword">this</span>.str);</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//用的构造函数,不能return</span></div><div class="line">&#125;</div><div class="line">Dad_Class.prototype.strInPrototype = <span class="string">"dad_strInPrototype"</span>;</div><div class="line">Dad_Class.prototype.functionInPrototype = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    alert(<span class="string">"Dad_Class==&gt;"</span> + <span class="keyword">this</span>.name);</div><div class="line">&#125;;</div><div class="line">Dad_Class.prototype.theSameNameFun = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    alert(<span class="string">"Dad_Class==&gt;"</span> + <span class="keyword">this</span>.str);</div><div class="line">&#125;;</div><div class="line"><span class="comment">//子类</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Kid_Class</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="comment">//1.apply继承: 目的是继承Dad_Class中的this.XXXX</span></div><div class="line">    <span class="comment">//会在此作用域内更换this指针</span></div><div class="line">    <span class="comment">//也就是把将Dad_Class中带this的东西拷到Kid_Class中,但拷贝不了prototype</span></div><div class="line">    Dad_Class.apply(<span class="keyword">this</span>, <span class="built_in">arguments</span>);</div><div class="line">    <span class="keyword">this</span>.str = <span class="string">"kid_str"</span>;</div><div class="line">    <span class="keyword">this</span>.array = [<span class="string">"kid_1_ruantao"</span>, <span class="string">"kid_2_duapp"</span>, <span class="string">"kid_3_com"</span>];</div><div class="line">&#125;</div><div class="line">Kid_Class.prototype.functionInPrototype2222 = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    alert(<span class="string">"Kid_Class==&gt;"</span> + <span class="keyword">this</span>.name);</div><div class="line">&#125;;</div><div class="line">Kid_Class.prototype.theSameNameFun = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    alert(<span class="string">"Kid_Class==&gt;"</span> + <span class="keyword">this</span>.str);</div><div class="line">&#125;;</div><div class="line"><span class="comment">//2拷贝继承: 目的是要继承Dad_Class.prototype.YYYY</span></div><div class="line">copyExtend_Class(Dad_Class, Kid_Class);</div><div class="line"> </div><div class="line"> </div><div class="line"><span class="comment">//实例化</span></div><div class="line"><span class="keyword">var</span> dad = <span class="keyword">new</span> Dad_Class(<span class="string">"str"</span>);</div><div class="line"><span class="keyword">var</span> kid = <span class="keyword">new</span> Kid_Class();</div><div class="line">kid.name = <span class="string">"RRRRR"</span>;</div><div class="line"> </div><div class="line"><span class="comment">//效果展示</span></div><div class="line"><span class="built_in">console</span>.log(<span class="string">"Dad_Class.constructor==&gt;"</span>+Dad_Class.constructor);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">"Kid_Class.constructor==&gt;"</span>+Kid_Class.constructor);<span class="comment">//这俩都是Function </span></div><div class="line"> </div><div class="line"><span class="built_in">console</span>.log(dad.strInPrototype);</div><div class="line"><span class="built_in">console</span>.log(kid.strInPrototype);<span class="comment">//只有使用拷贝继承时,kid才能继承Dad_Class.prototype.YYYY</span></div><div class="line"> </div><div class="line">dad.functionInThis();</div><div class="line">kid.functionInThis();<span class="comment">//只有使用apply继承时,kid才能继承Dad_Class中的this.XXXX</span></div></pre></td></tr></table></figure>
+<h2 id="二-使用字面量声明对象"><a href="#二-使用字面量声明对象" class="headerlink" title="二: 使用字面量声明对象"></a>二: 使用字面量声明对象</h2><p>这个因为没有new, 只能去拷贝. 可玩性比较低, 以我现在的水平看不合适做继承<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * 博文作者:ruantao1989&#123;@&#125;gmail.com</div><div class="line"> * 引自博客:ruantao.duapp.com/blog</div><div class="line"> */</div><div class="line"><span class="comment">//二: 使用字面量声明对象, </span></div><div class="line"><span class="comment">//这个因为没有new, 只能去拷贝. 可玩性比较低, 以我现在的水平看不合适做继承</span></div><div class="line"> </div><div class="line"><span class="comment">//对象拷贝继承</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">copyExtend_Object</span>(<span class="params">p, c</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> c = c || &#123;&#125;;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i <span class="keyword">in</span> p) &#123;</div><div class="line">        <span class="keyword">if</span> (<span class="keyword">typeof</span> p[i] === <span class="string">'object'</span>) &#123;</div><div class="line">            c[i] = (p[i].constructor === <span class="built_in">Array</span>) ? [] : &#123;&#125;;</div><div class="line">            copyExtend_Object(p[i], c[i]);</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            c[i] = p[i];</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//c.constructor = p.constructor;</span></div><div class="line">    <span class="keyword">return</span> c;</div><div class="line">&#125;</div><div class="line"> </div><div class="line"><span class="comment">/**</span></div><div class="line"> * 博文作者:ruantao1989&#123;@&#125;gmail.com</div><div class="line"> * 引自博客:ruantao.duapp.com/blog</div><div class="line"> */</div><div class="line"><span class="comment">//父对象</span></div><div class="line"><span class="keyword">var</span> Dad_Object = &#123;</div><div class="line">    array : [<span class="string">"dad_0_ruantao"</span>, <span class="string">"dad_1_duapp"</span>, <span class="string">"dad_2_com"</span>],</div><div class="line">    obj : &#123;</div><div class="line">        key: <span class="string">"dad_value_ruantao.duapp.com"</span></div><div class="line">    &#125;,</div><div class="line">    str : <span class="string">"dad"</span>,</div><div class="line">    fun : <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        alert(<span class="keyword">this</span>.name);</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//因为是字面量声明的对象, 所以不能return , 类似:</span></div><div class="line">    <span class="comment">// function Dad_Object(n)&#123;</span></div><div class="line">    <span class="comment">//     return &#123;</span></div><div class="line">    <span class="comment">//         name : "dad"+n</span></div><div class="line">    <span class="comment">//     &#125;</span></div><div class="line">    <span class="comment">// &#125; 的形式,子对象继承不到任何值</span></div><div class="line">&#125;;</div><div class="line"><span class="comment">//Dad_Object.prototype继承不了,都为undefined</span></div><div class="line"> </div><div class="line"><span class="comment">//子对象</span></div><div class="line"><span class="keyword">var</span> kid_Object = &#123;&#125;;</div><div class="line"><span class="comment">//继承</span></div><div class="line">kid_Object = copyExtend_Object(Dad_Object);</div><div class="line">kid_Object.name = <span class="string">"kid1"</span>;</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/07/20/angular2/angular2-note-06/" rel="next" title="Angular2笔记6-router">
+                <i class="fa fa-chevron-left"></i> Angular2笔记6-router
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/12/04/js/js-inheritance-01/"
+           data-title="js继承1:apply继承和类拷贝继承" data-url="http://ruantao1989.github.io/2016/12/04/js/js-inheritance-01/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars2.githubusercontent.com/u/1949437?v=3&s=460"
+               alt="ruantao1989" />
+          <p class="site-author-name" itemprop="name">ruantao1989</p>
+          <p class="site-description motion-element" itemprop="description">思行合一</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">35</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-使用”构造函数”模式"><span class="nav-number">1.</span> <span class="nav-text">一: 使用”构造函数”模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-使用字面量声明对象"><span class="nav-number">2.</span> <span class="nav-text">二: 使用字面量声明对象</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ruantao1989</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"ruantao1989"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
