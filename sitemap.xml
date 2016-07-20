@@ -2,9 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://ruantao1989.github.io/2016/12/04/js/js-inheritance-01/</loc>
+    <loc>http://ruantao1989.github.io/2015/01/09/openLayers/openLayers-02-layer/</loc>
     
-    <lastmod>2016-07-20T07:03:50.595Z</lastmod>
+    <lastmod>2016-07-20T07:29:42.279Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://ruantao1989.github.io/2015/01/09/openLayers/openLayers-01-map/</loc>
+    
+    <lastmod>2016-07-20T07:16:31.634Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://ruantao1989.github.io/2014/12/04/js/js-inheritance-01/</loc>
+    
+    <lastmod>2016-07-20T07:07:45.415Z</lastmod>
     
   </url>
   

@@ -1,0 +1,677 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="ruantao1989" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="博文作者:ruantao1989{@}gmail.com引自博客:ruantao.duapp.com/blog">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenLayers学习-示例学习2:图层">
+<meta property="og:url" content="http://ruantao1989.github.io/2015/01/09/openLayers/openLayers-02-layer/index.html">
+<meta property="og:site_name" content="ruantao1989">
+<meta property="og:description" content="博文作者:ruantao1989{@}gmail.com引自博客:ruantao.duapp.com/blog">
+<meta property="og:updated_time" content="2016-07-20T07:29:42.279Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OpenLayers学习-示例学习2:图层">
+<meta name="twitter:description" content="博文作者:ruantao1989{@}gmail.com引自博客:ruantao.duapp.com/blog">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://ruantao1989.github.io/2015/01/09/openLayers/openLayers-02-layer/"/>
+
+  <title> OpenLayers学习-示例学习2:图层 | ruantao1989 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">ruantao1989</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                OpenLayers学习-示例学习2:图层
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2015-01-09T21:36:00+08:00" content="2015-01-09">
+              2015-01-09
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/OpenLayers学习/" itemprop="url" rel="index">
+                    <span itemprop="name">OpenLayers学习</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/01/09/openLayers/openLayers-02-layer/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/01/09/openLayers/openLayers-02-layer/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>博文作者:ruantao1989{@}gmail.com<br>引自博客:ruantao.duapp.com/blog<br><a id="more"></a></p>
+<h2 id="二-Layer图层"><a href="#二-Layer图层" class="headerlink" title="二:Layer图层"></a>二:Layer图层</h2><h3 id="1-添加-删除图层"><a href="#1-添加-删除图层" class="headerlink" title="1.添加/删除图层"></a>1.添加/删除图层</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//按OpenLayers的封装, 估计还会有".Layer.WFS"一类的子类(后查得WFS在)</span></div><div class="line">map.addLayer(<span class="keyword">new</span> OpenLayers.Layer.WMS(...));</div><div class="line">map.removeLayer(<span class="keyword">this</span>.layer);</div></pre></td></tr></table></figure>
+<h3 id="2-自定义图层"><a href="#2-自定义图层" class="headerlink" title="2.自定义图层"></a>2.自定义图层</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">this</span>.layer = <span class="keyword">new</span> OpenLayers.Layer.Vector(<span class="string">"Editable"</span>);</div><div class="line"><span class="keyword">this</span>.map.addLayer(<span class="keyword">this</span>.layer);</div></pre></td></tr></table></figure>
+<h3 id="3-json数据图层"><a href="#3-json数据图层" class="headerlink" title="3.json数据图层"></a>3.json数据图层</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">map = <span class="keyword">new</span> OpenLayers.Map(&#123;</div><div class="line">        div: <span class="string">"map"</span>,</div><div class="line">    maxExtent: <span class="keyword">new</span> OpenLayers.Bounds(</div><div class="line">        <span class="number">1549471.9221</span>, <span class="number">6403610.94</span>, <span class="number">1550001.32545</span>, <span class="number">6404015.8</span></div><div class="line">    )</div><div class="line">&#125;);</div><div class="line"><span class="keyword">var</span> vectors = <span class="keyword">new</span> OpenLayers.Layer.Vector(<span class="string">"Lines"</span>, &#123;</div><div class="line">    strategies: [<span class="keyword">new</span> OpenLayers.Strategy.Fixed()],                </div><div class="line">    protocol: <span class="keyword">new</span> OpenLayers.Protocol.HTTP(&#123;</div><div class="line">        url: <span class="string">"data/roads.json"</span>,<span class="comment">//Ajax请求本地的json文件,chrome默认不允许 需要修改下</span></div><div class="line">        format: <span class="keyword">new</span> OpenLayers.Format.GeoJSON()<span class="comment">//格式是GeoJSON</span></div><div class="line">    &#125;),</div><div class="line">    <span class="comment">//styleMap: styles 可以单独制定线的样式等等,默认是黄的</span></div><div class="line">&#125;);</div><div class="line">map.addLayer(vectors);<span class="comment">//json图层</span></div><div class="line">map.zoomToMaxExtent();</div></pre></td></tr></table></figure>
+<h3 id="4-多个图层及切换"><a href="#4-多个图层及切换" class="headerlink" title="4.多个图层及切换"></a>4.多个图层及切换</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> osm = <span class="keyword">new</span> OpenLayers.Layer.OSM();</div><div class="line"><span class="keyword">var</span> gmap = <span class="keyword">new</span> OpenLayers.Layer.Google(<span class="string">"Google Streets"</span>, &#123;visibility: <span class="literal">false</span>&#125;);<span class="comment">//默认不显示</span></div><div class="line">map.addLayers([osm, gmap]);<span class="comment">//添加多个图层(倒序添加,第0层会盖住第1层)</span></div><div class="line">map.addControl(<span class="keyword">new</span> OpenLayers.Control.LayerSwitcher());<span class="comment">//切换器</span></div></pre></td></tr></table></figure>
+<h3 id="5-ArcGIS服务的图层"><a href="#5-ArcGIS服务的图层" class="headerlink" title="5.ArcGIS服务的图层"></a>5.ArcGIS服务的图层</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">layer = <span class="keyword">new</span> OpenLayers.Layer.ArcGIS93Rest</div><div class="line">cacheLayer = <span class="keyword">new</span> OpenLayers.Layer.ArcGISCache</div><div class="line"><span class="keyword">new</span> OpenLayers.Layer.ArcIMS</div></pre></td></tr></table></figure>
+<h3 id="6-图层描述"><a href="#6-图层描述" class="headerlink" title="6.图层描述"></a>6.图层描述</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//配合map.addControl(new OpenLayers.Control.Attribution());</span></div><div class="line"><span class="keyword">new</span> OpenLayers.Layer.WMS(...,&#123;attribution:<span class="string">"描述信息!@#$"</span>&#125;);</div></pre></td></tr></table></figure>
+<h3 id="7-Bing图层"><a href="#7-Bing图层" class="headerlink" title="7.Bing图层"></a>7.Bing图层</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">new</span> OpenLayers.Layer.Bing(&#123;</div><div class="line">    name: <span class="string">"Road"</span>,</div><div class="line">    key: apiKey,</div><div class="line">    type: <span class="string">"Road"</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h3 id="8-缩放级别限制"><a href="#8-缩放级别限制" class="headerlink" title="8.缩放级别限制"></a>8.缩放级别限制</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//bing地图的级别, 一般都是在new Map时候传入参数    </span></div><div class="line">maxResolution: <span class="number">76.43702827453613</span>,</div><div class="line">numZoomLevels: <span class="number">3</span></div></pre></td></tr></table></figure>
+<h3 id="9-Layer-Boxes绘制矩形线框"><a href="#9-Layer-Boxes绘制矩形线框" class="headerlink" title="9.Layer.Boxes绘制矩形线框"></a>9.Layer.Boxes绘制矩形线框</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//绘图图层</span></div><div class="line"><span class="keyword">var</span> boxes  = <span class="keyword">new</span> OpenLayers.Layer.Boxes( <span class="string">"Boxes"</span> );</div><div class="line"><span class="comment">//边界</span></div><div class="line"><span class="keyword">var</span> box_extents = [</div><div class="line">    [<span class="number">-10</span>, <span class="number">50</span>, <span class="number">5</span>, <span class="number">60</span>],</div><div class="line">    [<span class="number">-75</span>, <span class="number">41</span>, <span class="number">-71</span>, <span class="number">44</span>],</div><div class="line">    [<span class="number">-122.6</span>, <span class="number">37.6</span>, <span class="number">-122.3</span>, <span class="number">37.9</span>],</div><div class="line">    [<span class="number">10</span>, <span class="number">10</span>, <span class="number">20</span>, <span class="number">20</span>]</div><div class="line">];</div><div class="line"><span class="comment">//根据边界画矩形</span></div><div class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; box_extents.length; i++) &#123;</div><div class="line">    ext = box_extents[i];</div><div class="line">    bounds = OpenLayers.Bounds.fromArray(ext);</div><div class="line">    box = <span class="keyword">new</span> OpenLayers.Marker.Box(bounds);</div><div class="line">    box.events.register(<span class="string">"click"</span>, box, <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line">        <span class="keyword">this</span>.setBorder(<span class="string">"yellow"</span>);</div><div class="line">    &#125;);</div><div class="line">    boxes.addMarker(box);</div><div class="line">&#125;</div><div class="line">map.addLayers([ol_wms, boxes]);</div></pre></td></tr></table></figure>
+<h3 id="10-Layer-Vector绘制矩形要素"><a href="#10-Layer-Vector绘制矩形要素" class="headerlink" title="10.Layer.Vector绘制矩形要素"></a>10.Layer.Vector绘制矩形要素</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> boxes  = <span class="keyword">new</span> OpenLayers.Layer.Vector( <span class="string">"Boxes"</span> );</div><div class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; box_extents.length; i++) &#123;</div><div class="line">    ext = box_extents[i];</div><div class="line">    bounds = OpenLayers.Bounds.fromArray(ext);</div><div class="line">    box = <span class="keyword">new</span> OpenLayers.Feature.Vector(bounds.toGeometry());</div><div class="line">    boxes.addFeatures(box);</div><div class="line">&#125;</div><div class="line">map.addLayers([ol_wms, boxes]);</div><div class="line"><span class="comment">//选择Vector工具</span></div><div class="line"><span class="keyword">var</span> sf = <span class="keyword">new</span> OpenLayers.Control.SelectFeature(boxes);</div><div class="line">map.addControl(sf);</div><div class="line">sf.activate();<span class="comment">//激活选择器, 可点选激活</span></div></pre></td></tr></table></figure>
+<h3 id="11-缓存瓦片数"><a href="#11-缓存瓦片数" class="headerlink" title="11.缓存瓦片数"></a>11.缓存瓦片数</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//设置缓存的瓦片数(包括视野外的)默认是0</span></div><div class="line"> <span class="keyword">new</span> OpenLayers.Layer.WMS( ..., &#123;<span class="string">'buffer'</span>:<span class="number">4</span>&#125;)</div></pre></td></tr></table></figure>
+<h3 id="12-利用localStorage做缓存"><a href="#12-利用localStorage做缓存" class="headerlink" title="12.利用localStorage做缓存"></a>12.利用localStorage做缓存</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//1.写</span></div><div class="line">cacheWrite = <span class="keyword">new</span> OpenLayers.Control.CacheWrite(&#123;</div><div class="line">    autoActivate: <span class="literal">true</span>,</div><div class="line">    imageFormat: <span class="string">"image/jpeg"</span>,</div><div class="line">    eventListeners: &#123;</div><div class="line">        cachefull: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; status.innerHTML = <span class="string">"Cache full."</span>; &#125;</div><div class="line">    &#125;</div><div class="line">&#125;);</div><div class="line">map.addControl(cacheWrite);</div><div class="line"><span class="comment">//写事件</span></div><div class="line">map.layers[<span class="number">0</span>].events.on(&#123;<span class="string">'tileloaded'</span>: updateStatus&#125;);</div><div class="line"><span class="comment">//2.读</span></div><div class="line">cacheRead = <span class="keyword">new</span> OpenLayers.Control.CacheRead();</div><div class="line">map.addControl(cacheRead);</div><div class="line"><span class="comment">//读事件</span></div><div class="line"><span class="keyword">new</span> OpenLayers.Layer.WMS(&#123;...</div><div class="line">    eventListeners: &#123;</div><div class="line">        tileloaded: updateHits</div><div class="line">    &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h3 id="13-canvas绘图元素"><a href="#13-canvas绘图元素" class="headerlink" title="13.canvas绘图元素"></a>13.canvas绘图元素</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> wfs = <span class="keyword">new</span> OpenLayers.Layer.Vector(<span class="string">"States"</span>, &#123;    </div><div class="line">            ... ...</div><div class="line">        renderers: [<span class="string">"Canvas"</span>, <span class="string">"SVG"</span>, <span class="string">"VML"</span>]</div><div class="line">    &#125;);</div></pre></td></tr></table></figure>
+<h3 id="14-Vector上绘制GeoJSON"><a href="#14-Vector上绘制GeoJSON" class="headerlink" title="14.Vector上绘制GeoJSON"></a>14.Vector上绘制GeoJSON</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> vector = <span class="keyword">new</span> OpenLayers.Layer.Vector(<span class="string">"GeoJSON"</span>, &#123;</div><div class="line">        ...</div><div class="line">        protocol: <span class="keyword">new</span> OpenLayers.Protocol.HTTP(&#123;</div><div class="line">            url: <span class="string">"geojson-reprojected.json"</span>,</div><div class="line">            format: <span class="keyword">new</span> OpenLayers.Format.GeoJSON()</div><div class="line">        &#125;)</div><div class="line">    &#125;);</div></pre></td></tr></table></figure>
+<h3 id="15-xml加载GeoRSS图层"><a href="#15-xml加载GeoRSS图层" class="headerlink" title="15.xml加载GeoRSS图层"></a>15.xml加载GeoRSS图层</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> newl = <span class="keyword">new</span> OpenLayers.Layer.GeoRSS(</div></pre></td></tr></table></figure>
+<h3 id="16-自定义图片图标加在GeoRSS图层上"><a href="#16-自定义图片图标加在GeoRSS图层上" class="headerlink" title="16.自定义图片图标加在GeoRSS图层上"></a>16.自定义图片图标加在GeoRSS图层上</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> yelp = <span class="keyword">new</span> OpenLayers.Icon(<span class="string">"http://www.openlayers.org/images/OpenLayers.trac.png"</span>, <span class="keyword">new</span> OpenLayers.Size(<span class="number">49</span>,<span class="number">44</span>));</div><div class="line"><span class="keyword">var</span> newl = <span class="keyword">new</span> OpenLayers.Layer.GeoRSS( <span class="string">'Yelp GeoRSS'</span>, <span class="string">'yelp-georss.xml'</span>, &#123;<span class="string">'icon'</span>:yelp&#125;);</div><div class="line">map.addLayer(newl);</div></pre></td></tr></table></figure>
+<h3 id="17-GML图层"><a href="#17-GML图层" class="headerlink" title="17.GML图层"></a>17.GML图层</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">map.addLayer(<span class="keyword">new</span> OpenLayers.Layer.Vector(<span class="string">"GML"</span>, &#123;</div><div class="line">    protocol: <span class="keyword">new</span> OpenLayers.Protocol.HTTP(&#123;</div><div class="line">        url: <span class="string">"gml/polygon.xml"</span>,</div><div class="line">        format: <span class="keyword">new</span> OpenLayers.Format.GML()</div><div class="line">    &#125;),</div></pre></td></tr></table></figure>
+<h3 id="18-google图层"><a href="#18-google图层" class="headerlink" title="18.google图层"></a>18.google图层</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> gphy = <span class="keyword">new</span> OpenLayers.Layer.Google(</div><div class="line">    <span class="string">"Google Physical"</span>,</div><div class="line">    &#123;type: G_PHYSICAL_MAP&#125;</div><div class="line">);</div></pre></td></tr></table></figure>
+<h3 id="19-静态网格图层"><a href="#19-静态网格图层" class="headerlink" title="19.静态网格图层"></a>19.静态网格图层</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">/有点儿wmts的意思</div><div class="line"><span class="keyword">new</span> OpenLayers.Layer.Grid(</div><div class="line">    <span class="string">"Google Streets"</span>,</div><div class="line">    <span class="string">"http://maps.googleapis.com/maps/api/staticmap?sensor=false&amp;maptype=roadmap"</span>, </div><div class="line">    <span class="literal">null</span>, options</div><div class="line">),</div><div class="line"><span class="keyword">var</span> options = &#123;</div><div class="line">    singleTile: <span class="literal">true</span>,</div><div class="line">    ratio: <span class="number">1</span>,</div><div class="line">    isBaseLayer: <span class="literal">true</span>,</div><div class="line">    wrapDateLine: <span class="literal">true</span>,</div><div class="line">    getURL: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> center = <span class="keyword">this</span>.map.getCenter().transform(<span class="string">"EPSG:3857"</span>, <span class="string">"EPSG:4326"</span>),</div><div class="line">            size = <span class="keyword">this</span>.map.getSize();</div><div class="line">        <span class="keyword">return</span> [</div><div class="line">            <span class="keyword">this</span>.url, <span class="string">"&amp;center="</span>, center.lat, <span class="string">","</span>, center.lon,</div><div class="line">            <span class="string">"&amp;zoom="</span>, <span class="keyword">this</span>.map.getZoom(), <span class="string">"&amp;size="</span>, size.w, <span class="string">"x"</span>, size.h</div><div class="line">        ].join(<span class="string">""</span>);</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="20-gutter沟槽"><a href="#20-gutter沟槽" class="headerlink" title="20.gutter沟槽"></a>20.gutter沟槽</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//这个不知道干嘛用的, 是个纯地质学的概念, 不太理解</span></div><div class="line"><span class="comment">//查得gutter的值会影响imageSize和imageOffset</span></div><div class="line"><span class="keyword">new</span> OpenLayers.Layer.WMS( <span class="string">"States (15px gutter)"</span>,</div><div class="line">        <span class="string">"http://suite.opengeo.org/geoserver/wms"</span>,</div><div class="line">        &#123;layers: <span class="string">'usa:states'</span>&#125;,</div><div class="line">        &#123;gutter: <span class="number">15</span>,</div></pre></td></tr></table></figure>
+<h3 id="21-图像图层"><a href="#21-图像图层" class="headerlink" title="21.图像图层"></a>21.图像图层</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> graphic = <span class="keyword">new</span> OpenLayers.Layer.Image(</div><div class="line">    <span class="string">'City Lights'</span>,</div><div class="line">    <span class="string">'data/4_m_citylights_lg.gif'</span>,</div><div class="line">    <span class="keyword">new</span> OpenLayers.Bounds(<span class="number">-180</span>, <span class="number">-88.759</span>, <span class="number">180</span>, <span class="number">88.759</span>),</div><div class="line">    <span class="keyword">new</span> OpenLayers.Size(<span class="number">580</span>, <span class="number">288</span>),</div><div class="line">    &#123;numZoomLevels: <span class="number">3</span>&#125;</div><div class="line">);</div></pre></td></tr></table></figure>
+<h3 id="22-KaMap图层"><a href="#22-KaMap图层" class="headerlink" title="22.KaMap图层"></a>22.KaMap图层</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> jpl_wms = <span class="keyword">new</span> OpenLayers.Layer.KaMap( <span class="string">"Satellite"</span>,</div><div class="line">     <span class="string">"http://www.openlayers.org/world/index.php"</span>, &#123;g: <span class="string">"satellite"</span>, map: <span class="string">"world"</span>&#125;);</div></pre></td></tr></table></figure>
+<h3 id="23-绘制KML轨迹"><a href="#23-绘制KML轨迹" class="headerlink" title="23.绘制KML轨迹"></a>23.绘制KML轨迹</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">new</span> OpenLayers.Map(&#123;</div><div class="line">    div: <span class="string">"map"</span>,</div><div class="line">    projection: mercator,</div><div class="line">    layers: [</div><div class="line">            ... ...</div><div class="line">            eventListeners: &#123;</div><div class="line">                <span class="string">"beforefeaturesadded"</span>: <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</div><div class="line">                    <span class="comment">// group the tracks by fid and create one track for</span></div><div class="line">                    <span class="comment">// every fid</span></div><div class="line">                    <span class="keyword">var</span> fid, points = [], feature;</div><div class="line">                    <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>, len=e.features.length; i&lt;len; i++) &#123;</div><div class="line">                        feature = e.features[i];</div><div class="line">                        <span class="keyword">if</span> ((fid &amp;&amp; feature.fid !== fid) || i === len<span class="number">-1</span>) &#123;</div><div class="line">                            <span class="keyword">this</span>.addNodes(points, &#123;silent: <span class="literal">true</span>&#125;);</div><div class="line">                            points = [];</div><div class="line">                        &#125; <span class="keyword">else</span> &#123;</div><div class="line">                            points.push(feature);</div><div class="line">                        &#125;</div><div class="line">                        fid = feature.fid;</div><div class="line">                    &#125;</div><div class="line">                    <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">                &#125;</div><div class="line">            &#125;</div></pre></td></tr></table></figure>
+<h3 id="24-图层加载事件"><a href="#24-图层加载事件" class="headerlink" title="24.图层加载事件"></a>24.图层加载事件</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">layer.events.register(<span class="string">"loadstart"</span>, layer, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">this</span>.logEvent(<span class="string">"Load Start"</span>);</div><div class="line">&#125;);</div><div class="line">layer.events.register(<span class="string">"tileloaded"</span>, layer, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">this</span>.logEvent(<span class="string">"Tile loaded. "</span> + <span class="keyword">this</span>.numLoadingTiles + <span class="string">" left."</span>);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h3 id="25-WMS图层透明度"><a href="#25-WMS图层透明度" class="headerlink" title="25.WMS图层透明度"></a>25.WMS图层透明度</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">shade.setOpacity(newOpacity);<span class="comment">//shade是Layer.WMS</span></div></pre></td></tr></table></figure>
+<h3 id="26-XYZ图层"><a href="#26-XYZ图层" class="headerlink" title="26.XYZ图层"></a>26.XYZ图层</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> earth = <span class="keyword">new</span> OpenLayers.Layer.XYZ(</div></pre></td></tr></table></figure>
+<h3 id="27-MapGuide图层"><a href="#27-MapGuide图层" class="headerlink" title="27.MapGuide图层"></a>27.MapGuide图层</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> layer = <span class="keyword">new</span> OpenLayers.Layer.MapGuide(</div></pre></td></tr></table></figure>
+<h3 id="28-MapServer图层"><a href="#28-MapServer图层" class="headerlink" title="28.MapServer图层"></a>28.MapServer图层</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">layer = <span class="keyword">new</span> OpenLayers.Layer.MapServer(</div></pre></td></tr></table></figure>
+<h3 id="29-文字图层"><a href="#29-文字图层" class="headerlink" title="29.文字图层"></a>29.文字图层</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">new</span> OpenLayers.Layer.Text( <span class="string">"text"</span>, &#123; location:<span class="string">"./textfile.txt"</span>&#125; );</div></pre></td></tr></table></figure>
+<h3 id="30-maker压盖顺序"><a href="#30-maker压盖顺序" class="headerlink" title="30.maker压盖顺序"></a>30.maker压盖顺序</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> layer = <span class="keyword">new</span> OpenLayers.Layer.Vector(</div><div class="line">    <span class="string">"Y-Order"</span>,</div><div class="line">    &#123;</div><div class="line">        ... ...</div><div class="line">        rendererOptions: &#123;yOrdering: <span class="literal">true</span>&#125;,</div><div class="line">        renderers: renderer</div><div class="line">    &#125;</div><div class="line">);</div><div class="line"><span class="keyword">var</span> layer = <span class="keyword">new</span> OpenLayers.Layer.Vector(</div><div class="line">    <span class="string">"Drawing Order"</span>,</div><div class="line">    &#123;</div><div class="line">        isBaseLayer: <span class="literal">true</span>,</div><div class="line">        <span class="comment">// enable the indexer by setting zIndexing to true</span></div><div class="line">        rendererOptions: &#123;zIndexing: <span class="literal">true</span>&#125;</div><div class="line">    &#125;</div><div class="line">);</div></pre></td></tr></table></figure>
+<h3 id="31-OSM在Canvas画布上的事件"><a href="#31-OSM在Canvas画布上的事件" class="headerlink" title="31.OSM在Canvas画布上的事件"></a>31.OSM在Canvas画布上的事件</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">layer = <span class="keyword">new</span> OpenLayers.Layer.OSM(<span class="string">'Simple OSM Map'</span>, <span class="literal">null</span>, &#123;</div><div class="line">    eventListeners: &#123;</div><div class="line">        tileloaded: <span class="function"><span class="keyword">function</span>(<span class="params">evt</span>) </span>&#123;</div><div class="line">            <span class="keyword">var</span> ctx = evt.tile.getCanvasContext();</div><div class="line">            <span class="keyword">if</span> (ctx) &#123;</div><div class="line">                <span class="keyword">var</span> imgd = ctx.getImageData(<span class="number">0</span>, <span class="number">0</span>, evt.tile.size.w, evt.tile.size.h);</div><div class="line">                <span class="keyword">var</span> pix = imgd.data;</div><div class="line">                <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>, n = pix.length; i &lt; n; i += <span class="number">4</span>) &#123;</div><div class="line">                    pix[i] = pix[i + <span class="number">1</span>] = pix[i + <span class="number">2</span>] = (<span class="number">3</span> * pix[i] + <span class="number">4</span> * pix[i + <span class="number">1</span>] + pix[i + <span class="number">2</span>]) / <span class="number">8</span>;</div><div class="line">                &#125;</div><div class="line">                ctx.putImageData(imgd, <span class="number">0</span>, <span class="number">0</span>);</div></pre></td></tr></table></figure>
+<h3 id="32-点阵"><a href="#32-点阵" class="headerlink" title="32.点阵"></a>32.点阵</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> points = <span class="keyword">new</span> OpenLayers.Layer.PointGrid(&#123;</div><div class="line">    isBaseLayer: <span class="literal">true</span>, dx: <span class="number">15</span>, dy: <span class="number">15</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h3 id="33-GeoRSS"><a href="#33-GeoRSS" class="headerlink" title="33.GeoRSS"></a>33.GeoRSS</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rss = <span class="keyword">new</span> OpenLayers.Layer.GeoRSS(parts[parts.length<span class="number">-1</span>], value);</div></pre></td></tr></table></figure>
+<h3 id="34-坐标系切换"><a href="#34-坐标系切换" class="headerlink" title="34.坐标系切换"></a>34.坐标系切换</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="string">'EPSG:3574'</span>: &#123;</div><div class="line">    projection: <span class="keyword">new</span> OpenLayers.Projection(<span class="string">'EPSG:3574'</span>),</div><div class="line">    units: <span class="string">'m'</span>,</div><div class="line">    maxExtent: <span class="keyword">new</span> OpenLayers.Bounds(<span class="number">-5505054</span>, <span class="number">-5505054</span>, <span class="number">5505054</span>, <span class="number">5505054</span>),</div><div class="line">    maxResolution: <span class="number">5505054</span> / <span class="number">128</span>,</div><div class="line">    numZoomLevels: <span class="number">18</span></div><div class="line">&#125;,</div><div class="line"><span class="comment">//切换坐标系</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">setProjection</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    projCode = <span class="keyword">this</span>.innerHTML;</div><div class="line">    <span class="keyword">var</span> oldExtent = map.getExtent();</div><div class="line">    <span class="keyword">var</span> oldCenter = map.getCenter();</div><div class="line">    <span class="keyword">var</span> oldProjection = map.getProjectionObject();</div><div class="line">    <span class="comment">// map projection is controlled by the base layer</span></div><div class="line">    map.baseLayer.addOptions(projectionOptions[projCode]);</div><div class="line">    <span class="comment">// with the base layer updated, the map has the new projection now</span></div><div class="line">    <span class="keyword">var</span> newProjection = map.getProjectionObject();</div><div class="line">    <span class="comment">// transform the center of the old projection, not the extent</span></div><div class="line">    map.setCenter(</div><div class="line">        oldCenter.transform(oldProjection, newProjection,</div><div class="line">        map.getZoomForExtent(oldExtent.transform(oldProjection, newProjection))</div><div class="line">    ));</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i=map.layers.length<span class="number">-1</span>; i&gt;=<span class="number">0</span>; --i) &#123;</div><div class="line">        <span class="comment">// update grid settings</span></div><div class="line">        map.layers[i].addOptions(projectionOptions[projCode]);</div><div class="line">        <span class="comment">// redraw layer - just in case center and zoom are the same in old and</span></div><div class="line">        <span class="comment">// new projection</span></div><div class="line">        map.layers[i].redraw();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="35-shift和ctrl画矩形"><a href="#35-shift和ctrl画矩形" class="headerlink" title="35.shift和ctrl画矩形"></a>35.shift和ctrl画矩形</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">polyOptions = &#123;sides: <span class="number">4</span>&#125;;</div><div class="line">polygonControl = <span class="keyword">new</span> OpenLayers.Control.DrawFeature(polygonLayer,</div><div class="line">                                OpenLayers.Handler.RegularPolygon,</div><div class="line">                                &#123;handlerOptions: polyOptions&#125;);</div><div class="line"><span class="comment">//配置,形状:shape==&gt;"3" triangle ,"4"  square,"5" pentagon ,"6" hexagon "40" circle</span></div><div class="line">polygonControl.handler.setOptions(options);</div><div class="line"><span class="comment">//</span></div><div class="line"><span class="keyword">var</span> radius = fraction * map.getExtent().getHeight();</div><div class="line">polygonControl.handler.setOptions(&#123;radius: radius,angle: <span class="number">0</span>&#125;);</div></pre></td></tr></table></figure>
+<h3 id="36-瓦片缓存图层"><a href="#36-瓦片缓存图层" class="headerlink" title="36.瓦片缓存图层"></a>36.瓦片缓存图层</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">layer = <span class="keyword">new</span> OpenLayers.Layer.TileCache(<span class="string">"TileCache Layer"</span>,</div><div class="line">                [<span class="string">"http://c0.tilecache.osgeo.org/wms-c/cache/"</span>,</div><div class="line">                 <span class="string">"http://c1.tilecache.osgeo.org/wms-c/cache/"</span>,</div><div class="line">                 <span class="string">"http://c2.tilecache.osgeo.org/wms-c/cache/"</span>,</div><div class="line">                 <span class="string">"http://c3.tilecache.osgeo.org/wms-c/cache/"</span>,</div><div class="line">                 <span class="string">"http://c4.tilecache.osgeo.org/wms-c/cache/"</span>],</div></pre></td></tr></table></figure>
+<h3 id="37-瓦片原点的偏移"><a href="#37-瓦片原点的偏移" class="headerlink" title="37.瓦片原点的偏移"></a>37.瓦片原点的偏移</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tileOrigin: <span class="keyword">new</span> OpenLayers.LonLat(<span class="number">-180</span>, <span class="number">-90</span>)</div></pre></td></tr></table></figure>
+<h3 id="38-TMS查询"><a href="#38-TMS查询" class="headerlink" title="38.TMS查询"></a>38.TMS查询</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">layer = <span class="keyword">new</span> OpenLayers.Layer.TMS( <span class="string">"TMS"</span>,</div><div class="line">        <span class="string">"http://tilecache.osgeo.org/wms-c/Basic.py/"</span>, &#123;layername: <span class="string">'basic'</span>, type:<span class="string">'png'</span>&#125; );</div></pre></td></tr></table></figure>
+<h3 id="39-图层zoom时的过渡效果"><a href="#39-图层zoom时的过渡效果" class="headerlink" title="39.图层zoom时的过渡效果"></a>39.图层zoom时的过渡效果</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">transitionEffect:<span class="string">'resize'</span> ; <span class="comment">//null</span></div></pre></td></tr></table></figure>
+<h3 id="40-UTFGrid"><a href="#40-UTFGrid" class="headerlink" title="40.UTFGrid"></a>40.UTFGrid</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//读对应位置的json</span></div><div class="line"><span class="keyword">var</span> utfgrid = <span class="keyword">new</span> OpenLayers.Layer.UTFGrid(&#123;</div><div class="line">    url: <span class="string">"utfgrid/world_utfgrid/$&#123;z&#125;/$&#123;x&#125;/$&#123;y&#125;.json"</span>,</div><div class="line">    utfgridResolution: <span class="number">4</span>, <span class="comment">// default is 2</span></div><div class="line">    displayInLayerSwitcher: <span class="literal">false</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h3 id="41-WMS长url"><a href="#41-WMS长url" class="headerlink" title="41.WMS长url"></a>41.WMS长url</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> base = <span class="keyword">new</span> OpenLayers.Layer.WMS(</div><div class="line">    base.mergeNewParams(&#123;makeTheUrlLong: longText&#125;);</div><div class="line">    <span class="keyword">var</span> string = OpenLayers.Util.getElement(<span class="string">'year'</span>).value + <span class="string">"-"</span> +</div><div class="line">                         OpenLayers.Util.getElement(<span class="string">'month'</span>).value + <span class="string">"-"</span> +</div><div class="line">                         OpenLayers.Util.getElement(<span class="string">'day'</span>).value + <span class="string">"T"</span> +</div><div class="line">                         OpenLayers.Util.getElement(<span class="string">'hour'</span>).value + <span class="string">":"</span> +</div><div class="line">                         OpenLayers.Util.getElement(<span class="string">'minute'</span>).value + <span class="string">":00"</span>;</div><div class="line">    base.mergeNewParams(&#123;<span class="string">'time'</span>:string&#125;);</div></pre></td></tr></table></figure>
+<h3 id="42-WMTS图层"><a href="#42-WMTS图层" class="headerlink" title="42.WMTS图层"></a>42.WMTS图层</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> wmts = <span class="keyword">new</span> OpenLayers.Layer.WMTS(&#123;</div><div class="line">    name: <span class="string">"Medford Buildings"</span>,</div><div class="line">    url: <span class="string">"http://v2.suite.opengeo.org/geoserver/gwc/service/wmts/"</span>,</div><div class="line">    layer: <span class="string">"medford:buildings"</span>,</div><div class="line">    matrixSet: <span class="string">"EPSG:900913"</span>,</div><div class="line">    matrixIds: matrixIds,</div><div class="line">    format: <span class="string">"image/png"</span>,</div><div class="line">    style: <span class="string">"_null"</span>,</div><div class="line">    opacity: <span class="number">0.7</span>,</div><div class="line">    isBaseLayer: <span class="literal">false</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h3 id="43-WorldWind图层"><a href="#43-WorldWind图层" class="headerlink" title="43.WorldWind图层"></a>43.WorldWind图层</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">new</span> OpenLayers.Layer.WorldWind</div></pre></td></tr></table></figure>
+<h3 id="44-Zoomify图层"><a href="#44-Zoomify图层" class="headerlink" title="44.Zoomify图层"></a>44.Zoomify图层</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> zoomify = <span class="keyword">new</span> OpenLayers.Layer.Zoomify( <span class="string">"Zoomify"</span>, zoomify_url, </div><div class="line">        <span class="keyword">new</span> OpenLayers.Size( zoomify_width, zoomify_height ) );</div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/01/09/openLayers/openLayers-01-map/" rel="next" title="OpenLayers学习-示例学习1:Map">
+                <i class="fa fa-chevron-left"></i> OpenLayers学习-示例学习1:Map
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/07/06/move-to-hexo/" rel="prev" title="Move to hexo">
+                Move to hexo <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2015/01/09/openLayers/openLayers-02-layer/"
+           data-title="OpenLayers学习-示例学习2:图层" data-url="http://ruantao1989.github.io/2015/01/09/openLayers/openLayers-02-layer/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars2.githubusercontent.com/u/1949437?v=3&s=460"
+               alt="ruantao1989" />
+          <p class="site-author-name" itemprop="name">ruantao1989</p>
+          <p class="site-description motion-element" itemprop="description">思行合一</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">37</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#二-Layer图层"><span class="nav-number">1.</span> <span class="nav-text">二:Layer图层</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-添加-删除图层"><span class="nav-number">1.1.</span> <span class="nav-text">1.添加/删除图层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-自定义图层"><span class="nav-number">1.2.</span> <span class="nav-text">2.自定义图层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-json数据图层"><span class="nav-number">1.3.</span> <span class="nav-text">3.json数据图层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-多个图层及切换"><span class="nav-number">1.4.</span> <span class="nav-text">4.多个图层及切换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-ArcGIS服务的图层"><span class="nav-number">1.5.</span> <span class="nav-text">5.ArcGIS服务的图层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-图层描述"><span class="nav-number">1.6.</span> <span class="nav-text">6.图层描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-Bing图层"><span class="nav-number">1.7.</span> <span class="nav-text">7.Bing图层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-缩放级别限制"><span class="nav-number">1.8.</span> <span class="nav-text">8.缩放级别限制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-Layer-Boxes绘制矩形线框"><span class="nav-number">1.9.</span> <span class="nav-text">9.Layer.Boxes绘制矩形线框</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-Layer-Vector绘制矩形要素"><span class="nav-number">1.10.</span> <span class="nav-text">10.Layer.Vector绘制矩形要素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#11-缓存瓦片数"><span class="nav-number">1.11.</span> <span class="nav-text">11.缓存瓦片数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#12-利用localStorage做缓存"><span class="nav-number">1.12.</span> <span class="nav-text">12.利用localStorage做缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#13-canvas绘图元素"><span class="nav-number">1.13.</span> <span class="nav-text">13.canvas绘图元素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#14-Vector上绘制GeoJSON"><span class="nav-number">1.14.</span> <span class="nav-text">14.Vector上绘制GeoJSON</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#15-xml加载GeoRSS图层"><span class="nav-number">1.15.</span> <span class="nav-text">15.xml加载GeoRSS图层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#16-自定义图片图标加在GeoRSS图层上"><span class="nav-number">1.16.</span> <span class="nav-text">16.自定义图片图标加在GeoRSS图层上</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#17-GML图层"><span class="nav-number">1.17.</span> <span class="nav-text">17.GML图层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#18-google图层"><span class="nav-number">1.18.</span> <span class="nav-text">18.google图层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#19-静态网格图层"><span class="nav-number">1.19.</span> <span class="nav-text">19.静态网格图层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#20-gutter沟槽"><span class="nav-number">1.20.</span> <span class="nav-text">20.gutter沟槽</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#21-图像图层"><span class="nav-number">1.21.</span> <span class="nav-text">21.图像图层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#22-KaMap图层"><span class="nav-number">1.22.</span> <span class="nav-text">22.KaMap图层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#23-绘制KML轨迹"><span class="nav-number">1.23.</span> <span class="nav-text">23.绘制KML轨迹</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#24-图层加载事件"><span class="nav-number">1.24.</span> <span class="nav-text">24.图层加载事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#25-WMS图层透明度"><span class="nav-number">1.25.</span> <span class="nav-text">25.WMS图层透明度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#26-XYZ图层"><span class="nav-number">1.26.</span> <span class="nav-text">26.XYZ图层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#27-MapGuide图层"><span class="nav-number">1.27.</span> <span class="nav-text">27.MapGuide图层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#28-MapServer图层"><span class="nav-number">1.28.</span> <span class="nav-text">28.MapServer图层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#29-文字图层"><span class="nav-number">1.29.</span> <span class="nav-text">29.文字图层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#30-maker压盖顺序"><span class="nav-number">1.30.</span> <span class="nav-text">30.maker压盖顺序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#31-OSM在Canvas画布上的事件"><span class="nav-number">1.31.</span> <span class="nav-text">31.OSM在Canvas画布上的事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#32-点阵"><span class="nav-number">1.32.</span> <span class="nav-text">32.点阵</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#33-GeoRSS"><span class="nav-number">1.33.</span> <span class="nav-text">33.GeoRSS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#34-坐标系切换"><span class="nav-number">1.34.</span> <span class="nav-text">34.坐标系切换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#35-shift和ctrl画矩形"><span class="nav-number">1.35.</span> <span class="nav-text">35.shift和ctrl画矩形</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#36-瓦片缓存图层"><span class="nav-number">1.36.</span> <span class="nav-text">36.瓦片缓存图层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#37-瓦片原点的偏移"><span class="nav-number">1.37.</span> <span class="nav-text">37.瓦片原点的偏移</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#38-TMS查询"><span class="nav-number">1.38.</span> <span class="nav-text">38.TMS查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#39-图层zoom时的过渡效果"><span class="nav-number">1.39.</span> <span class="nav-text">39.图层zoom时的过渡效果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#40-UTFGrid"><span class="nav-number">1.40.</span> <span class="nav-text">40.UTFGrid</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#41-WMS长url"><span class="nav-number">1.41.</span> <span class="nav-text">41.WMS长url</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#42-WMTS图层"><span class="nav-number">1.42.</span> <span class="nav-text">42.WMTS图层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#43-WorldWind图层"><span class="nav-number">1.43.</span> <span class="nav-text">43.WorldWind图层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#44-Zoomify图层"><span class="nav-number">1.44.</span> <span class="nav-text">44.Zoomify图层</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ruantao1989</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"ruantao1989"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
