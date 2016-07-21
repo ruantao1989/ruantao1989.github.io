@@ -260,8 +260,8 @@
             
               
                 
-                <a class="post-title-link" href="/2014/05/24/jQueryRead/jQuery-read-12-1/" itemprop="url">
-                  jQuery源码阅读12-1:回调队列$.Callback对象
+                <a class="post-title-link" href="/2014/05/08/jQueryRead/jQuery-read-02/" itemprop="url">
+                  jQuery源码阅读2:用extend()和fn.extend()扩展方法
                 </a>
               
             
@@ -274,8 +274,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2014-05-24T13:39:00+08:00" content="2014-05-24">
-              2014-05-24
+            <time itemprop="dateCreated" datetime="2014-05-08T21:55:00+08:00" content="2014-05-08">
+              2014-05-08
             </time>
           </span>
 
@@ -304,8 +304,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2014/05/24/jQueryRead/jQuery-read-12-1/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/24/jQueryRead/jQuery-read-12-1/" itemprop="commentsCount"></span>
+                <a href="/2014/05/08/jQueryRead/jQuery-read-02/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/08/jQueryRead/jQuery-read-02/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -329,9 +329,9 @@
 
       
         
-          <p>Deferred这个东西异常nb, 应该是jQuery中异步处理的核心<br>因为没有实现这种东西的经验, 所以不太好理解, 好多代码看不出目的性<br>有点儿操作系统里任务控制的感觉, 还得弄个状态机 三四种运行状态循环 管理运行状态什么的…<br>“回调队列”这个专题被迫拆成两部分吧, 先读简单的Callbacks队列<br>
+          <p>jQuery对象生成出来了, 下一步就是往里加方法 , 主要用的是extend()方法:<br>还是拆一下代码, 仅分析最简单的流程, 说明下工作原理.<br>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2014/05/24/jQueryRead/jQuery-read-12-1/#more" rel="contents">
+            <a class="btn" href="/2014/05/08/jQueryRead/jQuery-read-02/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -382,8 +382,8 @@
             
               
                 
-                <a class="post-title-link" href="/2014/05/24/jQueryRead/jQuery-read-12-2/" itemprop="url">
-                  jQuery源码阅读12-2:回调队列$.Deferred对象
+                <a class="post-title-link" href="/2014/05/06/jQueryRead/jQuery-read-01/" itemprop="url">
+                  jQuery源码阅读1:jQuery对象的生成
                 </a>
               
             
@@ -396,8 +396,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2014-05-24T13:39:00+08:00" content="2014-05-24">
-              2014-05-24
+            <time itemprop="dateCreated" datetime="2014-05-06T23:46:00+08:00" content="2014-05-06">
+              2014-05-06
             </time>
           </span>
 
@@ -426,8 +426,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2014/05/24/jQueryRead/jQuery-read-12-2/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/24/jQueryRead/jQuery-read-12-2/" itemprop="commentsCount"></span>
+                <a href="/2014/05/06/jQueryRead/jQuery-read-01/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/06/jQueryRead/jQuery-read-01/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -451,380 +451,9 @@
 
       
         
-          <p>Deferred这个东西我没看懂… 只看出他能干嘛了 连他实现的思路都没研究清楚…<br>后边很多模块的核心都是Deferred(比如Ajax)本应好好研究研究的, 不过时间有限, 先把读代码笔记发出来吧 回头再迭代</p>
-<p>deferred对象有三种执行状态:未完成，已完成和已失败.<br>如果执行状态是”已完成”（resolved）,deferred对象立刻调用done()方法指定的回调函数；如果执行状态是”已失败”，调用fail()方法指定的回调函数；如果执行状态是”未完成”，则继续等待，或者调用progress()方法指定的回调函数<br>
+          <p>最近比较忙, 不过还是想看看jQuery源码.<br>晚上大概翻了一下 好多看不懂的…<br>试着拆解一下 希望在博客里强制自己叙述出来 能稍微多看懂一点点.<br>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2014/05/24/jQueryRead/jQuery-read-12-2/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/05/24/jQueryRead/jQuery-read-11/" itemprop="url">
-                  jQuery源码阅读11:数据缓存data()
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2014-05-24T12:39:00+08:00" content="2014-05-24">
-              2014-05-24
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/jQuery源码阅读/" itemprop="url" rel="index">
-                    <span itemprop="name">jQuery源码阅读</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2014/05/24/jQueryRead/jQuery-read-11/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/24/jQueryRead/jQuery-read-11/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>读event之前, 核心方法里还有data和queue没读,先把基础方法里的障碍扫清吧</p>
-<p>1:data可以把目标数据绑定在dom元素上,或者js对象里<br>  (1).对于dom元素: 程序生成一个uuid关联数据和缓存, 把id写进对象, 把要缓存的数据缓存在jQuery.cache对象里<br>  (2).对于js对象:直接在此对象中增加一个名为jQuery/\d+/的对象, 把要缓存的数据放入此对象<br>2:缓存机制自身也用data缓存数据,提高效率</p>
-<p>这点儿代码看了好几个小时才看明白, 读懂之后发现其实缓存机制道理不复杂 就是流程太多太绕<br>总感觉对js对象缓存的处理是后加进来的, 做了一大堆追加判断 原有逻辑一下就复杂了<br>要是我写 有可能写两套逻辑单独处理, 但是那样维护又比较麻烦</p>
-<p>所以有感而发:再nb的人写傻大全的代码也避免不了臃肿…<br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2014/05/24/jQueryRead/jQuery-read-11/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/05/22/jQueryRead/jQuery-read-10/" itemprop="url">
-                  jQuery源码阅读10:浏览器检测support()
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2014-05-22T22:46:00+08:00" content="2014-05-22">
-              2014-05-22
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/jQuery源码阅读/" itemprop="url" rel="index">
-                    <span itemprop="name">jQuery源码阅读</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2014/05/22/jQueryRead/jQuery-read-10/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/22/jQueryRead/jQuery-read-10/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>suppor()t用html和css操作来验证浏览器特性,而不是直接查userAgent<br>里边提到的好些问题我都不知道, 这篇文章也就是个摘抄, 最多算个翻译…<br>粘一遍注释学习一下吧<br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2014/05/22/jQueryRead/jQuery-read-10/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/05/20/jQueryRead/jQuery-read-08-2/" itemprop="url">
-                  jQuery源码阅读8-2:属性操作val(),removeAttr()
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2014-05-20T22:06:00+08:00" content="2014-05-20">
-              2014-05-20
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/jQuery源码阅读/" itemprop="url" rel="index">
-                    <span itemprop="name">jQuery源码阅读</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2014/05/20/jQueryRead/jQuery-read-08-2/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/20/jQueryRead/jQuery-read-08-2/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>属性操作是比较独立的一块,<br>这次说下prop相关的, 和属性必须用的access 下次说更麻烦一点的attr,val 还有css相关的</p>
-<p>以prop的一次操作为例, 调用顺序是: fn.prop -&gt; access -&gt; jQuery.prop<br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2014/05/20/jQueryRead/jQuery-read-08-2/#more" rel="contents">
+            <a class="btn" href="/2014/05/06/jQueryRead/jQuery-read-01/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -858,7 +487,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span>
   </nav>
 
 
@@ -899,7 +528,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">37</span>
+              <span class="site-state-item-count">42</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>

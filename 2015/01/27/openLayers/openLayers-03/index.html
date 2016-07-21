@@ -1,0 +1,642 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="ruantao1989" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="OpenLayers里从新封装了原生的基本对象, 比如String对象,设计上, 解决了原生方法不够使的问题, 也没破坏基本对象的prototype, 不会和其他类库冲突
+这些类就像Util工具, 没什么上下文的状态,调用时候就直接调用: OpenLayers.String.startsWith(AAA,BBB) 通过处理拿到结果完事">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenLayers学习3-BaseTypes对基础类型对象的扩展">
+<meta property="og:url" content="http://ruantao1989.github.io/2015/01/27/openLayers/openLayers-03/index.html">
+<meta property="og:site_name" content="ruantao1989">
+<meta property="og:description" content="OpenLayers里从新封装了原生的基本对象, 比如String对象,设计上, 解决了原生方法不够使的问题, 也没破坏基本对象的prototype, 不会和其他类库冲突
+这些类就像Util工具, 没什么上下文的状态,调用时候就直接调用: OpenLayers.String.startsWith(AAA,BBB) 通过处理拿到结果完事">
+<meta property="og:updated_time" content="2016-07-21T08:53:50.867Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OpenLayers学习3-BaseTypes对基础类型对象的扩展">
+<meta name="twitter:description" content="OpenLayers里从新封装了原生的基本对象, 比如String对象,设计上, 解决了原生方法不够使的问题, 也没破坏基本对象的prototype, 不会和其他类库冲突
+这些类就像Util工具, 没什么上下文的状态,调用时候就直接调用: OpenLayers.String.startsWith(AAA,BBB) 通过处理拿到结果完事">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://ruantao1989.github.io/2015/01/27/openLayers/openLayers-03/"/>
+
+  <title> OpenLayers学习3-BaseTypes对基础类型对象的扩展 | ruantao1989 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">ruantao1989</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                OpenLayers学习3-BaseTypes对基础类型对象的扩展
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2015-01-27T00:15:31+08:00" content="2015-01-27">
+              2015-01-27
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/OpenLayers学习/" itemprop="url" rel="index">
+                    <span itemprop="name">OpenLayers学习</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/01/27/openLayers/openLayers-03/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/01/27/openLayers/openLayers-03/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>OpenLayers里从新封装了原生的基本对象, 比如String对象,<br>设计上, 解决了原生方法不够使的问题, 也没破坏基本对象的prototype, 不会和其他类库冲突</p>
+<p>这些类就像Util工具, 没什么上下文的状态,<br>调用时候就直接调用: OpenLayers.String.startsWith(AAA,BBB) 通过处理拿到结果完事<br><a id="more"></a></p>
+<p>OpenLayers这块的代码比较朴实, 没用那么多花招, 拣几个说说:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//1.String</span></div><div class="line">    <span class="comment">//其实这块用正则用的不多, 这儿用了个链式的正则处理</span></div><div class="line">    trim: <span class="function"><span class="keyword">function</span>(<span class="params">str</span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> str.replace(<span class="regexp">/^\s\s*/</span>, <span class="string">''</span>).replace(<span class="regexp">/\s\s*$/</span>, <span class="string">''</span>);</div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="comment">//这个format就是把$&#123;token&#125;U最终换成context["token"]的功能</span></div><div class="line">    <span class="comment">//有种模版替换的思想, 将XXX模板化的成为==&gt;YYY</span></div><div class="line">    tokenRegEx:  <span class="regexp">/\$\&#123;([\w.]+?)\&#125;/g</span>,</div><div class="line">    format: <span class="function"><span class="keyword">function</span>(<span class="params">template, context, args</span>) </span>&#123;</div><div class="line"> </div><div class="line">        <span class="keyword">return</span> template.replace(OpenLayers.String.tokenRegEx, replacer);</div><div class="line">    &#125;</div><div class="line"> </div><div class="line"> </div><div class="line">    <span class="comment">//2.Number</span></div><div class="line">    <span class="comment">/*</span></div><div class="line">        num     &#123;Float&#125;</div><div class="line">        dec     &#123;Integer&#125; 数字的小数部分四舍五入到指定的位数. 默认为 0. 设置为null值时小数部分不变.</div><div class="line">        tsep    &#123;String&#125; 千位分隔符.  默认值为 “,”.</div><div class="line">        dsep    &#123;String&#125; 小数点分隔符.  默认值为 “.”.</div><div class="line">    */</div><div class="line">    format: <span class="function"><span class="keyword">function</span>(<span class="params">num, dec, tsep, dsep</span>) </span>&#123;</div><div class="line">        <span class="comment">//预防性处理</span></div><div class="line">        dec = (<span class="keyword">typeof</span> dec != <span class="string">"undefined"</span>) ? dec : <span class="number">0</span>; </div><div class="line">        tsep = (<span class="keyword">typeof</span> tsep != <span class="string">"undefined"</span>) ? tsep :</div><div class="line">            OpenLayers.Number.thousandsSeparator; </div><div class="line">        dsep = (<span class="keyword">typeof</span> dsep != <span class="string">"undefined"</span>) ? dsep :</div><div class="line">            OpenLayers.Number.decimalSeparator;</div><div class="line"> </div><div class="line">        <span class="comment">//四舍五入,按dec去toFix</span></div><div class="line">        <span class="keyword">if</span> (dec != <span class="literal">null</span>) &#123;</div><div class="line">            num = <span class="built_in">parseFloat</span>(num.toFixed(dec));</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//按小数点切分(123.456).toString().split("."); ==&gt; ["123", "456"]</span></div><div class="line">        <span class="keyword">var</span> parts = num.toString().split(<span class="string">"."</span>);</div><div class="line">        <span class="keyword">if</span> (parts.length == <span class="number">1</span> &amp;&amp; dec == <span class="literal">null</span>) &#123;</div><div class="line">            <span class="comment">// integer where we do not want to touch the decimals</span></div><div class="line">            dec = <span class="number">0</span>;</div><div class="line">        &#125;</div><div class="line">         </div><div class="line">        <span class="comment">//切分后的int部分</span></div><div class="line">        <span class="keyword">var</span> integer = parts[<span class="number">0</span>];</div><div class="line">        <span class="keyword">if</span> (tsep) &#123;</div><div class="line">            <span class="keyword">var</span> thousands = <span class="regexp">/(-?[0-9]+)([0-9]&#123;3&#125;)/</span>; <span class="comment">//0-9三位</span></div><div class="line">            <span class="keyword">while</span>(thousands.test(integer)) &#123;</div><div class="line">                <span class="comment">//循环写入千分位切分符 </span></div><div class="line">                integer = integer.replace(thousands, <span class="string">"$1"</span> + tsep + <span class="string">"$2"</span>); </div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">         </div><div class="line">        <span class="keyword">var</span> str;</div><div class="line">        <span class="keyword">if</span> (dec == <span class="number">0</span>) &#123;</div><div class="line">            str = integer;<span class="comment">//就是整型</span></div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="comment">//rem是小数部分</span></div><div class="line">            <span class="keyword">var</span> rem = parts.length &gt; <span class="number">1</span> ? parts[<span class="number">1</span>] : <span class="string">"0"</span>;</div><div class="line">            <span class="keyword">if</span> (dec != <span class="literal">null</span>) &#123;</div><div class="line">                <span class="comment">//用于产生末尾的补零</span></div><div class="line">                <span class="comment">//new Array(指定长度 - 实际小数位长度+1)就是最后还差多少个0, 没初始化join("0"), 在最后补齐</span></div><div class="line">                rem = rem + <span class="keyword">new</span> <span class="built_in">Array</span>(dec - rem.length + <span class="number">1</span>).join(<span class="string">"0"</span>);</div><div class="line">            &#125;</div><div class="line">            <span class="comment">//整型 + 小数点 + 小数部分</span></div><div class="line">            str = integer + dsep + rem;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> str;</div><div class="line">    &#125;,</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//3.Function</span></div><div class="line">    <span class="comment">//function就开始有意思了</span></div><div class="line">    OpenLayers.Function = &#123;</div><div class="line">        <span class="comment">/**</span></div><div class="line">         * APIFunction: bind</div><div class="line">         * 往一个对象上绑定一个function. 通过闭包改变this</div><div class="line">         * </div><div class="line">         * Parameters:</div><div class="line">         * func - &#123;Function&#125; 传入的 function.</div><div class="line">         * object - &#123;Object&#125; 要绑定function的object(this指向此对象).</div><div class="line">         * </div><div class="line">         * Returns:</div><div class="line">         * &#123;Function&#125; 'this'指向object的闭包</div><div class="line">         */</div><div class="line">        bind: <span class="function"><span class="keyword">function</span>(<span class="params">func, object</span>) </span>&#123;</div><div class="line">            <span class="comment">//将第二个参数往后的参数转成数组</span></div><div class="line">            <span class="comment">//相当于调用(类数组) arguments.slice(2)</span></div><div class="line">            <span class="keyword">var</span> args = <span class="built_in">Array</span>.prototype.slice.apply(<span class="built_in">arguments</span>, [<span class="number">2</span>]);</div><div class="line">            <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">                <span class="comment">// 这个数组里前边是是第二个参数之后的参数</span></div><div class="line">                <span class="comment">// 后边接全部传参的数组</span></div><div class="line">                <span class="keyword">var</span> newArgs = args.concat(</div><div class="line">                    <span class="built_in">Array</span>.prototype.slice.apply(<span class="built_in">arguments</span>, [<span class="number">0</span>])</div><div class="line">                );</div><div class="line">                <span class="comment">//闭包: object.func(参数是newArgs[])</span></div><div class="line">                <span class="keyword">return</span> func.apply(object, newArgs);</div><div class="line">            &#125;;</div><div class="line">        &#125;,</div><div class="line"> </div><div class="line">        <span class="comment">/**</span></div><div class="line">         * APIFunction: bindAsEventListener</div><div class="line">         * 往一个对象上绑定一个function. 传给func的第一个参数将会是event对象 </div><div class="line">         * </div><div class="line">         * Parameters:</div><div class="line">         * func - &#123;Function&#125; 接收event的函数.</div><div class="line">         * object - &#123;Object&#125; this所指的对象.</div><div class="line">         * </div><div class="line">         * Returns:</div><div class="line">         * &#123;Function&#125;</div><div class="line">         */</div><div class="line">        bindAsEventListener: <span class="function"><span class="keyword">function</span>(<span class="params">func, object</span>) </span>&#123;</div><div class="line">            <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">event</span>) </span>&#123;</div><div class="line">                <span class="comment">//相当于调用 object.func(event || window.event)</span></div><div class="line">                <span class="keyword">return</span> func.call(object, event || <span class="built_in">window</span>.event);</div><div class="line">            &#125;;</div><div class="line">        &#125;,</div></pre></td></tr></table></figure>
+<h3 id="3-json数据图层"><a href="#3-json数据图层" class="headerlink" title="3.json数据图层"></a>3.json数据图层</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">map = <span class="keyword">new</span> OpenLayers.Map(&#123;</div><div class="line">        div: <span class="string">"map"</span>,</div><div class="line">    maxExtent: <span class="keyword">new</span> OpenLayers.Bounds(</div><div class="line">        <span class="number">1549471.9221</span>, <span class="number">6403610.94</span>, <span class="number">1550001.32545</span>, <span class="number">6404015.8</span></div><div class="line">    )</div><div class="line">&#125;);</div><div class="line"><span class="keyword">var</span> vectors = <span class="keyword">new</span> OpenLayers.Layer.Vector(<span class="string">"Lines"</span>, &#123;</div><div class="line">    strategies: [<span class="keyword">new</span> OpenLayers.Strategy.Fixed()],                </div><div class="line">    protocol: <span class="keyword">new</span> OpenLayers.Protocol.HTTP(&#123;</div><div class="line">        url: <span class="string">"data/roads.json"</span>,<span class="comment">//Ajax请求本地的json文件,chrome默认不允许 需要修改下</span></div><div class="line">        format: <span class="keyword">new</span> OpenLayers.Format.GeoJSON()<span class="comment">//格式是GeoJSON</span></div><div class="line">    &#125;),</div><div class="line">    <span class="comment">//styleMap: styles 可以单独制定线的样式等等,默认是黄的</span></div><div class="line">&#125;);</div><div class="line">map.addLayer(vectors);<span class="comment">//json图层</span></div><div class="line">map.zoomToMaxExtent();</div></pre></td></tr></table></figure>
+<h3 id="4-多个图层及切换"><a href="#4-多个图层及切换" class="headerlink" title="4.多个图层及切换"></a>4.多个图层及切换</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//4.Array就一个函数, 补充原生的Array.prototype.filter</span></div><div class="line">        OpenLayers.Array = &#123;</div><div class="line">            <span class="comment">/**</span></div><div class="line">             * APIMethod: filter</div><div class="line">             * 检查原生Array对象里有没有filter方法, 没有的话自己实现一个</div><div class="line">             *</div><div class="line">             * Parameters:</div><div class="line">             * array - &#123;Array&#125; 被筛选的数据源数组, 此数组不变</div><div class="line">             * callback - &#123;Function&#125; 每个元素都会调用这个回调函数, 如果此回调返回true 则会将此元素加入结果集</div><div class="line">             *                      此回调接受3个参数(array[idx],idx,array)</div><div class="line">             *                      如果有caller参数, 则this对象指向caller后调用callback</div><div class="line">             * caller - &#123;Object&#125; 回调调用时, this指向此caller</div><div class="line">             *</div><div class="line">             * Returns:</div><div class="line">             * &#123;Array&#125; 回调新数组, 由返回true的元素组成</div><div class="line">             */</div><div class="line">            filter: <span class="function"><span class="keyword">function</span>(<span class="params">array, callback, caller</span>) </span>&#123;</div><div class="line">                <span class="keyword">var</span> selected = [];</div><div class="line">                <span class="keyword">if</span> (<span class="built_in">Array</span>.prototype.filter) &#123;</div><div class="line">                    selected = array.filter(callback, caller);<span class="comment">//原生的</span></div><div class="line">                &#125; <span class="keyword">else</span> &#123;</div><div class="line">                    <span class="keyword">var</span> len = array.length;</div><div class="line">                    <span class="keyword">if</span> (<span class="keyword">typeof</span> callback != <span class="string">"function"</span>) &#123;</div><div class="line">                        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">TypeError</span>();<span class="comment">//回调不是function 抛TypeError, 比我管用的判断不是function后 跳过不执行好...</span></div><div class="line">                    &#125;</div><div class="line">                    <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>; i&lt;len; i++) &#123;</div><div class="line">                        <span class="keyword">if</span> (i <span class="keyword">in</span> array) &#123;<span class="comment">//这的in应该是针对类数组的筛选, 比如过滤"length"属性</span></div><div class="line">                            <span class="keyword">var</span> val = array[i];</div><div class="line">                            <span class="comment">//相当于caller.callback(val, i, array)</span></div><div class="line">                            <span class="keyword">if</span> (callback.call(caller, val, i, array)) &#123;</div><div class="line">                                selected.push(val);<span class="comment">//筛选结果</span></div><div class="line">                            &#125;</div><div class="line">                        &#125;</div><div class="line">                    &#125;        </div><div class="line">                &#125;</div><div class="line">                <span class="keyword">return</span> selected;</div><div class="line">            &#125;</div><div class="line">             </div><div class="line">        &#125;;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/01/25/openLayers/openLayers-02-geoserver/" rel="next" title="OpenLayers学习-使用geoServer发布的本地WMS服务">
+                <i class="fa fa-chevron-left"></i> OpenLayers学习-使用geoServer发布的本地WMS服务
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/01/29/openLayers/openLayers-04-tool1/" rel="prev" title="OpenLayers学习4-工具类Util_1">
+                OpenLayers学习4-工具类Util_1 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2015/01/27/openLayers/openLayers-03/"
+           data-title="OpenLayers学习3-BaseTypes对基础类型对象的扩展" data-url="http://ruantao1989.github.io/2015/01/27/openLayers/openLayers-03/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars2.githubusercontent.com/u/1949437?v=3&s=460"
+               alt="ruantao1989" />
+          <p class="site-author-name" itemprop="name">ruantao1989</p>
+          <p class="site-description motion-element" itemprop="description">思行合一</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">42</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-json数据图层"><span class="nav-number">1.</span> <span class="nav-text">3.json数据图层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-多个图层及切换"><span class="nav-number">2.</span> <span class="nav-text">4.多个图层及切换</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ruantao1989</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"ruantao1989"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
