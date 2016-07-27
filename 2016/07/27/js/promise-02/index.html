@@ -1,0 +1,645 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="ruantao1989" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="看了好几篇别人的博客, 才把大概的原理搞清楚…其实异步思想算是好理解, 但是代码现实也是够麻烦的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="实现个promise-2:读别人的实现">
+<meta property="og:url" content="http://ruantao1989.github.io/2016/07/27/js/promise-02/index.html">
+<meta property="og:site_name" content="ruantao1989">
+<meta property="og:description" content="看了好几篇别人的博客, 才把大概的原理搞清楚…其实异步思想算是好理解, 但是代码现实也是够麻烦的">
+<meta property="og:updated_time" content="2016-07-27T09:05:21.270Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="实现个promise-2:读别人的实现">
+<meta name="twitter:description" content="看了好几篇别人的博客, 才把大概的原理搞清楚…其实异步思想算是好理解, 但是代码现实也是够麻烦的">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://ruantao1989.github.io/2016/07/27/js/promise-02/"/>
+
+  <title> 实现个promise-2:读别人的实现 | ruantao1989 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">ruantao1989</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                实现个promise-2:读别人的实现
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2016-07-27T16:00:00+08:00" content="2016-07-27">
+              2016-07-27
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/js入门/" itemprop="url" rel="index">
+                    <span itemprop="name">js入门</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/07/27/js/promise-02/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/27/js/promise-02/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>看了好几篇别人的博客, 才把大概的原理搞清楚…<br>其实异步思想算是好理解, 但是代码现实也是够麻烦的<br> <a id="more"></a><br>参考这两个实现:<br><a href="https://github.com/xieranmaya/blog/issues/3" target="_blank" rel="external">https://github.com/xieranmaya/blog/issues/3</a><br><a href="https://github.com/bruce-xu/Promise/blob/master/Promise.js" target="_blank" rel="external">https://github.com/bruce-xu/Promise/blob/master/Promise.js</a></p>
+<h2 id="一-结构"><a href="#一-结构" class="headerlink" title="一.结构"></a>一.结构</h2><h3 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h3><p>在 promise 对象中增加分别代表成功回调和失败回调的两个数组，数组中的每一项是通过内部封装的闭包函数调用的结果，也是一个函数。<br>不过这个函数可以访问到内部调用闭包时传递的 promise 对象，因此通过这种方式也可以访问到我们需要的下一个 promise 以及其关联的成功、失败回调的引用<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Promise</span>(<span class="params">resolver</span>) </span>&#123;</div><div class="line">    <span class="keyword">this</span>._status = <span class="string">'pending'</span>;<span class="comment">//以此来标识当前 promise 对象的状态，并会触发后续 promise 的执行</span></div><div class="line"></div><div class="line">    <span class="keyword">this</span>._doneCallbacks = [];<span class="comment">//then方法push进来, 后续调用</span></div><div class="line">    <span class="keyword">this</span>._failCallbacks = [];</div><div class="line"></div><div class="line">    resolver(resolve, reject);<span class="comment">//任务成功与否由调用者控制，且需要在成功或失败时调用resolve或reject函数</span></div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="resolve-reject"><a href="#resolve-reject" class="headerlink" title="resolve/reject"></a>resolve/reject</h3><p>我们使用 promise，是期望在未来的某个时刻能获得一个结果，并且可用于接下来的 promise 调用。<br>所以resolve函数需要有一个参数来接收结果（同样，promise 执行失败后，我们也希望在后续 promise 中获得此失败信息，做相应处理。所以reject函数也需要有一个参数来接收错误）。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">resolve</span>(<span class="params">promise, data</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (promise._status !== <span class="string">'pending'</span>) &#123;</div><div class="line">        <span class="keyword">return</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    promise._status = <span class="string">'fullfilled'</span>;</div><div class="line">    promise._value = data;</div><div class="line"></div><div class="line">    run(promise);</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">reject</span>(<span class="params">promise, reason</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (promise._status !== <span class="string">'pending'</span>) &#123;</div><div class="line">        <span class="keyword">return</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    promise._status = <span class="string">'rejected'</span>;</div><div class="line">    promise._value = reason;</div><div class="line"></div><div class="line">    run(promise);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="二-then方法"><a href="#二-then方法" class="headerlink" title="二.then方法"></a>二.then方法</h2><p>Promise 代表着一个承诺。作为承诺，总需要有一个结果，无论成功与否。如果成功，我们会获得需要的结果；当然也有可能会失败。<br>then方法接收两个参数：onResolve和onReject，分别代表当前 promise 对象在成功或失败时，接下来需要做的操作。<br>比如形如promise.then().then()…。为了方便链式调用，then方法的实现中，都会返回一个新的 promise 对象，在then方法中增加闭包调用以及为前一个 promise 对象保存引用</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Promise</span>.prototype.then = <span class="function"><span class="keyword">function</span>(<span class="params">onResolve, onReject</span>) </span>&#123;</div><div class="line">    <span class="comment">//新的Promise</span></div><div class="line">    <span class="keyword">var</span> promise = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;);</div><div class="line">    </div><div class="line">    <span class="comment">//保存新的Promise引用,处理方法,处理方式</span></div><div class="line">    <span class="keyword">this</span>._doneCallbacks.push(makeCallback(promise, onResolve, <span class="string">'resolve'</span>));</div><div class="line">    <span class="keyword">this</span>._failCallbacks.push(makeCallback(promise, onReject, <span class="string">'reject'</span>));</div><div class="line"></div><div class="line">    <span class="comment">//如果在一个已经被fullfilled或rejected的promise上调用then，则需要直接执行通过then注册的回调函数</span></div><div class="line">    run(<span class="keyword">this</span>);</div><div class="line"></div><div class="line">    <span class="keyword">return</span> promise;<span class="comment">//返回新的promise</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>此处then方法内创建的 promise 对象和暴露给用户直接调用的 Promise 构造函数所创建的 promise 对象有些不同。<br>用户调用 Promise 构造函数时需要传递resolver参数代表与此 promise 对象关联的任务，且任务会立即执行。</p>
+<p>由此可知以下两点：<br>1.首先then方法中创建的 promise 关联的任务不能在 promise 对象创建时立即执行，所以先传入一个空函数以符合 Promise 构造函数调用格式；<br>2.其次前一个 promise 对象需要能够知道下一个 promise 对象是谁，其关联的任务是什么，这样才能在自己完成后调用下一个 promise 的任务。</p>
+<p>因此前一个 promise 需要持有下一个 promise 以及其任务的引用。<br>由于 promise 的执行可能会成功也可能会失败，因此后一个 promise 一般会提供成功或失败后需要执行的任务供前一个 promise 调用。</p>
+<h2 id="三-回调"><a href="#三-回调" class="headerlink" title="三.回调"></a>三.回调</h2><h2 id="执行回调"><a href="#执行回调" class="headerlink" title="执行回调"></a>执行回调</h2><p>resolve和reject函数中首先判断了当前 promise 的状态，如果不是pending（即已经被 resolve 或 reject 过了，不再重复执行）<br>然后赋予 promise 新的状态，并保存成功或失败的值。最后调用run函数。run函数用于触发接下来的 promise 的执行。run函数中需要注意的一点是，需要异步执行相关的回调函数。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">run</span>(<span class="params">promise</span>) </span>&#123;</div><div class="line">    <span class="comment">// `then`方法中也会调用，所以此处仍需做一次判断</span></div><div class="line">    <span class="keyword">if</span> (promise._status === <span class="string">'pending'</span>) &#123;</div><div class="line">        <span class="keyword">return</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">var</span> value = promise._value;</div><div class="line">    <span class="keyword">var</span> callbacks = promise._status === <span class="string">'fullfilled'</span></div><div class="line">        ? promise._doneCallbacks</div><div class="line">        : promise._failCallbacks;</div><div class="line"></div><div class="line">    <span class="comment">// Promise异步操作的核心语句(先把then都追加完了, 然后依次调用队列里的callbacks)</span></div><div class="line">    setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>, len = callbacks.length; i &lt; len; i++) &#123;</div><div class="line">            callbacks[i](value);</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line"></div><div class="line">    <span class="comment">// 每个promise只能被执行一次。虽然`_doneCallbacks`和`_failCallbacks`用户不应该直接访问，但还是可以访问到，保险起见，做清空处理。</span></div><div class="line">    promise._doneCallbacks = [];</div><div class="line">    promise._failCallbacks = [];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="保存之前状态的callback"><a href="#保存之前状态的callback" class="headerlink" title="保存之前状态的callback"></a>保存之前状态的callback</h3><p>由于成功回调onResolve和失败回调onReject都通过此闭包封装，所以在闭包中增加了第三个参数action，以区分是哪种回调。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">makeCallback</span>(<span class="params">promise, callback, action</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">promiseCallback</span>(<span class="params">value</span>) </span>&#123;</div><div class="line">        <span class="comment">// 如果传递了callback，则使用前一个promise传递过来的值作为参数调用callback，</span></div><div class="line">        <span class="comment">// 并根据callback的调用结果来处理当前promise</span></div><div class="line">        <span class="keyword">if</span> (<span class="keyword">typeof</span> callback === <span class="string">'function'</span>) &#123;</div><div class="line">            <span class="keyword">var</span> x;</div><div class="line">            <span class="keyword">try</span> &#123;</div><div class="line">                x = callback(value);</div><div class="line">            &#125; <span class="keyword">catch</span> (e) &#123;</div><div class="line">                <span class="comment">// 如果调用callback时抛出异常，则直接用此异常对象reject当前promise</span></div><div class="line">                reject(promise, e);</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            <span class="comment">// 如果callback的返回值是当前promise，为避免造成死循环，需要抛出异常</span></div><div class="line">            <span class="comment">// 根据Promise+规范，此处应抛出TypeError异常</span></div><div class="line">            <span class="keyword">if</span> (x === promise) &#123;</div><div class="line">                <span class="keyword">var</span> reason = <span class="keyword">new</span> <span class="built_in">TypeError</span>(<span class="string">'TypeError: The return value could not be same with the promise'</span>);</div><div class="line">                reject(promise, reason);</div><div class="line">            &#125;</div><div class="line">            <span class="comment">// 如果返回值是一个Promise对象，则当返回的Promise对象被resolve/reject后，再resolve/reject当前Promise</span></div><div class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (x <span class="keyword">instanceof</span> <span class="built_in">Promise</span>) &#123;</div><div class="line">                x.then(</div><div class="line">                    <span class="function"><span class="keyword">function</span> (<span class="params">data</span>) </span>&#123;</div><div class="line">                        resolve(promise, data);</div><div class="line">                    &#125;,</div><div class="line">                    <span class="function"><span class="keyword">function</span> (<span class="params">reason</span>) </span>&#123;</div><div class="line">                        reject(promise, reason);</div><div class="line">                    &#125;</div><div class="line">                );</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                <span class="keyword">var</span> then;</div><div class="line">                (<span class="function"><span class="keyword">function</span> <span class="title">resolveThenable</span>(<span class="params">x</span>) </span>&#123;</div><div class="line">                    <span class="comment">// 如果返回的是一个Thenable对象（此处逻辑有点坑，参照Promise+的规范实现）</span></div><div class="line">                    <span class="keyword">if</span> (x &amp;&amp; (<span class="keyword">typeof</span> x === <span class="string">'object'</span>|| <span class="keyword">typeof</span> x === <span class="string">'function'</span>)) &#123;</div><div class="line">                        <span class="keyword">try</span> &#123;</div><div class="line">                            then = x.then;</div><div class="line">                        &#125; <span class="keyword">catch</span> (e) &#123;</div><div class="line">                            reject(promise, e);</div><div class="line">                            <span class="keyword">return</span>;</div><div class="line">                        &#125;</div><div class="line"></div><div class="line">                        <span class="keyword">if</span> (<span class="keyword">typeof</span> then === <span class="string">'function'</span>) &#123;</div><div class="line">                            <span class="comment">// 调用Thenable对象的`then`方法时，传递进去的`resolvePromise`和`rejectPromise`方法（及下面的两个匿名方法）</span></div><div class="line">                            <span class="comment">// 可能会被重复调用。但Promise+规范规定这两个方法有且只能有其中的一个被调用一次，多次调用将被忽略。</span></div><div class="line">                            <span class="comment">// 此处通过`invoked`来处理重复调用</span></div><div class="line">                            <span class="keyword">var</span> invoked = <span class="literal">false</span>;</div><div class="line">                            <span class="keyword">try</span> &#123;</div><div class="line">                                then.call(</div><div class="line">                                    x,</div><div class="line">                                    <span class="function"><span class="keyword">function</span> (<span class="params">y</span>) </span>&#123;</div><div class="line">                                        <span class="keyword">if</span> (invoked) &#123;</div><div class="line">                                            <span class="keyword">return</span>;</div><div class="line">                                        &#125;</div><div class="line">                                        invoked = <span class="literal">true</span>;</div><div class="line"></div><div class="line">                                        <span class="comment">// 避免死循环</span></div><div class="line">                                        <span class="keyword">if</span> (y === x) &#123;</div><div class="line">                                            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">TypeError</span>(<span class="string">'TypeError: The return value could not be same with the previous thenable object'</span>);</div><div class="line">                                        &#125;</div><div class="line"></div><div class="line">                                        <span class="comment">// y仍有可能是thenable对象，递归调用</span></div><div class="line">                                        resolveThenable(y);</div><div class="line">                                    &#125;,</div><div class="line">                                    <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line">                                        <span class="keyword">if</span> (invoked) &#123;</div><div class="line">                                            <span class="keyword">return</span>;</div><div class="line">                                        &#125;</div><div class="line">                                        invoked = <span class="literal">true</span>;</div><div class="line"></div><div class="line">                                        reject(promise, e);</div><div class="line">                                    &#125;</div><div class="line">                                );</div><div class="line">                            &#125; <span class="keyword">catch</span> (e) &#123;</div><div class="line">                                <span class="comment">// 如果`resolvePromise`和`rejectPromise`方法被调用后，再抛出异常，则忽略异常</span></div><div class="line">                                <span class="comment">// 否则用异常对象reject此Promise对象</span></div><div class="line">                                <span class="keyword">if</span> (!invoked) &#123;</div><div class="line">                                    reject(promise, e);</div><div class="line">                                &#125;</div><div class="line">                            &#125;</div><div class="line">                        &#125;</div><div class="line">                        <span class="keyword">else</span> &#123;</div><div class="line">                            resolve(promise, x);</div><div class="line">                        &#125;</div><div class="line">                    &#125;</div><div class="line">                    <span class="keyword">else</span> &#123;</div><div class="line">                        resolve(promise, x);</div><div class="line">                    &#125;</div><div class="line">                &#125;(x));</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="comment">// 如果未传递callback，直接用前一个promise传递过来的值resolve/reject当前Promise对象</span></div><div class="line">        <span class="keyword">else</span> &#123;</div><div class="line">            action === <span class="string">'resolve'</span></div><div class="line">                ? resolve(promise, value)</div><div class="line">                : reject(promise, value);</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="四-done"><a href="#四-done" class="headerlink" title="四.done"></a>四.done</h2><p>done(fail,catch)就是then的语法糖<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">done: <span class="function"><span class="keyword">function</span> (<span class="params">onResolve</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.then(onResolve, <span class="literal">null</span>);</div><div class="line">&#125;,</div></pre></td></tr></table></figure></p>
+<h2 id="五-小结"><a href="#五-小结" class="headerlink" title="五.小结"></a>五.小结</h2><p>小结一下:<br>Promise的主要思想就是用闭包把异步的操作保存下来, 然后通过多个Promise串联 依次调用(所以每个then必须返回一个新的Promise对象)<br>大概流程就是: </p>
+<p>Promise构造函数(初始化状态等) -&gt; resolve方法(改状态) -&gt; run方法(setTimeout(0)加入js队列) -&gt; 后续then()循环… -&gt; js队列开始依次执行setTimeout(0)的回调<br>至此一个then完事了,但是这个then里如果有新的Promise对象, 就又续上了. 所以就是 重复 或者完成了</p>
+<p>巧妙也是麻烦之处就是一个Promise对象, 能完成上述的循环<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve,reject</span>)</span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">"==&gt;1构造函数"</span>)</div><div class="line">    resolve(<span class="string">"构造函数传参"</span>);</div><div class="line">&#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">"==&gt;2第一个then"</span>);</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve,reject</span>)</span>&#123;</div><div class="line">        setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">            <span class="built_in">console</span>.log(<span class="string">"==&gt;3延迟_"</span>+data);</div><div class="line">            resolve();</div><div class="line">        &#125;, <span class="number">2000</span>);</div><div class="line">    &#125;);</div><div class="line">&#125;).done(<span class="function"><span class="keyword">function</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">"==&gt;4第二个then_"</span>+data);</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/07/21/js/promise-01/" rel="next" title="实现个promise-1:错误处理">
+                <i class="fa fa-chevron-left"></i> 实现个promise-1:错误处理
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/07/27/js/promise-02/"
+           data-title="实现个promise-2:读别人的实现" data-url="http://ruantao1989.github.io/2016/07/27/js/promise-02/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars2.githubusercontent.com/u/1949437?v=3&s=460"
+               alt="ruantao1989" />
+          <p class="site-author-name" itemprop="name">ruantao1989</p>
+          <p class="site-description motion-element" itemprop="description">思行合一</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">53</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-结构"><span class="nav-number">1.</span> <span class="nav-text">一.结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#构造函数"><span class="nav-number">1.1.</span> <span class="nav-text">构造函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#resolve-reject"><span class="nav-number">1.2.</span> <span class="nav-text">resolve/reject</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-then方法"><span class="nav-number">2.</span> <span class="nav-text">二.then方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三-回调"><span class="nav-number">3.</span> <span class="nav-text">三.回调</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#执行回调"><span class="nav-number">4.</span> <span class="nav-text">执行回调</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#保存之前状态的callback"><span class="nav-number">4.1.</span> <span class="nav-text">保存之前状态的callback</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四-done"><span class="nav-number">5.</span> <span class="nav-text">四.done</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五-小结"><span class="nav-number">6.</span> <span class="nav-text">五.小结</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ruantao1989</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"ruantao1989"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

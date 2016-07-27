@@ -1,0 +1,633 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="ruantao1989" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="事件类好些没看懂… 细节比较复杂 等用到时候再返回头来查吧">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenLayers学习13-event2">
+<meta property="og:url" content="http://ruantao1989.github.io/2015/02/10/openLayers/openLayers-13-event2/index.html">
+<meta property="og:site_name" content="ruantao1989">
+<meta property="og:description" content="事件类好些没看懂… 细节比较复杂 等用到时候再返回头来查吧">
+<meta property="og:updated_time" content="2016-07-27T09:25:26.303Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OpenLayers学习13-event2">
+<meta name="twitter:description" content="事件类好些没看懂… 细节比较复杂 等用到时候再返回头来查吧">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://ruantao1989.github.io/2015/02/10/openLayers/openLayers-13-event2/"/>
+
+  <title> OpenLayers学习13-event2 | ruantao1989 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">ruantao1989</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                OpenLayers学习13-event2
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2015-02-10T00:23:39+08:00" content="2015-02-10">
+              2015-02-10
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/OpenLayers学习/" itemprop="url" rel="index">
+                    <span itemprop="name">OpenLayers学习</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/02/10/openLayers/openLayers-13-event2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/02/10/openLayers/openLayers-13-event2/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>事件类好些没看懂… 细节比较复杂 等用到时候再返回头来查吧<br><a id="more"></a></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div><div class="line">202</div><div class="line">203</div><div class="line">204</div><div class="line">205</div><div class="line">206</div><div class="line">207</div><div class="line">208</div><div class="line">209</div><div class="line">210</div><div class="line">211</div><div class="line">212</div><div class="line">213</div><div class="line">214</div><div class="line">215</div><div class="line">216</div><div class="line">217</div><div class="line">218</div><div class="line">219</div><div class="line">220</div><div class="line">221</div><div class="line">222</div><div class="line">223</div><div class="line">224</div><div class="line">225</div><div class="line">226</div><div class="line">227</div><div class="line">228</div><div class="line">229</div><div class="line">230</div><div class="line">231</div><div class="line">232</div><div class="line">233</div><div class="line">234</div><div class="line">235</div><div class="line">236</div><div class="line">237</div><div class="line">238</div><div class="line">239</div><div class="line">240</div><div class="line">241</div><div class="line">242</div><div class="line">243</div><div class="line">244</div><div class="line">245</div><div class="line">246</div><div class="line">247</div><div class="line">248</div><div class="line">249</div><div class="line">250</div><div class="line">251</div><div class="line">252</div><div class="line">253</div><div class="line">254</div><div class="line">255</div><div class="line">256</div><div class="line">257</div><div class="line">258</div><div class="line">259</div><div class="line">260</div><div class="line">261</div><div class="line">262</div><div class="line">263</div><div class="line">264</div><div class="line">265</div><div class="line">266</div><div class="line">267</div><div class="line">268</div><div class="line">269</div><div class="line">270</div><div class="line">271</div><div class="line">272</div><div class="line">273</div><div class="line">274</div><div class="line">275</div><div class="line">276</div><div class="line">277</div><div class="line">278</div><div class="line">279</div><div class="line">280</div><div class="line">281</div><div class="line">282</div><div class="line">283</div><div class="line">284</div><div class="line">285</div><div class="line">286</div><div class="line">287</div><div class="line">288</div><div class="line">289</div><div class="line">290</div><div class="line">291</div><div class="line">292</div><div class="line">293</div><div class="line">294</div><div class="line">295</div><div class="line">296</div><div class="line">297</div><div class="line">298</div><div class="line">299</div><div class="line">300</div><div class="line">301</div><div class="line">302</div><div class="line">303</div><div class="line">304</div><div class="line">305</div><div class="line">306</div><div class="line">307</div><div class="line">308</div><div class="line">309</div><div class="line">310</div><div class="line">311</div><div class="line">312</div><div class="line">313</div><div class="line">314</div><div class="line">315</div><div class="line">316</div><div class="line">317</div><div class="line">318</div><div class="line">319</div><div class="line">320</div><div class="line">321</div><div class="line">322</div><div class="line">323</div><div class="line">324</div><div class="line">325</div><div class="line">326</div><div class="line">327</div><div class="line">328</div><div class="line">329</div><div class="line">330</div><div class="line">331</div><div class="line">332</div><div class="line">333</div><div class="line">334</div><div class="line">335</div><div class="line">336</div><div class="line">337</div><div class="line">338</div><div class="line">339</div><div class="line">340</div><div class="line">341</div><div class="line">342</div><div class="line">343</div><div class="line">344</div><div class="line">345</div><div class="line">346</div><div class="line">347</div><div class="line">348</div><div class="line">349</div><div class="line">350</div><div class="line">351</div><div class="line">352</div><div class="line">353</div><div class="line">354</div><div class="line">355</div><div class="line">356</div><div class="line">357</div><div class="line">358</div><div class="line">359</div><div class="line">360</div><div class="line">361</div><div class="line">362</div><div class="line">363</div><div class="line">364</div><div class="line">365</div><div class="line">366</div><div class="line">367</div><div class="line">368</div><div class="line">369</div><div class="line">370</div><div class="line">371</div><div class="line">372</div><div class="line">373</div><div class="line">374</div><div class="line">375</div><div class="line">376</div><div class="line">377</div><div class="line">378</div><div class="line">379</div><div class="line">380</div><div class="line">381</div><div class="line">382</div><div class="line">383</div><div class="line">384</div><div class="line">385</div><div class="line">386</div><div class="line">387</div><div class="line">388</div><div class="line">389</div><div class="line">390</div><div class="line">391</div><div class="line">392</div><div class="line">393</div><div class="line">394</div><div class="line">395</div><div class="line">396</div><div class="line">397</div><div class="line">398</div><div class="line">399</div><div class="line">400</div><div class="line">401</div><div class="line">402</div><div class="line">403</div><div class="line">404</div><div class="line">405</div><div class="line">406</div><div class="line">407</div><div class="line">408</div><div class="line">409</div><div class="line">410</div><div class="line">411</div><div class="line">412</div><div class="line">413</div><div class="line">414</div><div class="line">415</div><div class="line">416</div><div class="line">417</div><div class="line">418</div><div class="line">419</div><div class="line">420</div><div class="line">421</div><div class="line">422</div><div class="line">423</div><div class="line">424</div><div class="line">425</div><div class="line">426</div><div class="line">427</div><div class="line">428</div><div class="line">429</div><div class="line">430</div><div class="line">431</div><div class="line">432</div><div class="line">433</div><div class="line">434</div><div class="line">435</div><div class="line">436</div><div class="line">437</div><div class="line">438</div><div class="line">439</div><div class="line">440</div><div class="line">441</div><div class="line">442</div><div class="line">443</div><div class="line">444</div><div class="line">445</div><div class="line">446</div><div class="line">447</div><div class="line">448</div><div class="line">449</div><div class="line">450</div><div class="line">451</div><div class="line">452</div><div class="line">453</div><div class="line">454</div><div class="line">455</div><div class="line">456</div><div class="line">457</div><div class="line">458</div><div class="line">459</div><div class="line">460</div><div class="line">461</div><div class="line">462</div><div class="line">463</div><div class="line">464</div><div class="line">465</div><div class="line">466</div><div class="line">467</div><div class="line">468</div><div class="line">469</div><div class="line">470</div><div class="line">471</div><div class="line">472</div><div class="line">473</div><div class="line">474</div><div class="line">475</div><div class="line">476</div><div class="line">477</div><div class="line">478</div><div class="line">479</div><div class="line">480</div><div class="line">481</div><div class="line">482</div><div class="line">483</div><div class="line">484</div><div class="line">485</div><div class="line">486</div><div class="line">487</div><div class="line">488</div><div class="line">489</div><div class="line">490</div><div class="line">491</div><div class="line">492</div><div class="line">493</div><div class="line">494</div><div class="line">495</div><div class="line">496</div><div class="line">497</div><div class="line">498</div><div class="line">499</div><div class="line">500</div><div class="line">501</div><div class="line">502</div><div class="line">503</div><div class="line">504</div><div class="line">505</div><div class="line">506</div><div class="line">507</div><div class="line">508</div><div class="line">509</div><div class="line">510</div><div class="line">511</div><div class="line">512</div><div class="line">513</div><div class="line">514</div><div class="line">515</div><div class="line">516</div><div class="line">517</div><div class="line">518</div><div class="line">519</div><div class="line">520</div><div class="line">521</div><div class="line">522</div><div class="line">523</div><div class="line">524</div><div class="line">525</div><div class="line">526</div><div class="line">527</div><div class="line">528</div><div class="line">529</div><div class="line">530</div><div class="line">531</div><div class="line">532</div><div class="line">533</div><div class="line">534</div><div class="line">535</div><div class="line">536</div><div class="line">537</div><div class="line">538</div><div class="line">539</div><div class="line">540</div><div class="line">541</div><div class="line">542</div><div class="line">543</div><div class="line">544</div><div class="line">545</div><div class="line">546</div><div class="line">547</div><div class="line">548</div><div class="line">549</div><div class="line">550</div><div class="line">551</div><div class="line">552</div><div class="line">553</div><div class="line">554</div><div class="line">555</div><div class="line">556</div><div class="line">557</div><div class="line">558</div><div class="line">559</div><div class="line">560</div><div class="line">561</div><div class="line">562</div><div class="line">563</div><div class="line">564</div><div class="line">565</div><div class="line">566</div><div class="line">567</div><div class="line">568</div><div class="line">569</div><div class="line">570</div><div class="line">571</div><div class="line">572</div><div class="line">573</div><div class="line">574</div><div class="line">575</div><div class="line">576</div><div class="line">577</div><div class="line">578</div><div class="line">579</div><div class="line">580</div><div class="line">581</div><div class="line">582</div><div class="line">583</div><div class="line">584</div><div class="line">585</div><div class="line">586</div><div class="line">587</div><div class="line">588</div><div class="line">589</div><div class="line">590</div><div class="line">591</div><div class="line">592</div><div class="line">593</div><div class="line">594</div><div class="line">595</div><div class="line">596</div><div class="line">597</div><div class="line">598</div><div class="line">599</div><div class="line">600</div><div class="line">601</div><div class="line">602</div><div class="line">603</div><div class="line">604</div><div class="line">605</div><div class="line">606</div><div class="line">607</div><div class="line">608</div><div class="line">609</div><div class="line">610</div><div class="line">611</div><div class="line">612</div><div class="line">613</div><div class="line">614</div><div class="line">615</div><div class="line">616</div><div class="line">617</div><div class="line">618</div><div class="line">619</div><div class="line">620</div><div class="line">621</div><div class="line">622</div><div class="line">623</div><div class="line">624</div><div class="line">625</div><div class="line">626</div><div class="line">627</div><div class="line">628</div><div class="line">629</div><div class="line">630</div><div class="line">631</div><div class="line">632</div><div class="line">633</div><div class="line">634</div><div class="line">635</div><div class="line">636</div><div class="line">637</div><div class="line">638</div><div class="line">639</div><div class="line">640</div><div class="line">641</div><div class="line">642</div><div class="line">643</div><div class="line">644</div><div class="line">645</div><div class="line">646</div><div class="line">647</div><div class="line">648</div><div class="line">649</div><div class="line">650</div><div class="line">651</div><div class="line">652</div><div class="line">653</div><div class="line">654</div><div class="line">655</div><div class="line">656</div><div class="line">657</div><div class="line">658</div><div class="line">659</div><div class="line">660</div><div class="line">661</div><div class="line">662</div><div class="line">663</div><div class="line">664</div><div class="line">665</div><div class="line">666</div><div class="line">667</div><div class="line">668</div><div class="line">669</div><div class="line">670</div><div class="line">671</div><div class="line">672</div><div class="line">673</div><div class="line">674</div><div class="line">675</div><div class="line">676</div><div class="line">677</div><div class="line">678</div><div class="line">679</div><div class="line">680</div><div class="line">681</div><div class="line">682</div><div class="line">683</div><div class="line">684</div><div class="line">685</div><div class="line">686</div><div class="line">687</div><div class="line">688</div><div class="line">689</div><div class="line">690</div><div class="line">691</div><div class="line">692</div><div class="line">693</div><div class="line">694</div><div class="line">695</div><div class="line">696</div><div class="line">697</div><div class="line">698</div><div class="line">699</div><div class="line">700</div><div class="line">701</div><div class="line">702</div><div class="line">703</div></pre></td><td class="code"><pre><div class="line">OpenLayers.Events = OpenLayers.Class(&#123;</div><div class="line"> </div><div class="line">    <span class="comment">//定义浏览器事件</span></div><div class="line">    BROWSER_EVENTS: [</div><div class="line">        <span class="string">"mouseover"</span>, <span class="string">"mouseout"</span>,</div><div class="line">        <span class="string">"mousedown"</span>, <span class="string">"mouseup"</span>, <span class="string">"mousemove"</span>, </div><div class="line">        <span class="string">"click"</span>, <span class="string">"dblclick"</span>, <span class="string">"rightclick"</span>, <span class="string">"dblrightclick"</span>,</div><div class="line">        <span class="string">"resize"</span>, <span class="string">"focus"</span>, <span class="string">"blur"</span>,</div><div class="line">        <span class="string">"touchstart"</span>, <span class="string">"touchmove"</span>, <span class="string">"touchend"</span>,</div><div class="line">        <span class="string">"keydown"</span></div><div class="line">    ],</div><div class="line"> </div><div class="line">    <span class="comment">/** </span></div><div class="line">     * Property: listeners </div><div class="line">     * &#123;Object&#125; Hashtable of Array(Function): events listener functions  </div><div class="line">     */</div><div class="line">    <span class="comment">//事件监听函数的哈希表 </span></div><div class="line">    listeners: <span class="literal">null</span>,</div><div class="line"> </div><div class="line">    <span class="comment">/** </span></div><div class="line">     * Property: object </div><div class="line">     * &#123;Object&#125;  the code object issuing application events </div><div class="line">     */</div><div class="line">    <span class="comment">//触发事件的对象</span></div><div class="line">    object: <span class="literal">null</span>,</div><div class="line"> </div><div class="line">    <span class="comment">/** </span></div><div class="line">     * Property: element </div><div class="line">     * &#123;DOMElement&#125;  the DOM element receiving browser events </div><div class="line">     */</div><div class="line">    <span class="comment">//接收浏览器事件的DOM元素</span></div><div class="line">    element: <span class="literal">null</span>,</div><div class="line"> </div><div class="line">    <span class="comment">/** </span></div><div class="line">     * Property: eventHandler </div><div class="line">     * &#123;Function&#125;  bound event handler attached to elements </div><div class="line">     */</div><div class="line">    <span class="comment">// DOM元素上的事件处理函数</span></div><div class="line">    eventHandler: <span class="literal">null</span>,</div><div class="line"> </div><div class="line">    <span class="comment">/** </span></div><div class="line">     * APIProperty: fallThrough </div><div class="line">     * &#123;Boolean&#125; </div><div class="line">     */</div><div class="line">    <span class="comment">//</span></div><div class="line">    fallThrough: <span class="literal">null</span>,</div><div class="line"> </div><div class="line">    <span class="comment">//是否在鼠标evt中加入.xy属性, 相当于是否默认执行下列代码</span></div><div class="line">    <span class="comment">//function named(evt) &#123; </span></div><div class="line">    <span class="comment">//        this.xy = this.object.events.getMousePosition(evt) </span></div><div class="line">    <span class="comment">//    &#125;  完后需要手动GCthis.clearMouseCache()</span></div><div class="line">    includeXY: <span class="literal">false</span>,      </div><div class="line">     </div><div class="line">    <span class="comment">//自定义扩展Event, 如 OpenLayers.Events.foostart = OpenLayers.Class(&#123;</span></div><div class="line">    extensions: <span class="literal">null</span>,</div><div class="line">     </div><div class="line">    <span class="comment">/**</span></div><div class="line">     * Property: extensionCount</div><div class="line">     * &#123;Object&#125; Keys are event types (like in &lt;listeners&gt;), values are the</div><div class="line">     *     number of extension listeners for each event type.</div><div class="line">     */</div><div class="line">    <span class="comment">//哈希表缓存, key是事件类型, value是每个事件对应多少个listeners</span></div><div class="line">    extensionCount: <span class="literal">null</span>,</div><div class="line"> </div><div class="line">    <span class="comment">/**</span></div><div class="line">     * Method: clearMouseListener</div><div class="line">     * A version of &lt;clearMouseCache&gt; that is bound to this instance so that</div><div class="line">     *     it can be used with &lt;OpenLayers.Event.observe&gt; and</div><div class="line">     *     &lt;OpenLayers.Event.stopObserving&gt;.</div><div class="line">     */</div><div class="line">    <span class="comment">//实现clearMouseCache()的另一种方法,  </span></div><div class="line">    clearMouseListener: <span class="literal">null</span>,</div><div class="line"> </div><div class="line">    <span class="comment">/**</span></div><div class="line">     * Constructor: OpenLayers.Events</div><div class="line">     * Construct an OpenLayers.Events object.</div><div class="line">     *</div><div class="line">     * Parameters:</div><div class="line">     * object - &#123;Object&#125; The js object to which this Events object  is being added</div><div class="line">     * element - &#123;DOMElement&#125; A dom element to respond to browser events</div><div class="line">     * eventTypes - &#123;Array(String)&#125; Deprecated.  Array of custom application</div><div class="line">     *     events.  A listener may be registered for any named event, regardless</div><div class="line">     *     of the values provided here.</div><div class="line">     * fallThrough - &#123;Boolean&#125; Allow events to fall through after these have</div><div class="line">     *                         been handled?</div><div class="line">     * options - &#123;Object&#125; Options for the events object.</div><div class="line">     */</div><div class="line">    <span class="comment">//OpenLayers.Events构造, </span></div><div class="line">    <span class="comment">//object: 添加事件的js对象</span></div><div class="line">    <span class="comment">//element: 接收浏览器事件的dom元素</span></div><div class="line">    <span class="comment">//eventTypes: Ol事件的数组, 监听已经命名过的的时间类型</span></div><div class="line">    <span class="comment">//fallThrough: </span></div><div class="line">    <span class="comment">//options: </span></div><div class="line">    initialize: <span class="function"><span class="keyword">function</span> (<span class="params">object, element, eventTypes, fallThrough, options</span>) </span>&#123;</div><div class="line">        OpenLayers.Util.extend(<span class="keyword">this</span>, options);<span class="comment">//合并选项</span></div><div class="line">        <span class="comment">//初始化this</span></div><div class="line">        <span class="keyword">this</span>.object     = object;</div><div class="line">        <span class="keyword">this</span>.fallThrough = fallThrough;</div><div class="line">        <span class="keyword">this</span>.listeners  = &#123;&#125;;</div><div class="line">        <span class="keyword">this</span>.extensions = &#123;&#125;;</div><div class="line">        <span class="keyword">this</span>.extensionCount = &#123;&#125;;</div><div class="line">        <span class="keyword">this</span>._msTouches = [];</div><div class="line">         </div><div class="line">        <span class="comment">//缓存的元素为空的话, 绑定元素</span></div><div class="line">        <span class="keyword">if</span> (element != <span class="literal">null</span>) &#123;</div><div class="line">            <span class="keyword">this</span>.attachToElement(element);</div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="comment">//GC</span></div><div class="line">    destroy: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="comment">//遍历extensions, GC</span></div><div class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> e <span class="keyword">in</span> <span class="keyword">this</span>.extensions) &#123;</div><div class="line">            <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="keyword">this</span>.extensions[e] !== <span class="string">"boolean"</span>) &#123;</div><div class="line">                <span class="keyword">this</span>.extensions[e].destroy();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">this</span>.extensions = <span class="literal">null</span>;</div><div class="line">        <span class="comment">//对元素解除观察, 特意对滚动做了一个兼容</span></div><div class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.element) &#123;</div><div class="line">            OpenLayers.Event.stopObservingElement(<span class="keyword">this</span>.element);</div><div class="line">            <span class="keyword">if</span>(<span class="keyword">this</span>.element.hasScrollEvent) &#123;</div><div class="line">                OpenLayers.Event.stopObserving(</div><div class="line">                    <span class="built_in">window</span>, <span class="string">"scroll"</span>, <span class="keyword">this</span>.clearMouseListener</div><div class="line">                );</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">this</span>.element = <span class="literal">null</span>;</div><div class="line"> </div><div class="line">        <span class="comment">//缓存全都至空</span></div><div class="line">        <span class="keyword">this</span>.listeners = <span class="literal">null</span>;</div><div class="line">        <span class="keyword">this</span>.object = <span class="literal">null</span>;</div><div class="line">        <span class="keyword">this</span>.fallThrough = <span class="literal">null</span>;</div><div class="line">        <span class="keyword">this</span>.eventHandler = <span class="literal">null</span>;</div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="comment">/**</span></div><div class="line">     * APIMethod: addEventType</div><div class="line">     * Deprecated.  Any event can be triggered without adding it first.</div><div class="line">     * </div><div class="line">     * Parameters:</div><div class="line">     * eventName - &#123;String&#125;</div><div class="line">     */</div><div class="line">    <span class="comment">//没看出这个空方法能干吗 </span></div><div class="line">    addEventType: <span class="function"><span class="keyword">function</span>(<span class="params">eventName</span>) </span>&#123;</div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="comment">//绑定缓存元素 </span></div><div class="line">    attachToElement: <span class="function"><span class="keyword">function</span> (<span class="params">element</span>) </span>&#123;</div><div class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.element) &#123;</div><div class="line">            <span class="comment">//如果已有的, 先解除观察</span></div><div class="line">            OpenLayers.Event.stopObservingElement(<span class="keyword">this</span>.element);</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">           </div><div class="line">            <span class="comment">// 更换this指针指向</span></div><div class="line">            <span class="keyword">this</span>.eventHandler = OpenLayers.Function.bindAsEventListener(</div><div class="line">                <span class="keyword">this</span>.handleBrowserEvent, <span class="keyword">this</span></div><div class="line">            );</div><div class="line">             </div><div class="line">            <span class="keyword">this</span>.clearMouseListener = OpenLayers.Function.bind(</div><div class="line">                <span class="keyword">this</span>.clearMouseCache, <span class="keyword">this</span></div><div class="line">            );</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">this</span>.element = element;</div><div class="line">        <span class="keyword">var</span> msTouch = !!<span class="built_in">window</span>.navigator.msMaxTouchPoints;</div><div class="line">        <span class="keyword">var</span> type;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>, len = <span class="keyword">this</span>.BROWSER_EVENTS.length; i &lt; len; i++) &#123;</div><div class="line">            <span class="comment">//遍历定义的浏览器事件类型</span></div><div class="line">            type = <span class="keyword">this</span>.BROWSER_EVENTS[i];</div><div class="line">            <span class="comment">//利用OpenLayers.Event缓存注册事件</span></div><div class="line">            OpenLayers.Event.observe(element, type, <span class="keyword">this</span>.eventHandler</div><div class="line">            );</div><div class="line">            <span class="comment">//特殊处理touch事件</span></div><div class="line">            <span class="keyword">if</span> (msTouch &amp;&amp; type.indexOf(<span class="string">'touch'</span>) === <span class="number">0</span>) &#123;</div><div class="line">                <span class="keyword">this</span>.addMsTouchListener(element, type, <span class="keyword">this</span>.eventHandler);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="comment">// disable dragstart in IE so that mousedown/move/up works normally</span></div><div class="line">        <span class="comment">//禁止IE里的dragstart, 保证mousedown/move/up能工作</span></div><div class="line">        OpenLayers.Event.observe(element, <span class="string">"dragstart"</span>, OpenLayers.Event.stop);</div><div class="line">    &#125;,</div><div class="line">     </div><div class="line">    <span class="comment">/**</span></div><div class="line">     * APIMethod: on</div><div class="line">     * Convenience method for registering listeners with a common scope.</div><div class="line">     *     Internally, this method calls &lt;register&gt; as shown in the examples</div><div class="line">     *     below.</div><div class="line">     *</div><div class="line">     * Example use:</div><div class="line">     * (code)</div><div class="line">     * // register a single listener for the "loadstart" event</div><div class="line">     * events.on(&#123;"loadstart": loadStartListener&#125;);</div><div class="line">     *</div><div class="line">     * // this is equivalent to the following</div><div class="line">     * events.register("loadstart", undefined, loadStartListener);</div><div class="line">     *</div><div class="line">     * // register multiple listeners to be called with the same `this` object</div><div class="line">     * events.on(&#123;</div><div class="line">     *     "loadstart": loadStartListener,</div><div class="line">     *     "loadend": loadEndListener,</div><div class="line">     *     scope: object</div><div class="line">     * &#125;);</div><div class="line">     *</div><div class="line">     * // this is equivalent to the following</div><div class="line">     * events.register("loadstart", object, loadStartListener);</div><div class="line">     * events.register("loadend", object, loadEndListener);</div><div class="line">     * (end)</div><div class="line">     *</div><div class="line">     * Parameters:</div><div class="line">     *  object - &#123;Object&#125;     </div><div class="line">     */</div><div class="line">    <span class="comment">//用 this.register注册事件, scope是指作用域, 十个关键字</span></div><div class="line">    <span class="comment">//events.on(&#123;</span></div><div class="line">    <span class="comment">//     "loadstart": loadStartListener,</span></div><div class="line">    <span class="comment">//     "loadend": loadEndListener,</span></div><div class="line">    <span class="comment">//     scope: object</span></div><div class="line">    <span class="comment">// &#125;);</span></div><div class="line">    on: <span class="function"><span class="keyword">function</span>(<span class="params">object</span>) </span>&#123;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">var</span> type <span class="keyword">in</span> object) &#123;</div><div class="line">            <span class="keyword">if</span>(type != <span class="string">"scope"</span> &amp;&amp; object.hasOwnProperty(type)) &#123;</div><div class="line">                <span class="keyword">this</span>.register(type, object.scope, object[type]);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="comment">/**</span></div><div class="line">     * APIMethod: register</div><div class="line">     * Register an event on the events object.</div><div class="line">     *</div><div class="line">     * When the event is triggered, the 'func' function will be called, in the</div><div class="line">     * context of 'obj'. Imagine we were to register an event, specifying an </div><div class="line">     * OpenLayers.Bounds Object as 'obj'. When the event is triggered, the </div><div class="line">     * context in the callback function will be our Bounds object. This means</div><div class="line">     * that within our callback function, we can access the properties and </div><div class="line">     * methods of the Bounds object through the "this" variable. So our </div><div class="line">     * callback could execute something like: </div><div class="line">     * :    leftStr = "Left: " + this.left;</div><div class="line">     *   </div><div class="line">     *                   or</div><div class="line">     *  </div><div class="line">     * :    centerStr = "Center: " + this.getCenterLonLat();</div><div class="line">     *</div><div class="line">     * Parameters:</div><div class="line">     * type - &#123;String&#125; Name of the event to register</div><div class="line">     * obj - &#123;Object&#125; The object to bind the context to for the callback#.</div><div class="line">     *     If no object is specified, default is the Events's 'object' property.</div><div class="line">     * func - &#123;Function&#125; The callback function. If no callback is </div><div class="line">     *     specified, this function does nothing.</div><div class="line">     * priority - &#123;Boolean|Object&#125; If true, adds the new listener to the</div><div class="line">     *     *front* of the events queue instead of to the end.</div><div class="line">     *</div><div class="line">     * Valid options for priority:</div><div class="line">     * extension - &#123;Boolean&#125; If true, then the event will be registered as</div><div class="line">     *     extension event. Extension events are handled before all other</div><div class="line">     *     events.</div><div class="line">     */</div><div class="line">    <span class="comment">//注册的事件触发后, func会被执行, 上下文this是obj.</span></div><div class="line">    <span class="comment">//priority为true的话, 会把事件加在这个事件队列最前边</span></div><div class="line">    register: <span class="function"><span class="keyword">function</span> (<span class="params">type, obj, func, priority</span>) </span>&#123;</div><div class="line">        <span class="keyword">if</span> (type <span class="keyword">in</span> OpenLayers.Events &amp;&amp; !<span class="keyword">this</span>.extensions[type]) &#123;</div><div class="line">            <span class="comment">//type缓存在extensions里</span></div><div class="line">            <span class="keyword">this</span>.extensions[type] = <span class="keyword">new</span> OpenLayers.Events[type](<span class="keyword">this</span>);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> (func != <span class="literal">null</span>) &#123;</div><div class="line">            <span class="keyword">if</span> (obj == <span class="literal">null</span>)  &#123;</div><div class="line">                obj = <span class="keyword">this</span>.object;<span class="comment">//缓存obj</span></div><div class="line">            &#125;</div><div class="line">            <span class="keyword">var</span> listeners = <span class="keyword">this</span>.listeners[type];</div><div class="line">            <span class="keyword">if</span> (!listeners) &#123;</div><div class="line">                <span class="comment">//此type还没有的话, 就创建个新的[]缓存</span></div><div class="line">                listeners = [];</div><div class="line">                <span class="keyword">this</span>.listeners[type] = listeners;</div><div class="line">                <span class="keyword">this</span>.extensionCount[type] = <span class="number">0</span>;</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">var</span> listener = &#123;obj: obj, func: func&#125;;</div><div class="line">            <span class="keyword">if</span> (priority) &#123;</div><div class="line">                <span class="comment">//有priority的话, 放在数组最前边</span></div><div class="line">                listeners.splice(<span class="keyword">this</span>.extensionCount[type], <span class="number">0</span>, listener);</div><div class="line">                <span class="keyword">if</span> (<span class="keyword">typeof</span> priority === <span class="string">"object"</span> &amp;&amp; priority.extension) &#123;</div><div class="line">                    <span class="keyword">this</span>.extensionCount[type]++;</div><div class="line">                &#125;</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                listeners.push(listener);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="comment">/**</span></div><div class="line">     * APIMethod: registerPriority</div><div class="line">     * Same as register() but adds the new listener to the *front* of the</div><div class="line">     *     events queue instead of to the end.</div><div class="line">     *    </div><div class="line">     *     <span class="doctag">TODO:</span> get rid of this in 3.0 - Decide whether listeners should be </div><div class="line">     *     called in the order they were registered or in reverse order.</div><div class="line">     *</div><div class="line">     *</div><div class="line">     * Parameters:</div><div class="line">     * type - &#123;String&#125; Name of the event to register</div><div class="line">     * obj - &#123;Object&#125; The object to bind the context to for the callback#.</div><div class="line">     *                If no object is specified, default is the Events's </div><div class="line">     *                'object' property.</div><div class="line">     * func - &#123;Function&#125; The callback function. If no callback is </div><div class="line">     *                   specified, this function does nothing.</div><div class="line">     */</div><div class="line">    <span class="comment">//最后一个参数固定为true的register </span></div><div class="line">    registerPriority: <span class="function"><span class="keyword">function</span> (<span class="params">type, obj, func</span>) </span>&#123;</div><div class="line">        <span class="keyword">this</span>.register(type, obj, func, <span class="literal">true</span>);</div><div class="line">    &#125;,</div><div class="line">     </div><div class="line">    <span class="comment">/**</span></div><div class="line">     * APIMethod: un</div><div class="line">     * Convenience method for unregistering listeners with a common scope.</div><div class="line">     *     Internally, this method calls &lt;unregister&gt; as shown in the examples</div><div class="line">     *     below.</div><div class="line">     *</div><div class="line">     * Example use:</div><div class="line">     * (code)</div><div class="line">     * // unregister a single listener for the "loadstart" event</div><div class="line">     * events.un(&#123;"loadstart": loadStartListener&#125;);</div><div class="line">     *</div><div class="line">     * // this is equivalent to the following</div><div class="line">     * events.unregister("loadstart", undefined, loadStartListener);</div><div class="line">     *</div><div class="line">     * // unregister multiple listeners with the same `this` object</div><div class="line">     * events.un(&#123;</div><div class="line">     *     "loadstart": loadStartListener,</div><div class="line">     *     "loadend": loadEndListener,</div><div class="line">     *     scope: object</div><div class="line">     * &#125;);</div><div class="line">     *</div><div class="line">     * // this is equivalent to the following</div><div class="line">     * events.unregister("loadstart", object, loadStartListener);</div><div class="line">     * events.unregister("loadend", object, loadEndListener);</div><div class="line">     * (end)</div><div class="line">     */</div><div class="line">    <span class="comment">// on的逆操作</span></div><div class="line">    un: <span class="function"><span class="keyword">function</span>(<span class="params">object</span>) </span>&#123;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">var</span> type <span class="keyword">in</span> object) &#123;</div><div class="line">            <span class="keyword">if</span>(type != <span class="string">"scope"</span> &amp;&amp; object.hasOwnProperty(type)) &#123;</div><div class="line">                <span class="keyword">this</span>.unregister(type, object.scope, object[type]);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="comment">/**</span></div><div class="line">     * APIMethod: unregister</div><div class="line">     *</div><div class="line">     * Parameters:</div><div class="line">     * type - &#123;String&#125; </div><div class="line">     * obj - &#123;Object&#125; If none specified, defaults to this.object</div><div class="line">     * func - &#123;Function&#125; </div><div class="line">     */</div><div class="line">    <span class="comment">//register的逆操作 </span></div><div class="line">    unregister: <span class="function"><span class="keyword">function</span> (<span class="params">type, obj, func</span>) </span>&#123;</div><div class="line">        <span class="keyword">if</span> (obj == <span class="literal">null</span>)  &#123;</div><div class="line">            obj = <span class="keyword">this</span>.object;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">var</span> listeners = <span class="keyword">this</span>.listeners[type];</div><div class="line">        <span class="keyword">if</span> (listeners != <span class="literal">null</span>) &#123;</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>, len=listeners.length; i&lt;len; i++) &#123;</div><div class="line">                <span class="keyword">if</span> (listeners[i].obj == obj &amp;&amp; listeners[i].func == func) &#123;</div><div class="line">                    listeners.splice(i, <span class="number">1</span>);</div><div class="line">                    <span class="keyword">break</span>;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="comment">/** </span></div><div class="line">     * Method: remove</div><div class="line">     * Remove all listeners for a given event type. If type is not registered,</div><div class="line">     *     does nothing.</div><div class="line">     *</div><div class="line">     * Parameters:</div><div class="line">     * type - &#123;String&#125; </div><div class="line">     */</div><div class="line">    <span class="comment">//删除type类型下的所有 listeners</span></div><div class="line">    remove: <span class="function"><span class="keyword">function</span>(<span class="params">type</span>) </span>&#123;</div><div class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.listeners[type] != <span class="literal">null</span>) &#123;</div><div class="line">            <span class="keyword">this</span>.listeners[type] = [];</div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="comment">/**</span></div><div class="line">     * APIMethod: triggerEvent</div><div class="line">     * Trigger a specified registered event.  </div><div class="line">     * </div><div class="line">     * Parameters:</div><div class="line">     * type - &#123;String&#125; </div><div class="line">     * evt - &#123;Event || Object&#125; will be passed to the listeners.</div><div class="line">     *</div><div class="line">     * Returns:</div><div class="line">     * &#123;Boolean&#125; The last listener return.  If a listener returns false, the</div><div class="line">     *     chain of listeners will stop getting called.</div><div class="line">     */</div><div class="line">    <span class="comment">//触发事件 </span></div><div class="line">    triggerEvent: <span class="function"><span class="keyword">function</span> (<span class="params">type, evt</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> listeners = <span class="keyword">this</span>.listeners[type];</div><div class="line"> </div><div class="line">        <span class="comment">//没监听就直接返回</span></div><div class="line">        <span class="keyword">if</span>(!listeners || listeners.length == <span class="number">0</span>) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="literal">undefined</span>;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//组装evt对象</span></div><div class="line">        <span class="keyword">if</span> (evt == <span class="literal">null</span>) &#123;</div><div class="line">            evt = &#123;&#125;;</div><div class="line">        &#125;</div><div class="line">        evt.object = <span class="keyword">this</span>.object;</div><div class="line">        evt.element = <span class="keyword">this</span>.element;</div><div class="line">        <span class="keyword">if</span>(!evt.type) &#123;</div><div class="line">            evt.type = type;</div><div class="line">        &#125;</div><div class="line">     </div><div class="line">        <span class="comment">//拷贝listeners</span></div><div class="line">        listeners = listeners.slice();</div><div class="line">        <span class="keyword">var</span> continueChain;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>, len=listeners.length; i&lt;len; i++) &#123;</div><div class="line">            <span class="keyword">var</span> callback = listeners[i];</div><div class="line">            <span class="comment">// bind the context to callback.obj</span></div><div class="line">            continueChain = callback.func.apply(callback.obj, [evt]);</div><div class="line"> </div><div class="line">            <span class="keyword">if</span> ((continueChain != <span class="literal">undefined</span>) &amp;&amp; (continueChain == <span class="literal">false</span>)) &#123;</div><div class="line">                <span class="comment">// if callback returns false, execute no more callbacks.</span></div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="comment">//fallThrough为false的, 执行完直接stop</span></div><div class="line">        <span class="keyword">if</span> (!<span class="keyword">this</span>.fallThrough) &#123;           </div><div class="line">            OpenLayers.Event.stop(evt, <span class="literal">true</span>);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> continueChain;</div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="comment">// 在triggerEvent()之前添加事件的xy属性</span></div><div class="line">    handleBrowserEvent: <span class="function"><span class="keyword">function</span> (<span class="params">evt</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> type = evt.type, listeners = <span class="keyword">this</span>.listeners[type];</div><div class="line">        <span class="keyword">if</span>(!listeners || listeners.length == <span class="number">0</span>) &#123;</div><div class="line">            <span class="keyword">return</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="comment">//触摸事件都有xy</span></div><div class="line">        <span class="keyword">var</span> touches = evt.touches;</div><div class="line">        <span class="keyword">if</span> (touches &amp;&amp; touches[<span class="number">0</span>]) &#123;</div><div class="line">            <span class="keyword">var</span> x = <span class="number">0</span>;</div><div class="line">            <span class="keyword">var</span> y = <span class="number">0</span>;</div><div class="line">            <span class="keyword">var</span> num = touches.length;</div><div class="line">            <span class="keyword">var</span> touch;</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>; i&lt;num; ++i) &#123;</div><div class="line">                touch = <span class="keyword">this</span>.getTouchClientXY(touches[i]);</div><div class="line">                x += touch.clientX;</div><div class="line">                y += touch.clientY;</div><div class="line">            &#125;</div><div class="line">            evt.clientX = x / num;</div><div class="line">            evt.clientY = y / num;</div><div class="line">        &#125;</div><div class="line">        <span class="comment">//需要includeXY的话给鼠标事件增加xy</span></div><div class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.includeXY) &#123;</div><div class="line">            evt.xy = <span class="keyword">this</span>.getMousePosition(evt);</div><div class="line">        &#125; </div><div class="line">        <span class="keyword">this</span>.triggerEvent(type, evt);</div><div class="line">    &#125;,</div><div class="line">     </div><div class="line">    <span class="comment">/**</span></div><div class="line">     * Method: getTouchClientXY</div><div class="line">     * WebKit has a few bugs for clientX/clientY. This method detects them</div><div class="line">     * and calculate the correct values.</div><div class="line">     *</div><div class="line">     * Parameters:</div><div class="line">     * evt - &#123;Touch&#125; a Touch object from a TouchEvent</div><div class="line">     * </div><div class="line">     * Returns:</div><div class="line">     * &#123;Object&#125; An object with only clientX and clientY properties with the</div><div class="line">     * calculated values.</div><div class="line">     */</div><div class="line">    <span class="comment">//获取touch事件的xy</span></div><div class="line">    getTouchClientXY: <span class="function"><span class="keyword">function</span> (<span class="params">evt</span>) </span>&#123;</div><div class="line">        <span class="comment">// olMochWin is to override window, used for testing</span></div><div class="line">        <span class="keyword">var</span> win = <span class="built_in">window</span>.olMockWin || <span class="built_in">window</span>,</div><div class="line">            winPageX = win.pageXOffset,</div><div class="line">            winPageY = win.pageYOffset,</div><div class="line">            x = evt.clientX,</div><div class="line">            y = evt.clientY;</div><div class="line">         </div><div class="line">        <span class="keyword">if</span> (evt.pageY === <span class="number">0</span> &amp;&amp; <span class="built_in">Math</span>.floor(y) &gt; <span class="built_in">Math</span>.floor(evt.pageY) ||</div><div class="line">            evt.pageX === <span class="number">0</span> &amp;&amp; <span class="built_in">Math</span>.floor(x) &gt; <span class="built_in">Math</span>.floor(evt.pageX)) &#123;</div><div class="line">            <span class="comment">// iOS4 include scroll offset in clientX/Y</span></div><div class="line">            x = x - winPageX;</div><div class="line">            y = y - winPageY;</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (y &lt; (evt.pageY - winPageY) || x &lt; (evt.pageX - winPageX) ) &#123;</div><div class="line">            <span class="comment">// Some Android browsers have totally bogus values for clientX/Y</span></div><div class="line">            <span class="comment">// when scrolling/zooming a page</span></div><div class="line">            x = evt.pageX - winPageX;</div><div class="line">            y = evt.pageY - winPageY;</div><div class="line">        &#125;</div><div class="line">         </div><div class="line">        evt.olClientX = x;</div><div class="line">        evt.olClientY = y;</div><div class="line">         </div><div class="line">        <span class="keyword">return</span> &#123;</div><div class="line">            clientX: x,</div><div class="line">            clientY: y</div><div class="line">        &#125;;</div><div class="line">    &#125;,</div><div class="line">     </div><div class="line">    <span class="comment">/**</span></div><div class="line">     * APIMethod: clearMouseCache</div><div class="line">     * Clear cached data about the mouse position. This should be called any </div><div class="line">     *     time the element that events are registered on changes position </div><div class="line">     *     within the page.</div><div class="line">     */</div><div class="line">    <span class="comment">// 清除鼠标缓存</span></div><div class="line">    clearMouseCache: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; </div><div class="line">        <span class="keyword">this</span>.element.scrolls = <span class="literal">null</span>;</div><div class="line">        <span class="keyword">this</span>.element.lefttop = <span class="literal">null</span>;</div><div class="line">        <span class="keyword">this</span>.element.offsets = <span class="literal">null</span>;</div><div class="line">    &#125;,      </div><div class="line"> </div><div class="line">    <span class="comment">/**</span></div><div class="line">     * Method: getMousePosition</div><div class="line">     * </div><div class="line">     * Parameters:</div><div class="line">     * evt - &#123;Event&#125; </div><div class="line">     * </div><div class="line">     * Returns:</div><div class="line">     * &#123;&lt;OpenLayers.Pixel&gt;&#125; The current xy coordinate of the mouse, adjusted</div><div class="line">     *                      for offsets</div><div class="line">     */</div><div class="line">    <span class="comment">//获得鼠标位置, 包括处理滚动和偏移</span></div><div class="line">    getMousePosition: <span class="function"><span class="keyword">function</span> (<span class="params">evt</span>) </span>&#123;</div><div class="line">        <span class="keyword">if</span> (!<span class="keyword">this</span>.includeXY) &#123;</div><div class="line">            <span class="keyword">this</span>.clearMouseCache();</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!<span class="keyword">this</span>.element.hasScrollEvent) &#123;</div><div class="line">            OpenLayers.Event.observe(<span class="built_in">window</span>, <span class="string">"scroll"</span>, <span class="keyword">this</span>.clearMouseListener);</div><div class="line">            <span class="keyword">this</span>.element.hasScrollEvent = <span class="literal">true</span>;</div><div class="line">        &#125;</div><div class="line">         </div><div class="line">        <span class="keyword">if</span> (!<span class="keyword">this</span>.element.scrolls) &#123;</div><div class="line">            <span class="keyword">var</span> viewportElement = OpenLayers.Util.getViewportElement();</div><div class="line">            <span class="keyword">this</span>.element.scrolls = [</div><div class="line">                <span class="built_in">window</span>.pageXOffset || viewportElement.scrollLeft,</div><div class="line">                <span class="built_in">window</span>.pageYOffset || viewportElement.scrollTop</div><div class="line">            ];</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="keyword">if</span> (!<span class="keyword">this</span>.element.lefttop) &#123;</div><div class="line">            <span class="keyword">this</span>.element.lefttop = [</div><div class="line">                (<span class="built_in">document</span>.documentElement.clientLeft || <span class="number">0</span>),</div><div class="line">                (<span class="built_in">document</span>.documentElement.clientTop  || <span class="number">0</span>)</div><div class="line">            ];</div><div class="line">        &#125;</div><div class="line">         </div><div class="line">        <span class="keyword">if</span> (!<span class="keyword">this</span>.element.offsets) &#123;</div><div class="line">            <span class="keyword">this</span>.element.offsets = OpenLayers.Util.pagePosition(<span class="keyword">this</span>.element);</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> OpenLayers.Pixel(</div><div class="line">            (evt.clientX + <span class="keyword">this</span>.element.scrolls[<span class="number">0</span>]) - <span class="keyword">this</span>.element.offsets[<span class="number">0</span>]</div><div class="line">                         - <span class="keyword">this</span>.element.lefttop[<span class="number">0</span>], </div><div class="line">            (evt.clientY + <span class="keyword">this</span>.element.scrolls[<span class="number">1</span>]) - <span class="keyword">this</span>.element.offsets[<span class="number">1</span>]</div><div class="line">                         - <span class="keyword">this</span>.element.lefttop[<span class="number">1</span>]</div><div class="line">        ); </div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="comment">//绑定触摸事件</span></div><div class="line">    <span class="comment">//element: 绑定的元素</span></div><div class="line">    <span class="comment">//type: 触摸事件类型</span></div><div class="line">    <span class="comment">//handler: 包装过的处理函数</span></div><div class="line">    addMsTouchListener: <span class="function"><span class="keyword">function</span> (<span class="params">element, type, handler</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> eventHandler = <span class="keyword">this</span>.eventHandler;</div><div class="line">        <span class="keyword">var</span> touches = <span class="keyword">this</span>._msTouches;</div><div class="line"> </div><div class="line">        <span class="comment">//包装处理函数, 对于多点触摸事件, 每个touch都要stop</span></div><div class="line">        <span class="function"><span class="keyword">function</span> <span class="title">msHandler</span>(<span class="params">evt</span>) </span>&#123;</div><div class="line">            handler(OpenLayers.Util.applyDefaults(&#123;</div><div class="line">                stopPropagation: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">                    <span class="keyword">for</span> (<span class="keyword">var</span> i=touches.length<span class="number">-1</span>; i&gt;=<span class="number">0</span>; --i) &#123;</div><div class="line">                        touches[i].stopPropagation();</div><div class="line">                    &#125;</div><div class="line">                &#125;,</div><div class="line">                preventDefault: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">                    <span class="keyword">for</span> (<span class="keyword">var</span> i=touches.length<span class="number">-1</span>; i&gt;=<span class="number">0</span>; --i) &#123;</div><div class="line">                        touches[i].preventDefault();</div><div class="line">                    &#125;</div><div class="line">                &#125;,</div><div class="line">                type: type</div><div class="line">            &#125;, evt));</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//按类型分配</span></div><div class="line">        <span class="keyword">switch</span> (type) &#123;</div><div class="line">            <span class="keyword">case</span> <span class="string">'touchstart'</span>:</div><div class="line">                <span class="keyword">return</span> <span class="keyword">this</span>.addMsTouchListenerStart(element, type, msHandler);</div><div class="line">            <span class="keyword">case</span> <span class="string">'touchend'</span>:</div><div class="line">                <span class="keyword">return</span> <span class="keyword">this</span>.addMsTouchListenerEnd(element, type, msHandler);</div><div class="line">            <span class="keyword">case</span> <span class="string">'touchmove'</span>:</div><div class="line">                <span class="keyword">return</span> <span class="keyword">this</span>.addMsTouchListenerMove(element, type, msHandler);</div><div class="line">            <span class="keyword">default</span>:</div><div class="line">                <span class="keyword">throw</span> <span class="string">'Unknown touch event type'</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="comment">// 多点touch start</span></div><div class="line">    addMsTouchListenerStart: <span class="function"><span class="keyword">function</span>(<span class="params">element, type, handler</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> touches = <span class="keyword">this</span>._msTouches;</div><div class="line"> </div><div class="line">        <span class="keyword">var</span> cb = <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="keyword">var</span> alreadyInArray = <span class="literal">false</span>;</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>, ii=touches.length; i&lt;ii; ++i) &#123;</div><div class="line">                <span class="keyword">if</span> (touches[i].pointerId == e.pointerId) &#123;</div><div class="line">                    alreadyInArray = <span class="literal">true</span>;<span class="comment">//查找到的对应的</span></div><div class="line">                    <span class="keyword">break</span>;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">if</span> (!alreadyInArray) &#123;</div><div class="line">                touches.push(e);<span class="comment">//没有对应的就继续push</span></div><div class="line">            &#125;</div><div class="line"> </div><div class="line">            e.touches = touches.slice();</div><div class="line">            handler(e);<span class="comment">//执行副本</span></div><div class="line">        &#125;;</div><div class="line"> </div><div class="line">        OpenLayers.Event.observe(element, <span class="string">'MSPointerDown'</span>, cb);<span class="comment">//监听类似mousedown</span></div><div class="line"> </div><div class="line">        <span class="comment">// Need to also listen for end events to keep the _msTouches list</span></div><div class="line">        <span class="comment">// accurate</span></div><div class="line">        <span class="comment">//遍历删除touches数组</span></div><div class="line">        <span class="keyword">var</span> internalCb = <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>, ii=touches.length; i&lt;ii; ++i) &#123;</div><div class="line">                <span class="keyword">if</span> (touches[i].pointerId == e.pointerId) &#123;</div><div class="line">                    touches.splice(i, <span class="number">1</span>);</div><div class="line">                    <span class="keyword">break</span>;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;;</div><div class="line">        OpenLayers.Event.observe(element, <span class="string">'MSPointerUp'</span>, internalCb);</div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="comment">/**</span></div><div class="line">     * Method: addMsTouchListenerMove</div><div class="line">     *</div><div class="line">     * Parameters:</div><div class="line">     * element - &#123;DOMElement&#125; The DOM element to register the listener on</div><div class="line">     * type - &#123;String&#125; The event type</div><div class="line">     * handler - &#123;Function&#125; the handler</div><div class="line">     */</div><div class="line">    addMsTouchListenerMove: <span class="function"><span class="keyword">function</span> (<span class="params">element, type, handler</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> touches = <span class="keyword">this</span>._msTouches;</div><div class="line">        <span class="keyword">var</span> cb = <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="comment">//Don't fire touch moves when mouse isn't down</span></div><div class="line">            <span class="keyword">if</span> (e.pointerType == e.MSPOINTER_TYPE_MOUSE &amp;&amp; e.buttons == <span class="number">0</span>) &#123;</div><div class="line">                <span class="keyword">return</span>;</div><div class="line">            &#125;</div><div class="line"> </div><div class="line">            <span class="keyword">if</span> (touches.length == <span class="number">1</span> &amp;&amp; touches[<span class="number">0</span>].pageX == e.pageX &amp;&amp;</div><div class="line">                    touches[<span class="number">0</span>].pageY == e.pageY) &#123;</div><div class="line">                <span class="comment">// don't trigger event when pointer has not moved</span></div><div class="line">                <span class="keyword">return</span>;</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>, ii=touches.length; i&lt;ii; ++i) &#123;</div><div class="line">                <span class="keyword">if</span> (touches[i].pointerId == e.pointerId) &#123;</div><div class="line">                    touches[i] = e;</div><div class="line">                    <span class="keyword">break</span>;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line"> </div><div class="line">            e.touches = touches.slice();</div><div class="line">            handler(e);</div><div class="line">        &#125;;</div><div class="line"> </div><div class="line">        OpenLayers.Event.observe(element, <span class="string">'MSPointerMove'</span>, cb);<span class="comment">//move事件</span></div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="comment">/**</span></div><div class="line">     * Method: addMsTouchListenerEnd</div><div class="line">     *</div><div class="line">     * Parameters:</div><div class="line">     * element - &#123;DOMElement&#125; The DOM element to register the listener on</div><div class="line">     * type - &#123;String&#125; The event type</div><div class="line">     * handler - &#123;Function&#125; the handler</div><div class="line">     */</div><div class="line">    addMsTouchListenerEnd: <span class="function"><span class="keyword">function</span> (<span class="params">element, type, handler</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> touches = <span class="keyword">this</span>._msTouches;</div><div class="line"> </div><div class="line">        <span class="keyword">var</span> cb = <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</div><div class="line"> </div><div class="line">            <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>, ii=touches.length; i&lt;ii; ++i) &#123;</div><div class="line">                <span class="keyword">if</span> (touches[i].pointerId == e.pointerId) &#123;</div><div class="line">                    touches.splice(i, <span class="number">1</span>);</div><div class="line">                    <span class="keyword">break</span>;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">             </div><div class="line">            e.touches = touches.slice();</div><div class="line">            handler(e);</div><div class="line">        &#125;;</div><div class="line"> </div><div class="line">        OpenLayers.Event.observe(element, <span class="string">'MSPointerUp'</span>, cb);<span class="comment">//类似mouseUp</span></div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    CLASS_NAME: <span class="string">"OpenLayers.Events"</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/02/08/openLayers/openLayers-12-event1/" rel="next" title="OpenLayers学习12-事件Event_1">
+                <i class="fa fa-chevron-left"></i> OpenLayers学习12-事件Event_1
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/02/10/openLayers/openLayers-14-projection/" rel="prev" title="OpenLayers学习14-投影Projection">
+                OpenLayers学习14-投影Projection <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2015/02/10/openLayers/openLayers-13-event2/"
+           data-title="OpenLayers学习13-event2" data-url="http://ruantao1989.github.io/2015/02/10/openLayers/openLayers-13-event2/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars2.githubusercontent.com/u/1949437?v=3&s=460"
+               alt="ruantao1989" />
+          <p class="site-author-name" itemprop="name">ruantao1989</p>
+          <p class="site-description motion-element" itemprop="description">思行合一</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">53</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <p class="post-toc-empty">This post does not have a Table of Contents</p>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ruantao1989</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"ruantao1989"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
