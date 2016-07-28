@@ -2,6 +2,125 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://ruantao1989.github.io/2015/04/01/js/js-inheritance-04/</loc>
+    
+    <lastmod>2016-07-28T08:03:01.325Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://ruantao1989.github.io/2015/01/20/js/js-inheritance-03/</loc>
+    
+    <lastmod>2016-07-28T08:00:51.457Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://ruantao1989.github.io/2015/01/20/js/js-inheritance-02/</loc>
+    
+    <lastmod>2016-07-28T07:58:18.271Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://ruantao1989.github.io/2015/03/26/openLayers/openLayers-21-xyz/</loc>
+    
+    <lastmod>2016-07-28T07:53:37.502Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://ruantao1989.github.io/2015/03/19/openLayers/openLayers-20-wmts/</loc>
+    
+    <lastmod>2016-07-28T07:52:35.214Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://ruantao1989.github.io/2015/03/18/openLayers/openLayers-19-tile/</loc>
+    
+    <lastmod>2016-07-28T07:51:03.669Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://ruantao1989.github.io/2015/03/18/openLayers/openLayers-18-layer-grid2/</loc>
+    
+    <lastmod>2016-07-28T07:49:47.414Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://ruantao1989.github.io/2015/03/18/openLayers/openLayers-18-layer-grid/</loc>
+    
+    <lastmod>2016-07-28T07:48:47.989Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://ruantao1989.github.io/2015/03/17/openLayers/openLayers-17-layer-httpRequest/</loc>
+    
+    <lastmod>2016-07-28T07:47:22.681Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://ruantao1989.github.io/2015/03/16/openLayers/openLayers-16-layer2/</loc>
+    
+    <lastmod>2016-07-28T07:46:07.306Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://ruantao1989.github.io/2015/03/12/openLayers/openLayers-16-layer1/</loc>
+    
+    <lastmod>2016-07-28T07:44:56.227Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://ruantao1989.github.io/2015/03/02/openLayers/openLayers-15-map2/</loc>
+    
+    <lastmod>2016-07-28T07:43:18.123Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://ruantao1989.github.io/2015/02/28/openLayers/openLayers-15-map1/</loc>
+    
+    <lastmod>2016-07-28T07:42:06.894Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://ruantao1989.github.io/2015/02/13/tools/phoneGap/</loc>
+    
+    <lastmod>2016-07-28T07:38:42.608Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://ruantao1989.github.io/2016/07/28/js/promise-03/</loc>
+    
+    <lastmod>2016-07-28T07:34:26.882Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://ruantao1989.github.io/2016/07/27/js/promise-02/</loc>
+    
+    <lastmod>2016-07-28T07:34:17.010Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://ruantao1989.github.io/2016/07/21/js/promise-01/</loc>
+    
+    <lastmod>2016-07-28T07:33:58.273Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://ruantao1989.github.io/2015/02/10/openLayers/openLayers-14-projection/</loc>
     
     <lastmod>2016-07-27T09:26:49.048Z</lastmod>
@@ -72,13 +191,6 @@
   </url>
   
   <url>
-    <loc>http://ruantao1989.github.io/2016/07/27/js/promise-02/</loc>
-    
-    <lastmod>2016-07-27T09:05:21.270Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://ruantao1989.github.io/2015/01/29/openLayers/openLayers-04-tool1/</loc>
     
     <lastmod>2016-07-21T08:56:38.703Z</lastmod>
@@ -96,13 +208,6 @@
     <loc>http://ruantao1989.github.io/2015/01/25/openLayers/openLayers-02-geoserver/</loc>
     
     <lastmod>2016-07-21T08:50:46.754Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://ruantao1989.github.io/2016/07/21/js/promise-01/</loc>
-    
-    <lastmod>2016-07-21T08:47:58.461Z</lastmod>
     
   </url>
   

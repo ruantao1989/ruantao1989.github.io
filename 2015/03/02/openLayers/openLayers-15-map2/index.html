@@ -1,0 +1,634 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="ruantao1989" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="map类这回看的是”构造”和”控件”之前的函数. 包括一些工具函数和”layers”方法估计”控件”的方法也类似, 但”控件”类我还没看… 还是穿插着看吧 会比较快">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenLayers源码学习15:地图Map_2">
+<meta property="og:url" content="http://ruantao1989.github.io/2015/03/02/openLayers/openLayers-15-map2/index.html">
+<meta property="og:site_name" content="ruantao1989">
+<meta property="og:description" content="map类这回看的是”构造”和”控件”之前的函数. 包括一些工具函数和”layers”方法估计”控件”的方法也类似, 但”控件”类我还没看… 还是穿插着看吧 会比较快">
+<meta property="og:updated_time" content="2016-07-28T07:43:18.123Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OpenLayers源码学习15:地图Map_2">
+<meta name="twitter:description" content="map类这回看的是”构造”和”控件”之前的函数. 包括一些工具函数和”layers”方法估计”控件”的方法也类似, 但”控件”类我还没看… 还是穿插着看吧 会比较快">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://ruantao1989.github.io/2015/03/02/openLayers/openLayers-15-map2/"/>
+
+  <title> OpenLayers源码学习15:地图Map_2 | ruantao1989 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">ruantao1989</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                OpenLayers源码学习15:地图Map_2
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2015-03-02T22:22:27+08:00" content="2015-03-02">
+              2015-03-02
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/OpenLayers学习/" itemprop="url" rel="index">
+                    <span itemprop="name">OpenLayers学习</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/03/02/openLayers/openLayers-15-map2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/03/02/openLayers/openLayers-15-map2/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>map类这回看的是”构造”和”控件”之前的函数. 包括一些工具函数和”layers”方法<br>估计”控件”的方法也类似, 但”控件”类我还没看… 还是穿插着看吧 会比较快<br><a id="more"></a></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//返回viewPortDiv的DOM元素 </span></div><div class="line">getViewport: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.viewPortDiv;</div><div class="line">&#125;,</div><div class="line"> </div><div class="line"><span class="comment">// 把map渲染到指定div</span></div><div class="line">render: <span class="function"><span class="keyword">function</span>(<span class="params">div</span>) </span>&#123;</div><div class="line">    <span class="keyword">this</span>.div = OpenLayers.Util.getElement(div);</div><div class="line">    OpenLayers.Element.addClass(<span class="keyword">this</span>.div, <span class="string">'olMap'</span>);</div><div class="line">    <span class="keyword">this</span>.viewPortDiv.parentNode.removeChild(<span class="keyword">this</span>.viewPortDiv);<span class="comment">//先删掉viewPort</span></div><div class="line">    <span class="keyword">this</span>.div.appendChild(<span class="keyword">this</span>.viewPortDiv);<span class="comment">//再添加viewPoint</span></div><div class="line">    <span class="keyword">this</span>.updateSize();<span class="comment">//重绘尺寸</span></div><div class="line">&#125;,</div><div class="line"> </div><div class="line"><span class="comment">// 销毁方法, 在这留一个方法是为了手动调用销毁</span></div><div class="line">unloadDestroy: <span class="literal">null</span>,</div><div class="line"> </div><div class="line"><span class="comment">//当map被销毁后,  需要停止监听updateSize方法</span></div><div class="line">updateSizeDestroy: <span class="literal">null</span>,</div><div class="line"> </div><div class="line"><span class="comment">//销毁方法 , 应该在销毁map的container之前调用</span></div><div class="line">destroy:<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="comment">// 没有就是已经被销毁了</span></div><div class="line">    <span class="keyword">if</span> (!<span class="keyword">this</span>.unloadDestroy) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">    &#125;</div><div class="line">     </div><div class="line">    <span class="comment">// 先pan动画停止, 再置null</span></div><div class="line">    <span class="keyword">if</span>(<span class="keyword">this</span>.panTween) &#123;</div><div class="line">        <span class="keyword">this</span>.panTween.stop();</div><div class="line">        <span class="keyword">this</span>.panTween = <span class="literal">null</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// 先把zoom停止, 再置null</span></div><div class="line">    <span class="keyword">if</span>(<span class="keyword">this</span>.zoomTween) &#123;</div><div class="line">        <span class="keyword">this</span>.zoomTween.stop();</div><div class="line">        <span class="keyword">this</span>.zoomTween = <span class="literal">null</span>;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="comment">// 停止监听window的 'unload'事件</span></div><div class="line">    OpenLayers.Event.stopObserving(<span class="built_in">window</span>, <span class="string">'unload'</span>, <span class="keyword">this</span>.unloadDestroy);</div><div class="line">    <span class="keyword">this</span>.unloadDestroy = <span class="literal">null</span>;</div><div class="line"> </div><div class="line">    <span class="comment">//如果resize上有事件 停止监听</span></div><div class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.updateSizeDestroy) &#123;</div><div class="line">        OpenLayers.Event.stopObserving(<span class="built_in">window</span>, <span class="string">'resize'</span>, </div><div class="line">                                       <span class="keyword">this</span>.updateSizeDestroy);</div><div class="line">    &#125;</div><div class="line">     </div><div class="line">    <span class="keyword">this</span>.paddingForPopups = <span class="literal">null</span>;<span class="comment">//气泡间距的缓存</span></div><div class="line"> </div><div class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.controls != <span class="literal">null</span>) &#123;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="keyword">this</span>.controls.length - <span class="number">1</span>; i&gt;=<span class="number">0</span>; --i) &#123;</div><div class="line">            <span class="keyword">this</span>.controls[i].destroy();<span class="comment">//遍历置空controls</span></div><div class="line">        &#125; </div><div class="line">        <span class="keyword">this</span>.controls = <span class="literal">null</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.layers != <span class="literal">null</span>) &#123;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="keyword">this</span>.layers.length - <span class="number">1</span>; i&gt;=<span class="number">0</span>; --i) &#123;</div><div class="line">            <span class="comment">//遍历销毁layer, 传false是不让设置成base layer</span></div><div class="line">            <span class="keyword">this</span>.layers[i].destroy(<span class="literal">false</span>);</div><div class="line">        &#125; </div><div class="line">        <span class="keyword">this</span>.layers = <span class="literal">null</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//删掉viewport的DOM</span></div><div class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.viewPortDiv &amp;&amp; <span class="keyword">this</span>.viewPortDiv.parentNode) &#123;</div><div class="line">        <span class="keyword">this</span>.viewPortDiv.parentNode.removeChild(<span class="keyword">this</span>.viewPortDiv);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">this</span>.viewPortDiv = <span class="literal">null</span>;<span class="comment">//缓存置空</span></div><div class="line">     </div><div class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.tileManager) &#123;</div><div class="line">        <span class="keyword">this</span>.tileManager.removeMap(<span class="keyword">this</span>);</div><div class="line">        <span class="keyword">this</span>.tileManager = <span class="literal">null</span>;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="keyword">if</span>(<span class="keyword">this</span>.eventListeners) &#123;</div><div class="line">        <span class="keyword">this</span>.events.un(<span class="keyword">this</span>.eventListeners);</div><div class="line">        <span class="keyword">this</span>.eventListeners = <span class="literal">null</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">this</span>.events.destroy();<span class="comment">//event的销毁</span></div><div class="line">    <span class="keyword">this</span>.events = <span class="literal">null</span>;</div><div class="line"> </div><div class="line">    <span class="keyword">this</span>.options = <span class="literal">null</span>;</div><div class="line">&#125;,</div><div class="line"> </div><div class="line"><span class="comment">//更新构造里的options</span></div><div class="line">setOptions: <span class="function"><span class="keyword">function</span>(<span class="params">options</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> updatePxExtent = <span class="keyword">this</span>.minPx &amp;&amp;</div><div class="line">        options.restrictedExtent != <span class="keyword">this</span>.restrictedExtent;</div><div class="line">    OpenLayers.Util.extend(<span class="keyword">this</span>, options);</div><div class="line">    <span class="comment">// 重新计算 minPx 和 maxPx</span></div><div class="line">    updatePxExtent &amp;&amp; <span class="keyword">this</span>.moveTo(<span class="keyword">this</span>.getCachedCenter(), <span class="keyword">this</span>.zoom, &#123;</div><div class="line">        forceZoomChange: <span class="literal">true</span></div><div class="line">    &#125;);</div><div class="line">&#125;,</div><div class="line"> </div><div class="line"> <span class="comment">//返回tileSize</span></div><div class="line"> getTileSize: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">     <span class="keyword">return</span> <span class="keyword">this</span>.tileSize;</div><div class="line"> &#125;,</div><div class="line"> </div><div class="line"> </div><div class="line"><span class="comment">// 从array中查找property目标项目, match是匹配规则:match.test(map[array][i][property]) </span></div><div class="line">getBy: <span class="function"><span class="keyword">function</span>(<span class="params">array, property, match</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> test = (<span class="keyword">typeof</span> match.test == <span class="string">"function"</span>);</div><div class="line">    <span class="keyword">var</span> found = OpenLayers.Array.filter(<span class="keyword">this</span>[array], <span class="function"><span class="keyword">function</span>(<span class="params">item</span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> item[property] == match || (test &amp;&amp; match.test(item[property]));</div><div class="line">    &#125;);</div><div class="line">    <span class="keyword">return</span> found;</div><div class="line">&#125;,</div><div class="line"> </div><div class="line"><span class="comment">// 查找对应的layer,相当于match.test(layer[property])</span></div><div class="line">getLayersBy: <span class="function"><span class="keyword">function</span>(<span class="params">property, match</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.getBy(<span class="string">"layers"</span>, property, match);</div><div class="line">&#125;,</div><div class="line"> </div><div class="line"><span class="comment">// 按图层名称查找layer, 相当于name.test(layer.name)</span></div><div class="line">getLayersByName: <span class="function"><span class="keyword">function</span>(<span class="params">match</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.getLayersBy(<span class="string">"name"</span>, match);</div><div class="line">&#125;,</div><div class="line"> </div><div class="line"><span class="comment">//按 "CLASS_NAME"查找layer, 相当于type.test(layer.CLASS_NAME)</span></div><div class="line">getLayersByClass: <span class="function"><span class="keyword">function</span>(<span class="params">match</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.getLayersBy(<span class="string">"CLASS_NAME"</span>, match);</div><div class="line">&#125;,</div><div class="line"> </div><div class="line"><span class="comment">// 查找对应控件 和查找图层类似, match.test(controls[property])</span></div><div class="line">getControlsBy: <span class="function"><span class="keyword">function</span>(<span class="params">property, match</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.getBy(<span class="string">"controls"</span>, property, match);</div><div class="line">&#125;,</div><div class="line"> </div><div class="line"><span class="comment">// 根据"CLASS_NAME"查找控件, 类似于图层: type.test(control.CLASS_NAME)</span></div><div class="line">getControlsByClass: <span class="function"><span class="keyword">function</span>(<span class="params">match</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.getControlsBy(<span class="string">"CLASS_NAME"</span>, match);</div><div class="line">&#125;,</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div><div class="line">202</div><div class="line">203</div><div class="line">204</div><div class="line">205</div><div class="line">206</div><div class="line">207</div><div class="line">208</div><div class="line">209</div><div class="line">210</div><div class="line">211</div><div class="line">212</div><div class="line">213</div><div class="line">214</div><div class="line">215</div><div class="line">216</div><div class="line">217</div><div class="line">218</div><div class="line">219</div><div class="line">220</div><div class="line">221</div><div class="line">222</div><div class="line">223</div><div class="line">224</div><div class="line">225</div><div class="line">226</div><div class="line">227</div><div class="line">228</div><div class="line">229</div><div class="line">230</div><div class="line">231</div><div class="line">232</div><div class="line">233</div><div class="line">234</div><div class="line">235</div><div class="line">236</div><div class="line">237</div><div class="line">238</div><div class="line">239</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/********************************************************/</span></div><div class="line"><span class="comment">/*                                                      */</span></div><div class="line"><span class="comment">/*                  Layer Functions                     */</span></div><div class="line"><span class="comment">/*                                                      */</span></div><div class="line"><span class="comment">/*     The following functions deal with adding and     */</span></div><div class="line"><span class="comment">/*        removing Layers to and from the Map           */</span></div><div class="line"><span class="comment">/*                                                      */</span></div><div class="line"><span class="comment">/********************************************************/</span>         </div><div class="line"> </div><div class="line">  <span class="comment">//用id获得layer </span></div><div class="line">  getLayer: <span class="function"><span class="keyword">function</span>(<span class="params">id</span>) </span>&#123;</div><div class="line">      <span class="keyword">var</span> foundLayer = <span class="literal">null</span>;<span class="comment">//默认null</span></div><div class="line">      <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>, len=<span class="keyword">this</span>.layers.length; i&lt;len; i++) &#123;</div><div class="line">          <span class="keyword">var</span> layer = <span class="keyword">this</span>.layers[i];</div><div class="line">          <span class="keyword">if</span> (layer.id == id) &#123;</div><div class="line">              foundLayer = layer;<span class="comment">//遍历this.layers数组</span></div><div class="line">              <span class="keyword">break</span>;</div><div class="line">          &#125;</div><div class="line">      &#125;</div><div class="line">      <span class="keyword">return</span> foundLayer;</div><div class="line">  &#125;,</div><div class="line"> </div><div class="line">  <span class="comment">//对&lt;OpenLayers.Layer&gt;参数对象, 设置zIdx</span></div><div class="line">  setLayerZIndex: <span class="function"><span class="keyword">function</span> (<span class="params">layer, zIdx</span>) </span>&#123;</div><div class="line">      layer.setZIndex(</div><div class="line">          <span class="comment">//1判断此layer是否是baseLayer, </span></div><div class="line">          <span class="comment">//2去Z_INDEX_BASE配置里去查对应的z-index值</span></div><div class="line">          <span class="comment">//3把目标值*5 加上配置值, 设置</span></div><div class="line">          <span class="keyword">this</span>.Z_INDEX_BASE[layer.isBaseLayer ? <span class="string">'BaseLayer'</span> : <span class="string">'Overlay'</span>]</div><div class="line">          + zIdx * <span class="number">5</span> );</div><div class="line">  &#125;,</div><div class="line"> </div><div class="line">  <span class="comment">//重新设置图层的zidx</span></div><div class="line">  <span class="comment">//用上个方法的公式, 实际上是自身zidx*5 再加配置值</span></div><div class="line">  resetLayersZIndex: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">      <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>, len=<span class="keyword">this</span>.layers.length; i&lt;len; i++) &#123;</div><div class="line">          <span class="keyword">var</span> layer = <span class="keyword">this</span>.layers[i];</div><div class="line">          <span class="keyword">this</span>.setLayerZIndex(layer, i);</div><div class="line">      &#125;</div><div class="line">  &#125;,</div><div class="line">  </div><div class="line">  <span class="comment">//往map实例上添加图层</span></div><div class="line">  <span class="comment">//返回true就是已添加</span></div><div class="line">  addLayer: <span class="function"><span class="keyword">function</span> (<span class="params">layer</span>) </span>&#123;</div><div class="line">      <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>, len = <span class="keyword">this</span>.layers.length; i &lt; len; i++) &#123;</div><div class="line">          <span class="keyword">if</span> (<span class="keyword">this</span>.layers[i] == layer) &#123;<span class="comment">// 直接在缓存里找对应layer, 双等比较内存值</span></div><div class="line">              <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">          &#125;</div><div class="line">      &#125;</div><div class="line">      <span class="comment">//先触发一下"preaddlayer"事件, 失败的话直接返回</span></div><div class="line">      <span class="keyword">if</span> (<span class="keyword">this</span>.events.triggerEvent(<span class="string">"preaddlayer"</span>, &#123;layer: layer&#125;) === <span class="literal">false</span>) &#123;</div><div class="line">          <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">      &#125;</div><div class="line">      <span class="comment">//处理allOverlays配置为true时, 新图层的isBaseLayer置为false</span></div><div class="line">      <span class="keyword">if</span>(<span class="keyword">this</span>.allOverlays) &#123;</div><div class="line">          layer.isBaseLayer = <span class="literal">false</span>;</div><div class="line">      &#125;</div><div class="line">       </div><div class="line">      layer.div.className = <span class="string">"olLayerDiv"</span>;</div><div class="line">      layer.div.style.overflow = <span class="string">""</span>;</div><div class="line">      <span class="comment">//图层的z-index是按图层数量设定的, 队列越靠后zidex越大</span></div><div class="line">      <span class="keyword">this</span>.setLayerZIndex(layer, <span class="keyword">this</span>.layers.length);</div><div class="line"> </div><div class="line">      <span class="comment">//这个layer.isFixed不知道是什么配置</span></div><div class="line">      <span class="keyword">if</span> (layer.isFixed) &#123;</div><div class="line">          <span class="comment">//在map的viewport里添加此图层的div</span></div><div class="line">          <span class="keyword">this</span>.viewPortDiv.appendChild(layer.div);</div><div class="line">      &#125; <span class="keyword">else</span> &#123;</div><div class="line">          <span class="comment">//在map的layerContainerDiv里添加</span></div><div class="line">          <span class="keyword">this</span>.layerContainerDiv.appendChild(layer.div);</div><div class="line">      &#125;</div><div class="line">      <span class="keyword">this</span>.layers.push(layer);<span class="comment">//缓存</span></div><div class="line">      layer.setMap(<span class="keyword">this</span>);<span class="comment">//这个layer方法回头再看</span></div><div class="line"> </div><div class="line">      <span class="keyword">if</span> (layer.isBaseLayer || (<span class="keyword">this</span>.allOverlays &amp;&amp; !<span class="keyword">this</span>.baseLayer))  &#123;</div><div class="line">          <span class="keyword">if</span> (<span class="keyword">this</span>.baseLayer == <span class="literal">null</span>) &#123;</div><div class="line">              <span class="comment">// 头一次设置baselayer</span></div><div class="line">              <span class="keyword">this</span>.setBaseLayer(layer);</div><div class="line">          &#125; <span class="keyword">else</span> &#123;</div><div class="line">              <span class="comment">// 隐藏</span></div><div class="line">              layer.setVisibility(<span class="literal">false</span>);</div><div class="line">          &#125;</div><div class="line">      &#125; <span class="keyword">else</span> &#123;</div><div class="line">          <span class="comment">//重绘</span></div><div class="line">          layer.redraw();</div><div class="line">      &#125;</div><div class="line"> </div><div class="line">      <span class="comment">//触发这两个事件</span></div><div class="line">      <span class="keyword">this</span>.events.triggerEvent(<span class="string">"addlayer"</span>, &#123;layer: layer&#125;);</div><div class="line">      layer.events.triggerEvent(<span class="string">"added"</span>, &#123;map: <span class="keyword">this</span>, layer: layer&#125;);</div><div class="line">      <span class="comment">//回头再看这个添加</span></div><div class="line">      layer.afterAdd();</div><div class="line"> </div><div class="line">      <span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">  &#125;,</div><div class="line"></div><div class="line">  <span class="comment">//把传入的图层树组使用addLayer方法添加</span></div><div class="line">  addLayers: <span class="function"><span class="keyword">function</span> (<span class="params">layers</span>) </span>&#123;</div><div class="line">      <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>, len=layers.length; i&lt;len; i++) &#123;</div><div class="line">          <span class="keyword">this</span>.addLayer(layers[i]);</div><div class="line">      &#125;</div><div class="line">  &#125;,</div><div class="line"> </div><div class="line">  <span class="comment">//删除图层</span></div><div class="line">  removeLayer: <span class="function"><span class="keyword">function</span>(<span class="params">layer, setNewBaseLayer</span>) </span>&#123;</div><div class="line">      <span class="keyword">if</span> (<span class="keyword">this</span>.events.triggerEvent(<span class="string">"preremovelayer"</span>, &#123;layer: layer&#125;) === <span class="literal">false</span>) &#123;</div><div class="line">          <span class="keyword">return</span>;</div><div class="line">      &#125;</div><div class="line">      <span class="comment">//第二个参数默认为true</span></div><div class="line">      <span class="keyword">if</span> (setNewBaseLayer == <span class="literal">null</span>) &#123;</div><div class="line">          setNewBaseLayer = <span class="literal">true</span>;</div><div class="line">      &#125;</div><div class="line"> </div><div class="line">      <span class="comment">//fixed参数, 有的话就是在viewport里添加</span></div><div class="line">      <span class="keyword">if</span> (layer.isFixed) &#123;</div><div class="line">          <span class="keyword">this</span>.viewPortDiv.removeChild(layer.div);</div><div class="line">      &#125; <span class="keyword">else</span> &#123;</div><div class="line">          <span class="comment">//添加到layerContainerDiv里</span></div><div class="line">          <span class="keyword">this</span>.layerContainerDiv.removeChild(layer.div);</div><div class="line">      &#125;</div><div class="line">      OpenLayers.Util.removeItem(<span class="keyword">this</span>.layers, layer);<span class="comment">//删除数组元素</span></div><div class="line">      layer.removeMap(<span class="keyword">this</span>);</div><div class="line">      layer.map = <span class="literal">null</span>;<span class="comment">//持有map置为null</span></div><div class="line"> </div><div class="line">      <span class="comment">// baseLayer被删掉后, </span></div><div class="line">      <span class="keyword">if</span>(<span class="keyword">this</span>.baseLayer == layer) &#123;</div><div class="line">          <span class="keyword">this</span>.baseLayer = <span class="literal">null</span>;</div><div class="line">          <span class="keyword">if</span>(setNewBaseLayer) &#123;</div><div class="line">              <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>, len=<span class="keyword">this</span>.layers.length; i&lt;len; i++) &#123;</div><div class="line">                  <span class="keyword">var</span> iLayer = <span class="keyword">this</span>.layers[i];</div><div class="line">                  <span class="keyword">if</span> (iLayer.isBaseLayer || <span class="keyword">this</span>.allOverlays) &#123;</div><div class="line">                      <span class="keyword">this</span>.setBaseLayer(iLayer);</div><div class="line">                      <span class="keyword">break</span>;</div><div class="line">                  &#125;</div><div class="line">              &#125;</div><div class="line">          &#125;</div><div class="line">      &#125;</div><div class="line"> </div><div class="line">      <span class="comment">//对删除的图层调整zidx</span></div><div class="line">      <span class="keyword">this</span>.resetLayersZIndex();</div><div class="line"> </div><div class="line">      <span class="keyword">this</span>.events.triggerEvent(<span class="string">"removelayer"</span>, &#123;layer: layer&#125;);</div><div class="line">      layer.events.triggerEvent(<span class="string">"removed"</span>, &#123;map: <span class="keyword">this</span>, layer: layer&#125;);</div><div class="line">  &#125;,</div><div class="line"> </div><div class="line">  <span class="comment">// 获得图层的数量</span></div><div class="line">  getNumLayers: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">      <span class="keyword">return</span> <span class="keyword">this</span>.layers.length;</div><div class="line">  &#125;,</div><div class="line"> </div><div class="line">  <span class="comment">// 在layers数组里查找目标图层的顺序</span></div><div class="line">  getLayerIndex: <span class="function"><span class="keyword">function</span> (<span class="params">layer</span>) </span>&#123;</div><div class="line">      <span class="keyword">return</span> OpenLayers.Util.indexOf(<span class="keyword">this</span>.layers, layer);</div><div class="line">  &#125;,</div><div class="line">   </div><div class="line">  <span class="comment">// 设置图层顺序</span></div><div class="line">  setLayerIndex: <span class="function"><span class="keyword">function</span> (<span class="params">layer, idx</span>) </span>&#123;</div><div class="line">      <span class="keyword">var</span> base = <span class="keyword">this</span>.getLayerIndex(layer);<span class="comment">//当前顺序</span></div><div class="line">      <span class="comment">//调整上下限</span></div><div class="line">      <span class="keyword">if</span> (idx &lt; <span class="number">0</span>) &#123;</div><div class="line">          idx = <span class="number">0</span>;</div><div class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (idx &gt; <span class="keyword">this</span>.layers.length) &#123;</div><div class="line">          idx = <span class="keyword">this</span>.layers.length;</div><div class="line">      &#125;</div><div class="line">      <span class="comment">//顺序需要调整</span></div><div class="line">      <span class="keyword">if</span> (base != idx) &#123;</div><div class="line">          <span class="keyword">this</span>.layers.splice(base, <span class="number">1</span>);<span class="comment">//从缓存里删掉原有</span></div><div class="line">          <span class="keyword">this</span>.layers.splice(idx, <span class="number">0</span>, layer);</div><div class="line">          <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>, len=<span class="keyword">this</span>.layers.length; i&lt;len; i++) &#123;</div><div class="line">              <span class="keyword">this</span>.setLayerZIndex(<span class="keyword">this</span>.layers[i], i);</div><div class="line">          &#125;</div><div class="line">          <span class="comment">//改变图层事件</span></div><div class="line">          <span class="keyword">this</span>.events.triggerEvent(<span class="string">"changelayer"</span>, &#123;</div><div class="line">              layer: layer, property: <span class="string">"order"</span></div><div class="line">          &#125;);</div><div class="line">          <span class="keyword">if</span>(<span class="keyword">this</span>.allOverlays) &#123;</div><div class="line">              <span class="comment">//baseLayer的设置</span></div><div class="line">              <span class="keyword">if</span>(idx === <span class="number">0</span>) &#123;</div><div class="line">                  <span class="keyword">this</span>.setBaseLayer(layer);</div><div class="line">              &#125; <span class="keyword">else</span> <span class="keyword">if</span>(<span class="keyword">this</span>.baseLayer !== <span class="keyword">this</span>.layers[<span class="number">0</span>]) &#123;</div><div class="line">                  <span class="keyword">this</span>.setBaseLayer(<span class="keyword">this</span>.layers[<span class="number">0</span>]);</div><div class="line">              &#125;</div><div class="line">          &#125;</div><div class="line">      &#125;</div><div class="line">  &#125;,</div><div class="line"> </div><div class="line">  <span class="comment">// 提高图层的zidx为原zidx + delta</span></div><div class="line">  raiseLayer: <span class="function"><span class="keyword">function</span> (<span class="params">layer, delta</span>) </span>&#123;</div><div class="line">      <span class="keyword">var</span> idx = <span class="keyword">this</span>.getLayerIndex(layer) + delta;</div><div class="line">      <span class="keyword">this</span>.setLayerIndex(layer, idx);</div><div class="line">  &#125;,</div><div class="line">   </div><div class="line">  <span class="comment">// 设置baseLayer</span></div><div class="line">  setBaseLayer: <span class="function"><span class="keyword">function</span>(<span class="params">newBaseLayer</span>) </span>&#123;</div><div class="line">       </div><div class="line">      <span class="keyword">if</span> (newBaseLayer != <span class="keyword">this</span>.baseLayer) &#123;</div><div class="line">          <span class="comment">//确认目标图层在缓存数组中</span></div><div class="line">          <span class="keyword">if</span> (OpenLayers.Util.indexOf(<span class="keyword">this</span>.layers, newBaseLayer) != <span class="number">-1</span>) &#123;</div><div class="line"> </div><div class="line">              <span class="comment">//拿到中心点, 转换出对应resolution</span></div><div class="line">              <span class="keyword">var</span> center = <span class="keyword">this</span>.getCachedCenter();</div><div class="line">              <span class="keyword">var</span> newResolution = OpenLayers.Util.getResolutionFromScale(</div><div class="line">                  <span class="keyword">this</span>.getScale(), newBaseLayer.units</div><div class="line">              );</div><div class="line"> </div><div class="line">              <span class="comment">//原baseLayer要隐藏</span></div><div class="line">              <span class="keyword">if</span> (<span class="keyword">this</span>.baseLayer != <span class="literal">null</span> &amp;&amp; !<span class="keyword">this</span>.allOverlays) &#123;</div><div class="line">                  <span class="keyword">this</span>.baseLayer.setVisibility(<span class="literal">false</span>);</div><div class="line">              &#125;</div><div class="line"> </div><div class="line">              <span class="comment">// 缓存baseLayer</span></div><div class="line">              <span class="keyword">this</span>.baseLayer = newBaseLayer;</div><div class="line">               </div><div class="line">              <span class="comment">//考虑重绘</span></div><div class="line">              <span class="keyword">if</span>(!<span class="keyword">this</span>.allOverlays || <span class="keyword">this</span>.baseLayer.visibility) &#123;</div><div class="line">                  <span class="keyword">this</span>.baseLayer.setVisibility(<span class="literal">true</span>);</div><div class="line">                  <span class="comment">//没在范围内的要重绘</span></div><div class="line">                  <span class="keyword">if</span> (<span class="keyword">this</span>.baseLayer.inRange === <span class="literal">false</span>) &#123;</div><div class="line">                      <span class="keyword">this</span>.baseLayer.redraw();</div><div class="line">                  &#125;</div><div class="line">              &#125;</div><div class="line"> </div><div class="line">              <span class="comment">// 重新定位中心点</span></div><div class="line">              <span class="keyword">if</span> (center != <span class="literal">null</span>) &#123;</div><div class="line">                  <span class="comment">// 换算新图层对应的zoom</span></div><div class="line">                  <span class="keyword">var</span> newZoom = <span class="keyword">this</span>.getZoomForResolution(</div><div class="line">                      newResolution || <span class="keyword">this</span>.resolution, <span class="literal">true</span></div><div class="line">                  );</div><div class="line">                  <span class="comment">// 切换中心点</span></div><div class="line">                  <span class="keyword">this</span>.setCenter(center, newZoom, <span class="literal">false</span>, <span class="literal">true</span>);</div><div class="line">              &#125;</div><div class="line"> </div><div class="line">              <span class="comment">//触发changebaselayer事件</span></div><div class="line">              <span class="keyword">this</span>.events.triggerEvent(<span class="string">"changebaselayer"</span>, &#123;</div><div class="line">                  layer: <span class="keyword">this</span>.baseLayer</div><div class="line">              &#125;);</div><div class="line">          &#125;        </div><div class="line">      &#125;</div><div class="line">  &#125;,</div></pre></td></tr></table></figure>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/02/28/openLayers/openLayers-15-map1/" rel="next" title="OpenLayers源码学习15:地图Map_1">
+                <i class="fa fa-chevron-left"></i> OpenLayers源码学习15:地图Map_1
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/03/12/openLayers/openLayers-16-layer1/" rel="prev" title="OpenLayers源码学习16:图层Layer_1">
+                OpenLayers源码学习16:图层Layer_1 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2015/03/02/openLayers/openLayers-15-map2/"
+           data-title="OpenLayers源码学习15:地图Map_2" data-url="http://ruantao1989.github.io/2015/03/02/openLayers/openLayers-15-map2/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars2.githubusercontent.com/u/1949437?v=3&s=460"
+               alt="ruantao1989" />
+          <p class="site-author-name" itemprop="name">ruantao1989</p>
+          <p class="site-description motion-element" itemprop="description">思行合一</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">68</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <p class="post-toc-empty">This post does not have a Table of Contents</p>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ruantao1989</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"ruantao1989"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

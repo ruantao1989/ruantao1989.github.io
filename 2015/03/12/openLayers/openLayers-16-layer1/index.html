@@ -1,0 +1,634 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="ruantao1989" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="从图层开始才是真正的地图展示, 看了一半最迷糊的是scale, resolutions, bounds的换算,这回先把之前的通用函数扫清, 下次分析具体换算">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenLayers源码学习16:图层Layer_1">
+<meta property="og:url" content="http://ruantao1989.github.io/2015/03/12/openLayers/openLayers-16-layer1/index.html">
+<meta property="og:site_name" content="ruantao1989">
+<meta property="og:description" content="从图层开始才是真正的地图展示, 看了一半最迷糊的是scale, resolutions, bounds的换算,这回先把之前的通用函数扫清, 下次分析具体换算">
+<meta property="og:updated_time" content="2016-07-28T07:44:56.227Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OpenLayers源码学习16:图层Layer_1">
+<meta name="twitter:description" content="从图层开始才是真正的地图展示, 看了一半最迷糊的是scale, resolutions, bounds的换算,这回先把之前的通用函数扫清, 下次分析具体换算">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://ruantao1989.github.io/2015/03/12/openLayers/openLayers-16-layer1/"/>
+
+  <title> OpenLayers源码学习16:图层Layer_1 | ruantao1989 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">ruantao1989</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                OpenLayers源码学习16:图层Layer_1
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2015-03-12T20:55:54+08:00" content="2015-03-12">
+              2015-03-12
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/OpenLayers学习/" itemprop="url" rel="index">
+                    <span itemprop="name">OpenLayers学习</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/03/12/openLayers/openLayers-16-layer1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/03/12/openLayers/openLayers-16-layer1/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>从图层开始才是真正的地图展示, 看了一半最迷糊的是scale, resolutions, bounds的换算,<br>这回先把之前的通用函数扫清, 下次分析具体换算<br><a id="more"></a></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div></pre></td><td class="code"><pre><div class="line">OpenLayers.Layer = OpenLayers.Class(&#123;</div><div class="line"> </div><div class="line">    id: <span class="literal">null</span>,</div><div class="line"> </div><div class="line">    name: <span class="literal">null</span>,</div><div class="line"> </div><div class="line">    <span class="comment">//dom元素 </span></div><div class="line">    div: <span class="literal">null</span>,</div><div class="line"> </div><div class="line">    <span class="comment">//透明度 </span></div><div class="line">    opacity: <span class="number">1</span>,</div><div class="line"> </div><div class="line">    <span class="comment">//是否一直判定在range之内</span></div><div class="line">    alwaysInRange: <span class="literal">null</span>,   </div><div class="line"> </div><div class="line">    <span class="comment">//分辨率相关的属性配置 </span></div><div class="line">    RESOLUTION_PROPERTIES: [</div><div class="line">        <span class="string">'scales'</span>, <span class="string">'resolutions'</span>,</div><div class="line">        <span class="string">'maxScale'</span>, <span class="string">'minScale'</span>,</div><div class="line">        <span class="string">'maxResolution'</span>, <span class="string">'minResolution'</span>,</div><div class="line">        <span class="string">'numZoomLevels'</span>, <span class="string">'maxZoomLevel'</span></div><div class="line">    ],</div><div class="line"> </div><div class="line">    <span class="comment">/**</span></div><div class="line">     * 注册事件</div><div class="line">     * 代码示例:</div><div class="line">     * layer.events.register(type, obj, listener);</div><div class="line">     *</div><div class="line">     * object - &#123;Object&#125; A reference to layer.events.object.</div><div class="line">     * element - &#123;DOMElement&#125; A reference to layer.events.element.</div><div class="line">     *</div><div class="line">     * 支持事件类型:</div><div class="line">     * loadstart - 图层开始加载时候触发.  当使用向量图层用fixed和BBOX策略时, 将会使用OpenLayers.Filter</div><div class="line">     * loadend - 图层加载完毕是触发.  当使用向量图层用fixed和BBOX策略时, 持有一个 OpenLayers.Protocol.Response对象</div><div class="line">     * visibilitychanged - 透明/显示变化事件,如layer的switcher</div><div class="line">     * move - 图层移动, 如鼠标拖动</div><div class="line">     * moveend - 图层移动结束, 包括zoom变化</div><div class="line">     * added - 添加图层</div><div class="line">     * removed - 删除图层</div><div class="line">     */</div><div class="line">    events: <span class="literal">null</span>,</div><div class="line"> </div><div class="line">    <span class="comment">//map对象 </span></div><div class="line">    map: <span class="literal">null</span>,</div><div class="line">     </div><div class="line">    <span class="comment">// 是否是baseLayer</span></div><div class="line">    isBaseLayer: <span class="literal">false</span>,</div><div class="line">  </div><div class="line">    <span class="comment">//透明度 </span></div><div class="line">    alpha: <span class="literal">false</span>,</div><div class="line"> </div><div class="line">    <span class="comment">//是否把图层名显示在layer switcher里</span></div><div class="line">    displayInLayerSwitcher: <span class="literal">true</span>,</div><div class="line"> </div><div class="line">    <span class="comment">// 图层是否应该显示在map上</span></div><div class="line">    visibility: <span class="literal">true</span>,</div><div class="line"> </div><div class="line">    <span class="comment">//显示 &lt;OpenLayers.Control.Attribution&gt;</span></div><div class="line">    attribution: <span class="literal">null</span>, </div><div class="line"> </div><div class="line">    <span class="comment">//当前map的分辨率是不是在min/max range里, 在&lt;OpenLayers.Map.setCenter&gt;里设置</span></div><div class="line">    inRange: <span class="literal">false</span>,</div><div class="line">     </div><div class="line">    <span class="comment">//图片大小 &lt;OpenLayers.Size&gt;</span></div><div class="line">    imageSize: <span class="literal">null</span>,</div><div class="line">     </div><div class="line">  <span class="comment">// OPTIONS</span></div><div class="line"> </div><div class="line">    <span class="comment">//构造器的配置对象 </span></div><div class="line">    options: <span class="literal">null</span>,</div><div class="line"> </div><div class="line">    <span class="comment">//每一个都会注册到 &lt;OpenLayers.Events.on&gt;上</span></div><div class="line">    eventListeners: <span class="literal">null</span>,</div><div class="line"> </div><div class="line">    <span class="comment">// 瓦片之间的间距, 默认值0无效</span></div><div class="line">    gutter: <span class="number">0</span>, </div><div class="line"> </div><div class="line">    <span class="comment">// 投影&lt;OpenLayers.Projection&gt;</span></div><div class="line">    projection: <span class="literal">null</span>,    </div><div class="line">     </div><div class="line">    <span class="comment">// 单位'degrees' (or 'dd'), 'm', 'ft', 'km', 'mi', 'inches'.</span></div><div class="line">    units: <span class="literal">null</span>,</div><div class="line"> </div><div class="line">    <span class="comment">// 数组, 记录map的的scales顺序</span></div><div class="line">    scales: <span class="literal">null</span>,</div><div class="line"> </div><div class="line">    <span class="comment">//数组, 记录map的 resolutions数组</span></div><div class="line">    resolutions: <span class="literal">null</span>,</div><div class="line">     </div><div class="line">    <span class="comment">// &lt;OpenLayers.Bounds&gt;|Array , 最大范围,四至</span></div><div class="line">    maxExtent: <span class="literal">null</span>,</div><div class="line">     </div><div class="line">    <span class="comment">// &lt;OpenLayers.Bounds&gt;|Array, 最小范围</span></div><div class="line">    minExtent: <span class="literal">null</span>,</div><div class="line">     </div><div class="line">    <span class="comment">// 最大分辨率默认是360 deg / 256 px (&lt;OpenLayers.Map.tileSize&gt;)</span></div><div class="line">    maxResolution: <span class="literal">null</span>,</div><div class="line"> </div><div class="line">    minResolution: <span class="literal">null</span>,</div><div class="line"> </div><div class="line">    numZoomLevels: <span class="literal">null</span>,</div><div class="line">     </div><div class="line">    minScale: <span class="literal">null</span>,</div><div class="line">     </div><div class="line">    maxScale: <span class="literal">null</span>,</div><div class="line"> </div><div class="line">    <span class="comment">// 完全超出此图层的最大边界后, 是否请求map的瓦片</span></div><div class="line">    displayOutsideMaxExtent: <span class="literal">false</span>,</div><div class="line"> </div><div class="line">    <span class="comment">//仅在baselayer上用, 标记的换日线 </span></div><div class="line">    wrapDateLine: <span class="literal">false</span>,</div><div class="line">     </div><div class="line">    <span class="comment">// 存储在图层上的附加信息</span></div><div class="line">    metadata: <span class="literal">null</span>,</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div><div class="line">202</div><div class="line">203</div><div class="line">204</div><div class="line">205</div><div class="line">206</div><div class="line">207</div><div class="line">208</div><div class="line">209</div><div class="line">210</div><div class="line">211</div><div class="line">212</div><div class="line">213</div><div class="line">214</div><div class="line">215</div><div class="line">216</div><div class="line">217</div><div class="line">218</div><div class="line">219</div><div class="line">220</div><div class="line">221</div><div class="line">222</div><div class="line">223</div><div class="line">224</div><div class="line">225</div><div class="line">226</div><div class="line">227</div><div class="line">228</div><div class="line">229</div><div class="line">230</div><div class="line">231</div><div class="line">232</div><div class="line">233</div><div class="line">234</div><div class="line">235</div><div class="line">236</div><div class="line">237</div><div class="line">238</div><div class="line">239</div><div class="line">240</div><div class="line">241</div><div class="line">242</div><div class="line">243</div><div class="line">244</div><div class="line">245</div><div class="line">246</div><div class="line">247</div><div class="line">248</div><div class="line">249</div><div class="line">250</div><div class="line">251</div><div class="line">252</div><div class="line">253</div><div class="line">254</div><div class="line">255</div><div class="line">256</div><div class="line">257</div><div class="line">258</div><div class="line">259</div><div class="line">260</div><div class="line">261</div><div class="line">262</div><div class="line">263</div><div class="line">264</div><div class="line">265</div><div class="line">266</div><div class="line">267</div><div class="line">268</div><div class="line">269</div><div class="line">270</div><div class="line">271</div><div class="line">272</div><div class="line">273</div><div class="line">274</div><div class="line">275</div><div class="line">276</div><div class="line">277</div><div class="line">278</div><div class="line">279</div><div class="line">280</div><div class="line">281</div><div class="line">282</div><div class="line">283</div><div class="line">284</div><div class="line">285</div><div class="line">286</div><div class="line">287</div><div class="line">288</div><div class="line">289</div><div class="line">290</div><div class="line">291</div><div class="line">292</div><div class="line">293</div><div class="line">294</div><div class="line">295</div><div class="line">296</div><div class="line">297</div><div class="line">298</div><div class="line">299</div><div class="line">300</div><div class="line">301</div><div class="line">302</div><div class="line">303</div><div class="line">304</div><div class="line">305</div><div class="line">306</div><div class="line">307</div><div class="line">308</div><div class="line">309</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//构造, </span></div><div class="line"><span class="comment">//传参: 图层名, 构造配置项 </span></div><div class="line">initialize: <span class="function"><span class="keyword">function</span>(<span class="params">name, options</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">this</span>.metadata = &#123;&#125;;<span class="comment">//附加信息先置空</span></div><div class="line">     </div><div class="line">    options = OpenLayers.Util.extend(&#123;&#125;, options);<span class="comment">//合并配置</span></div><div class="line">    <span class="comment">//同步alwaysInRange</span></div><div class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.alwaysInRange != <span class="literal">null</span>) &#123;</div><div class="line">        options.alwaysInRange = <span class="keyword">this</span>.alwaysInRange;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">this</span>.addOptions(options);<span class="comment">//保存配置</span></div><div class="line"> </div><div class="line">    <span class="keyword">this</span>.name = name;</div><div class="line">     </div><div class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.id == <span class="literal">null</span>) &#123;<span class="comment">//创建自增id</span></div><div class="line"> </div><div class="line">        <span class="keyword">this</span>.id = OpenLayers.Util.createUniqueID(<span class="keyword">this</span>.CLASS_NAME + <span class="string">"_"</span>);</div><div class="line"> </div><div class="line">        <span class="keyword">this</span>.div = OpenLayers.Util.createDiv(<span class="keyword">this</span>.id);<span class="comment">//图层容器</span></div><div class="line">        <span class="keyword">this</span>.div.style.width = <span class="string">"100%"</span>;</div><div class="line">        <span class="keyword">this</span>.div.style.height = <span class="string">"100%"</span>;</div><div class="line">        <span class="keyword">this</span>.div.dir = <span class="string">"ltr"</span>;</div><div class="line"> </div><div class="line">        <span class="keyword">this</span>.events = <span class="keyword">new</span> OpenLayers.Events(<span class="keyword">this</span>, <span class="keyword">this</span>.div);</div><div class="line">        <span class="keyword">if</span>(<span class="keyword">this</span>.eventListeners <span class="keyword">instanceof</span> <span class="built_in">Object</span>) &#123;<span class="comment">//挨个注册传入的eventListeners的每项</span></div><div class="line">            <span class="keyword">this</span>.events.on(<span class="keyword">this</span>.eventListeners);</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">    &#125;</div><div class="line">&#125;,</div><div class="line"> </div><div class="line"><span class="comment">//内存回收 </span></div><div class="line">destroy: <span class="function"><span class="keyword">function</span>(<span class="params">setNewBaseLayer</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (setNewBaseLayer == <span class="literal">null</span>) &#123;</div><div class="line">        setNewBaseLayer = <span class="literal">true</span>;<span class="comment">//默认为true</span></div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.map != <span class="literal">null</span>) &#123;</div><div class="line">        <span class="keyword">this</span>.map.removeLayer(<span class="keyword">this</span>, setNewBaseLayer);<span class="comment">//通知所处map删掉本layer</span></div><div class="line">    &#125;</div><div class="line">    <span class="keyword">this</span>.projection = <span class="literal">null</span>;</div><div class="line">    <span class="keyword">this</span>.map = <span class="literal">null</span>;</div><div class="line">    <span class="keyword">this</span>.name = <span class="literal">null</span>;</div><div class="line">    <span class="keyword">this</span>.div = <span class="literal">null</span>;</div><div class="line">    <span class="keyword">this</span>.options = <span class="literal">null</span>;</div><div class="line"> </div><div class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.events) &#123;<span class="comment">//event的回收</span></div><div class="line">        <span class="keyword">if</span>(<span class="keyword">this</span>.eventListeners) &#123;</div><div class="line">            <span class="keyword">this</span>.events.un(<span class="keyword">this</span>.eventListeners);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">this</span>.events.destroy();</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">this</span>.eventListeners = <span class="literal">null</span>;</div><div class="line">    <span class="keyword">this</span>.events = <span class="literal">null</span>;</div><div class="line">&#125;,</div><div class="line"> </div><div class="line"><span class="comment">//克隆</span></div><div class="line">clone: <span class="function"><span class="keyword">function</span> (<span class="params">obj</span>) </span>&#123;</div><div class="line">     </div><div class="line">    <span class="keyword">if</span> (obj == <span class="literal">null</span>) &#123;</div><div class="line">        obj = <span class="keyword">new</span> OpenLayers.Layer(<span class="keyword">this</span>.name, <span class="keyword">this</span>.getOptions());<span class="comment">//默认new一个新的layer出啦</span></div><div class="line">    &#125;</div><div class="line">     </div><div class="line">    <span class="comment">// 合并属性</span></div><div class="line">    OpenLayers.Util.applyDefaults(obj, <span class="keyword">this</span>);</div><div class="line">     </div><div class="line">    <span class="comment">// 除了所持有,所处的map不能一样以外, 别的都一样 </span></div><div class="line">    obj.map = <span class="literal">null</span>;</div><div class="line">     </div><div class="line">    <span class="keyword">return</span> obj;</div><div class="line">&#125;,</div><div class="line"> </div><div class="line"><span class="comment">//获得 拷贝的options对象</span></div><div class="line">getOptions: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> options = &#123;&#125;;</div><div class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> o <span class="keyword">in</span> <span class="keyword">this</span>.options) &#123;</div><div class="line">        options[o] = <span class="keyword">this</span>[o];</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> options;</div><div class="line">&#125;,</div><div class="line"> </div><div class="line"><span class="comment">//设置图层名, 触发事件 </span></div><div class="line">setName: <span class="function"><span class="keyword">function</span>(<span class="params">newName</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (newName != <span class="keyword">this</span>.name) &#123;</div><div class="line">        <span class="keyword">this</span>.name = newName;</div><div class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.map != <span class="literal">null</span>) &#123;</div><div class="line">            <span class="keyword">this</span>.map.events.triggerEvent(<span class="string">"changelayer"</span>, &#123;</div><div class="line">                layer: <span class="keyword">this</span>,</div><div class="line">                property: <span class="string">"name"</span></div><div class="line">            &#125;);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;,    </div><div class="line"> </div><div class="line"><span class="comment">//增加配置项</span></div><div class="line">addOptions: <span class="function"><span class="keyword">function</span> (<span class="params">newOptions, reinitialize</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.options == <span class="literal">null</span>) &#123;<span class="comment">//不知道什么情况下this.options会为null</span></div><div class="line">        <span class="keyword">this</span>.options = &#123;&#125;;</div><div class="line">    &#125;</div><div class="line">     </div><div class="line">    <span class="keyword">if</span> (newOptions) &#123;<span class="comment">//传入newOptions项</span></div><div class="line">        <span class="comment">//构造投影</span></div><div class="line">        <span class="keyword">if</span>(<span class="keyword">typeof</span> newOptions.projection == <span class="string">"string"</span>) &#123;</div><div class="line">            newOptions.projection = <span class="keyword">new</span> OpenLayers.Projection(newOptions.projection);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> (newOptions.projection) &#123;</div><div class="line">            OpenLayers.Util.applyDefaults(newOptions,</div><div class="line">                OpenLayers.Projection.defaults[newOptions.projection.getCode()]);</div><div class="line">        &#125;</div><div class="line">        <span class="comment">// maxExtent和minExtent允许两种形式</span></div><div class="line">        <span class="keyword">if</span> (newOptions.maxExtent &amp;&amp; !(newOptions.maxExtent <span class="keyword">instanceof</span> OpenLayers.Bounds)) &#123;</div><div class="line">            newOptions.maxExtent = <span class="keyword">new</span> OpenLayers.Bounds(newOptions.maxExtent);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> (newOptions.minExtent &amp;&amp; !(newOptions.minExtent <span class="keyword">instanceof</span> OpenLayers.Bounds)) &#123;</div><div class="line">            newOptions.minExtent = <span class="keyword">new</span> OpenLayers.Bounds(newOptions.minExtent);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="comment">// 更新本layer的配置项</span></div><div class="line">    OpenLayers.Util.extend(<span class="keyword">this</span>.options, newOptions);</div><div class="line"> </div><div class="line">    <span class="comment">// 更新本图层对象</span></div><div class="line">    OpenLayers.Util.extend(<span class="keyword">this</span>, newOptions);</div><div class="line">     </div><div class="line">    <span class="comment">// 获得投影的单位</span></div><div class="line">    <span class="keyword">if</span>(<span class="keyword">this</span>.projection &amp;&amp; <span class="keyword">this</span>.projection.getUnits()) &#123;</div><div class="line">        <span class="keyword">this</span>.units = <span class="keyword">this</span>.projection.getUnits();</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="comment">// 如果本layer持有map对象</span></div><div class="line">    <span class="keyword">if</span>(<span class="keyword">this</span>.map) &#123;</div><div class="line">        <span class="comment">// 更新对应的数据</span></div><div class="line">        <span class="keyword">var</span> resolution = <span class="keyword">this</span>.map.getResolution();</div><div class="line">        <span class="keyword">var</span> properties = <span class="keyword">this</span>.RESOLUTION_PROPERTIES.concat(</div><div class="line">            [<span class="string">"projection"</span>, <span class="string">"units"</span>, <span class="string">"minExtent"</span>, <span class="string">"maxExtent"</span>]</div><div class="line">        );</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">var</span> o <span class="keyword">in</span> newOptions) &#123;</div><div class="line">            <span class="keyword">if</span>(newOptions.hasOwnProperty(o) &amp;&amp;</div><div class="line">               OpenLayers.Util.indexOf(properties, o) &gt;= <span class="number">0</span>) &#123;</div><div class="line"> </div><div class="line">                <span class="keyword">this</span>.initResolutions();</div><div class="line">                <span class="keyword">if</span> (reinitialize &amp;&amp; <span class="keyword">this</span>.map.baseLayer === <span class="keyword">this</span>) &#123;</div><div class="line">                    <span class="comment">// 更新中心点</span></div><div class="line">                    <span class="keyword">this</span>.map.setCenter(<span class="keyword">this</span>.map.getCenter(),</div><div class="line">                        <span class="keyword">this</span>.map.getZoomForResolution(resolution),</div><div class="line">                        <span class="literal">false</span>, <span class="literal">true</span></div><div class="line">                    );</div><div class="line">                    <span class="comment">// 触发baselayer更改事件</span></div><div class="line">                    <span class="keyword">this</span>.map.events.triggerEvent(<span class="string">"changebaselayer"</span>, &#123;</div><div class="line">                        layer: <span class="keyword">this</span></div><div class="line">                    &#125;);</div><div class="line">                &#125;</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;,</div><div class="line"> </div><div class="line"><span class="comment">//预留接口, 子类重写</span></div><div class="line">onMapResize: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="comment">//this function can be implemented by subclasses  </span></div><div class="line">&#125;,</div><div class="line"> </div><div class="line"><span class="comment">//图层重绘 </span></div><div class="line">redraw: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> redrawn = <span class="literal">false</span>;<span class="comment">//重回结果标志位</span></div><div class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.map) &#123;</div><div class="line"> </div><div class="line">        <span class="comment">// 重新计算Range</span></div><div class="line">        <span class="keyword">this</span>.inRange = <span class="keyword">this</span>.calculateInRange();</div><div class="line"> </div><div class="line">        <span class="comment">// 计算extent</span></div><div class="line">        <span class="keyword">var</span> extent = <span class="keyword">this</span>.getExtent();</div><div class="line"> </div><div class="line">        <span class="keyword">if</span> (extent &amp;&amp; <span class="keyword">this</span>.inRange &amp;&amp; <span class="keyword">this</span>.visibility) &#123;</div><div class="line">            <span class="keyword">var</span> zoomChanged = <span class="literal">true</span>;</div><div class="line">            <span class="keyword">this</span>.moveTo(extent, zoomChanged, <span class="literal">false</span>);<span class="comment">//move到新坐标</span></div><div class="line">            <span class="keyword">this</span>.events.triggerEvent(<span class="string">"moveend"</span>,</div><div class="line">                &#123;<span class="string">"zoomChanged"</span>: zoomChanged&#125;);<span class="comment">//触发一个move方法</span></div><div class="line">            redrawn = <span class="literal">true</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> redrawn;</div><div class="line">&#125;,</div><div class="line"> </div><div class="line"><span class="comment">//边界, zoom值, 是否正在拖拽 </span></div><div class="line">moveTo:<span class="function"><span class="keyword">function</span>(<span class="params">bounds, zoomChanged, dragging</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> display = <span class="keyword">this</span>.visibility;</div><div class="line">    <span class="keyword">if</span> (!<span class="keyword">this</span>.isBaseLayer) &#123;<span class="comment">//不是baselayer的话</span></div><div class="line">        display = display &amp;&amp; <span class="keyword">this</span>.inRange;<span class="comment">//正在显示 &amp;&amp; 在范围内</span></div><div class="line">    &#125;</div><div class="line">    <span class="keyword">this</span>.display(display);</div><div class="line">&#125;,</div><div class="line"> </div><div class="line"> </div><div class="line">moveByPx: <span class="function"><span class="keyword">function</span>(<span class="params">dx, dy</span>) </span>&#123;</div><div class="line">&#125;,</div><div class="line"> </div><div class="line"><span class="comment">// 设置所持有的map对象</span></div><div class="line">setMap: <span class="function"><span class="keyword">function</span>(<span class="params">map</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.map == <span class="literal">null</span>) &#123;<span class="comment">//仅在持有的map为null时生效</span></div><div class="line">     </div><div class="line">        <span class="keyword">this</span>.map = map;</div><div class="line">         </div><div class="line">        <span class="keyword">this</span>.maxExtent = <span class="keyword">this</span>.maxExtent || <span class="keyword">this</span>.map.maxExtent;</div><div class="line">        <span class="keyword">this</span>.minExtent = <span class="keyword">this</span>.minExtent || <span class="keyword">this</span>.map.minExtent;</div><div class="line">        <span class="comment">//坐标换算</span></div><div class="line">        <span class="keyword">this</span>.projection = <span class="keyword">this</span>.projection || <span class="keyword">this</span>.map.projection;</div><div class="line">        <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="keyword">this</span>.projection == <span class="string">"string"</span>) &#123;</div><div class="line">            <span class="keyword">this</span>.projection = <span class="keyword">new</span> OpenLayers.Projection(<span class="keyword">this</span>.projection);</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">// 单位</span></div><div class="line">        <span class="keyword">this</span>.units = <span class="keyword">this</span>.projection.getUnits() ||</div><div class="line">                     <span class="keyword">this</span>.units || <span class="keyword">this</span>.map.units;</div><div class="line">         </div><div class="line">        <span class="keyword">this</span>.initResolutions();</div><div class="line">         </div><div class="line">        <span class="keyword">if</span> (!<span class="keyword">this</span>.isBaseLayer) &#123;</div><div class="line">            <span class="keyword">this</span>.inRange = <span class="keyword">this</span>.calculateInRange();<span class="comment">//baselayer的话要重新计算Range</span></div><div class="line">            <span class="keyword">var</span> show = ((<span class="keyword">this</span>.visibility) &amp;&amp; (<span class="keyword">this</span>.inRange));</div><div class="line">            <span class="keyword">this</span>.div.style.display = show ? <span class="string">""</span> : <span class="string">"none"</span>;</div><div class="line">        &#125;</div><div class="line">         </div><div class="line">        <span class="keyword">this</span>.setTileSize();</div><div class="line">    &#125;</div><div class="line">&#125;,</div><div class="line"> </div><div class="line">afterAdd: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">&#125;,</div><div class="line"> </div><div class="line">removeMap: <span class="function"><span class="keyword">function</span>(<span class="params">map</span>) </span>&#123;</div><div class="line">    <span class="comment">//to be overridden by subclasses</span></div><div class="line">&#125;,</div><div class="line"> </div><div class="line"><span class="comment">//优先是 imageSize</span></div><div class="line">getImageSize: <span class="function"><span class="keyword">function</span>(<span class="params">bounds</span>) </span>&#123; </div><div class="line">    <span class="keyword">return</span> (<span class="keyword">this</span>.imageSize || <span class="keyword">this</span>.tileSize); </div><div class="line">&#125;,    </div><div class="line">   </div><div class="line"><span class="comment">//设置瓦片大小 </span></div><div class="line">setTileSize: <span class="function"><span class="keyword">function</span>(<span class="params">size</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> tileSize = (size) ? size :</div><div class="line">                            ((<span class="keyword">this</span>.tileSize) ? <span class="keyword">this</span>.tileSize :</div><div class="line">                                               <span class="keyword">this</span>.map.getTileSize());</div><div class="line">    <span class="keyword">this</span>.tileSize = tileSize;</div><div class="line">    <span class="keyword">if</span>(<span class="keyword">this</span>.gutter) &#123;</div><div class="line">        <span class="comment">//需要瓦片边距的话, 用瓦片宽+2倍边距</span></div><div class="line">        <span class="keyword">this</span>.imageSize = <span class="keyword">new</span> OpenLayers.Size(tileSize.w + (<span class="number">2</span>*<span class="keyword">this</span>.gutter), </div><div class="line">                                             tileSize.h + (<span class="number">2</span>*<span class="keyword">this</span>.gutter)); </div><div class="line">    &#125;</div><div class="line">&#125;,</div><div class="line"> </div><div class="line">getVisibility: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.visibility;</div><div class="line">&#125;,</div><div class="line"> </div><div class="line"><span class="comment">//设置是否可见 </span></div><div class="line">setVisibility: <span class="function"><span class="keyword">function</span>(<span class="params">visibility</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (visibility != <span class="keyword">this</span>.visibility) &#123;<span class="comment">//和当前状态不等时候生效</span></div><div class="line">        <span class="keyword">this</span>.visibility = visibility;</div><div class="line">        <span class="keyword">this</span>.display(visibility);<span class="comment">//下边display函数是关键</span></div><div class="line">        <span class="keyword">this</span>.redraw();</div><div class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.map != <span class="literal">null</span>) &#123;</div><div class="line">            <span class="comment">//手动触发事件</span></div><div class="line">            <span class="keyword">this</span>.map.events.triggerEvent(<span class="string">"changelayer"</span>, &#123;</div><div class="line">                layer: <span class="keyword">this</span>,</div><div class="line">                property: <span class="string">"visibility"</span></div><div class="line">            &#125;);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">this</span>.events.triggerEvent(<span class="string">"visibilitychanged"</span>);</div><div class="line">    &#125;</div><div class="line">&#125;,</div><div class="line"> </div><div class="line"><span class="comment">//核心函数, 其实就是控制本layer的display值"block" 或 "none"</span></div><div class="line">display: <span class="function"><span class="keyword">function</span>(<span class="params">display</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (display != (<span class="keyword">this</span>.div.style.display != <span class="string">"none"</span>)) &#123;</div><div class="line">        <span class="keyword">this</span>.div.style.display = (display &amp;&amp; <span class="keyword">this</span>.calculateInRange()) ? <span class="string">"block"</span> : <span class="string">"none"</span>;</div><div class="line">    &#125;</div><div class="line">&#125;,</div><div class="line"> </div><div class="line"><span class="comment">//核心函数, 这个range和bounds有什么不同</span></div><div class="line">calculateInRange: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> inRange = <span class="literal">false</span>;</div><div class="line"> </div><div class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.alwaysInRange) &#123;<span class="comment">//此配置, 就是一直inRange</span></div><div class="line">        inRange = <span class="literal">true</span>;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.map) &#123;<span class="comment">//得有map的前提下</span></div><div class="line">            <span class="keyword">var</span> resolution = <span class="keyword">this</span>.map.getResolution();<span class="comment">//获得当前map的Resolution</span></div><div class="line">            inRange = ( (resolution &gt;= <span class="keyword">this</span>.minResolution) &amp;&amp;</div><div class="line">                        (resolution &lt;= <span class="keyword">this</span>.maxResolution) );<span class="comment">//判断是否在本layer的max/min之内</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> inRange;</div><div class="line">&#125;,</div><div class="line"> </div><div class="line"><span class="comment">// 设置是否是baselayer</span></div><div class="line">setIsBaseLayer: <span class="function"><span class="keyword">function</span>(<span class="params">isBaseLayer</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (isBaseLayer != <span class="keyword">this</span>.isBaseLayer) &#123;<span class="comment">//异或当前状态</span></div><div class="line">        <span class="keyword">this</span>.isBaseLayer = isBaseLayer;<span class="comment">//设置状态位</span></div><div class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.map != <span class="literal">null</span>) &#123;</div><div class="line">            <span class="keyword">this</span>.map.events.triggerEvent(<span class="string">"changebaselayer"</span>, &#123;</div><div class="line">                layer: <span class="keyword">this</span></div><div class="line">            &#125;);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;,</div></pre></td></tr></table></figure>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/03/02/openLayers/openLayers-15-map2/" rel="next" title="OpenLayers源码学习15:地图Map_2">
+                <i class="fa fa-chevron-left"></i> OpenLayers源码学习15:地图Map_2
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/03/16/openLayers/openLayers-16-layer2/" rel="prev" title="OpenLayers源码学习16:图层Layer_2">
+                OpenLayers源码学习16:图层Layer_2 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2015/03/12/openLayers/openLayers-16-layer1/"
+           data-title="OpenLayers源码学习16:图层Layer_1" data-url="http://ruantao1989.github.io/2015/03/12/openLayers/openLayers-16-layer1/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars2.githubusercontent.com/u/1949437?v=3&s=460"
+               alt="ruantao1989" />
+          <p class="site-author-name" itemprop="name">ruantao1989</p>
+          <p class="site-description motion-element" itemprop="description">思行合一</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">68</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <p class="post-toc-empty">This post does not have a Table of Contents</p>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ruantao1989</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"ruantao1989"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

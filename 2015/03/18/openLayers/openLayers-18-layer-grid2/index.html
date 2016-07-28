@@ -1,0 +1,633 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="ruantao1989" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="然后grid的第二部分">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenLayers源码学习18:图层Layer.Grid_2">
+<meta property="og:url" content="http://ruantao1989.github.io/2015/03/18/openLayers/openLayers-18-layer-grid2/index.html">
+<meta property="og:site_name" content="ruantao1989">
+<meta property="og:description" content="然后grid的第二部分">
+<meta property="og:updated_time" content="2016-07-28T07:49:47.414Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OpenLayers源码学习18:图层Layer.Grid_2">
+<meta name="twitter:description" content="然后grid的第二部分">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://ruantao1989.github.io/2015/03/18/openLayers/openLayers-18-layer-grid2/"/>
+
+  <title> OpenLayers源码学习18:图层Layer.Grid_2 | ruantao1989 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">ruantao1989</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                OpenLayers源码学习18:图层Layer.Grid_2
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2015-03-18T22:26:29+08:00" content="2015-03-18">
+              2015-03-18
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/OpenLayers学习/" itemprop="url" rel="index">
+                    <span itemprop="name">OpenLayers学习</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/03/18/openLayers/openLayers-18-layer-grid2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/03/18/openLayers/openLayers-18-layer-grid2/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>然后grid的第二部分<br><a id="more"></a></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div><div class="line">202</div><div class="line">203</div><div class="line">204</div><div class="line">205</div><div class="line">206</div><div class="line">207</div><div class="line">208</div><div class="line">209</div><div class="line">210</div><div class="line">211</div><div class="line">212</div><div class="line">213</div><div class="line">214</div><div class="line">215</div><div class="line">216</div><div class="line">217</div><div class="line">218</div><div class="line">219</div><div class="line">220</div><div class="line">221</div><div class="line">222</div><div class="line">223</div><div class="line">224</div><div class="line">225</div><div class="line">226</div><div class="line">227</div><div class="line">228</div><div class="line">229</div><div class="line">230</div><div class="line">231</div><div class="line">232</div><div class="line">233</div><div class="line">234</div><div class="line">235</div><div class="line">236</div><div class="line">237</div><div class="line">238</div><div class="line">239</div><div class="line">240</div><div class="line">241</div><div class="line">242</div><div class="line">243</div><div class="line">244</div><div class="line">245</div><div class="line">246</div><div class="line">247</div><div class="line">248</div><div class="line">249</div><div class="line">250</div><div class="line">251</div><div class="line">252</div><div class="line">253</div><div class="line">254</div><div class="line">255</div><div class="line">256</div><div class="line">257</div><div class="line">258</div><div class="line">259</div><div class="line">260</div><div class="line">261</div><div class="line">262</div><div class="line">263</div><div class="line">264</div><div class="line">265</div><div class="line">266</div><div class="line">267</div><div class="line">268</div><div class="line">269</div><div class="line">270</div><div class="line">271</div><div class="line">272</div><div class="line">273</div><div class="line">274</div><div class="line">275</div><div class="line">276</div><div class="line">277</div><div class="line">278</div><div class="line">279</div><div class="line">280</div><div class="line">281</div><div class="line">282</div><div class="line">283</div><div class="line">284</div><div class="line">285</div><div class="line">286</div><div class="line">287</div><div class="line">288</div><div class="line">289</div><div class="line">290</div><div class="line">291</div><div class="line">292</div><div class="line">293</div><div class="line">294</div><div class="line">295</div><div class="line">296</div><div class="line">297</div><div class="line">298</div><div class="line">299</div><div class="line">300</div><div class="line">301</div><div class="line">302</div><div class="line">303</div><div class="line">304</div><div class="line">305</div><div class="line">306</div><div class="line">307</div><div class="line">308</div><div class="line">309</div><div class="line">310</div><div class="line">311</div><div class="line">312</div><div class="line">313</div><div class="line">314</div><div class="line">315</div><div class="line">316</div><div class="line">317</div><div class="line">318</div><div class="line">319</div><div class="line">320</div><div class="line">321</div><div class="line">322</div><div class="line">323</div><div class="line">324</div><div class="line">325</div><div class="line">326</div><div class="line">327</div><div class="line">328</div><div class="line">329</div><div class="line">330</div><div class="line">331</div><div class="line">332</div><div class="line">333</div><div class="line">334</div><div class="line">335</div><div class="line">336</div><div class="line">337</div><div class="line">338</div><div class="line">339</div><div class="line">340</div><div class="line">341</div><div class="line">342</div><div class="line">343</div><div class="line">344</div><div class="line">345</div><div class="line">346</div><div class="line">347</div><div class="line">348</div><div class="line">349</div><div class="line">350</div><div class="line">351</div><div class="line">352</div><div class="line">353</div><div class="line">354</div><div class="line">355</div><div class="line">356</div><div class="line">357</div><div class="line">358</div><div class="line">359</div><div class="line">360</div><div class="line">361</div><div class="line">362</div><div class="line">363</div><div class="line">364</div><div class="line">365</div><div class="line">366</div><div class="line">367</div><div class="line">368</div><div class="line">369</div><div class="line">370</div><div class="line">371</div><div class="line">372</div><div class="line">373</div><div class="line">374</div><div class="line">375</div><div class="line">376</div><div class="line">377</div><div class="line">378</div><div class="line">379</div><div class="line">380</div><div class="line">381</div><div class="line">382</div><div class="line">383</div><div class="line">384</div><div class="line">385</div><div class="line">386</div><div class="line">387</div><div class="line">388</div><div class="line">389</div><div class="line">390</div><div class="line">391</div><div class="line">392</div><div class="line">393</div><div class="line">394</div><div class="line">395</div><div class="line">396</div><div class="line">397</div><div class="line">398</div><div class="line">399</div><div class="line">400</div><div class="line">401</div><div class="line">402</div><div class="line">403</div><div class="line">404</div><div class="line">405</div><div class="line">406</div><div class="line">407</div><div class="line">408</div><div class="line">409</div><div class="line">410</div><div class="line">411</div><div class="line">412</div><div class="line">413</div><div class="line">414</div><div class="line">415</div><div class="line">416</div><div class="line">417</div><div class="line">418</div><div class="line">419</div><div class="line">420</div><div class="line">421</div><div class="line">422</div><div class="line">423</div><div class="line">424</div><div class="line">425</div><div class="line">426</div><div class="line">427</div><div class="line">428</div><div class="line">429</div><div class="line">430</div><div class="line">431</div><div class="line">432</div><div class="line">433</div><div class="line">434</div><div class="line">435</div><div class="line">436</div><div class="line">437</div><div class="line">438</div><div class="line">439</div><div class="line">440</div><div class="line">441</div><div class="line">442</div><div class="line">443</div><div class="line">444</div><div class="line">445</div><div class="line">446</div><div class="line">447</div><div class="line">448</div><div class="line">449</div><div class="line">450</div><div class="line">451</div><div class="line">452</div><div class="line">453</div><div class="line">454</div><div class="line">455</div><div class="line">456</div><div class="line">457</div><div class="line">458</div><div class="line">459</div><div class="line">460</div><div class="line">461</div><div class="line">462</div><div class="line">463</div><div class="line">464</div><div class="line">465</div><div class="line">466</div><div class="line">467</div><div class="line">468</div><div class="line">469</div><div class="line">470</div><div class="line">471</div><div class="line">472</div><div class="line">473</div><div class="line">474</div><div class="line">475</div><div class="line">476</div><div class="line">477</div><div class="line">478</div><div class="line">479</div><div class="line">480</div><div class="line">481</div><div class="line">482</div><div class="line">483</div><div class="line">484</div><div class="line">485</div><div class="line">486</div><div class="line">487</div><div class="line">488</div><div class="line">489</div><div class="line">490</div><div class="line">491</div><div class="line">492</div><div class="line">493</div><div class="line">494</div><div class="line">495</div><div class="line">496</div><div class="line">497</div><div class="line">498</div><div class="line">499</div><div class="line">500</div><div class="line">501</div><div class="line">502</div><div class="line">503</div><div class="line">504</div><div class="line">505</div><div class="line">506</div><div class="line">507</div><div class="line">508</div><div class="line">509</div><div class="line">510</div><div class="line">511</div><div class="line">512</div><div class="line">513</div><div class="line">514</div><div class="line">515</div><div class="line">516</div><div class="line">517</div><div class="line">518</div><div class="line">519</div><div class="line">520</div><div class="line">521</div><div class="line">522</div><div class="line">523</div><div class="line">524</div><div class="line">525</div><div class="line">526</div><div class="line">527</div><div class="line">528</div><div class="line">529</div><div class="line">530</div><div class="line">531</div><div class="line">532</div><div class="line">533</div><div class="line">534</div><div class="line">535</div><div class="line">536</div><div class="line">537</div><div class="line">538</div><div class="line">539</div><div class="line">540</div><div class="line">541</div><div class="line">542</div><div class="line">543</div><div class="line">544</div><div class="line">545</div><div class="line">546</div><div class="line">547</div><div class="line">548</div><div class="line">549</div><div class="line">550</div><div class="line">551</div><div class="line">552</div><div class="line">553</div></pre></td><td class="code"><pre><div class="line">   <span class="comment">// 调整背景缓存(back buffer), </span></div><div class="line">    applyBackBuffer: <span class="function"><span class="keyword">function</span>(<span class="params">resolution</span>) </span>&#123;</div><div class="line">        <span class="keyword">if</span>(<span class="keyword">this</span>.backBufferTimerId !== <span class="literal">null</span>) &#123;</div><div class="line">            <span class="keyword">this</span>.removeBackBuffer();</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">var</span> backBuffer = <span class="keyword">this</span>.backBuffer;</div><div class="line">        <span class="keyword">if</span>(!backBuffer) &#123;</div><div class="line">            backBuffer = <span class="keyword">this</span>.createBackBuffer();</div><div class="line">            <span class="keyword">if</span>(!backBuffer) &#123;</div><div class="line">                <span class="keyword">return</span>;</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">if</span> (resolution === <span class="keyword">this</span>.gridResolution) &#123;</div><div class="line">                <span class="comment">//分辨率相等</span></div><div class="line">                <span class="keyword">this</span>.div.insertBefore(backBuffer, <span class="keyword">this</span>.div.firstChild);<span class="comment">//将backbuffer插到div最前边</span></div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                <span class="comment">//分辨率不等的话, 插到baseLayer前边</span></div><div class="line">                <span class="keyword">this</span>.map.baseLayer.div.parentNode.insertBefore(backBuffer, <span class="keyword">this</span>.map.baseLayer.div);</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">this</span>.backBuffer = backBuffer;</div><div class="line"> </div><div class="line">            <span class="comment">// 缓存第一张瓦片的left/top</span></div><div class="line">            <span class="keyword">var</span> topLeftTileBounds = <span class="keyword">this</span>.grid[<span class="number">0</span>][<span class="number">0</span>].bounds;</div><div class="line">            <span class="keyword">this</span>.backBufferLonLat = &#123;</div><div class="line">                lon: topLeftTileBounds.left,</div><div class="line">                lat: topLeftTileBounds.top</div><div class="line">            &#125;;</div><div class="line">            <span class="keyword">this</span>.backBufferResolution = <span class="keyword">this</span>.gridResolution;</div><div class="line">        &#125;</div><div class="line">         </div><div class="line">        <span class="keyword">var</span> ratio = <span class="keyword">this</span>.backBufferResolution / resolution;</div><div class="line"> </div><div class="line">        <span class="comment">// 调整backBuffer里所有瓦片的偏移</span></div><div class="line">        <span class="keyword">var</span> tiles = backBuffer.childNodes, tile;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> i=tiles.length<span class="number">-1</span>; i&gt;=<span class="number">0</span>; --i) &#123;</div><div class="line">            tile = tiles[i];</div><div class="line">            tile.style.top = ((ratio * tile._i * tile._h) | <span class="number">0</span>) + <span class="string">'px'</span>;</div><div class="line">            tile.style.left = ((ratio * tile._j * tile._w) | <span class="number">0</span>) + <span class="string">'px'</span>;</div><div class="line">            tile.style.width = <span class="built_in">Math</span>.round(ratio * tile._w) + <span class="string">'px'</span>;</div><div class="line">            tile.style.height = <span class="built_in">Math</span>.round(ratio * tile._h) + <span class="string">'px'</span>;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">// 调整backBuffer的位置</span></div><div class="line">        <span class="keyword">var</span> position = <span class="keyword">this</span>.getViewPortPxFromLonLat(</div><div class="line">                <span class="keyword">this</span>.backBufferLonLat, resolution);</div><div class="line">        <span class="keyword">var</span> leftOffset = <span class="keyword">this</span>.map.layerContainerOriginPx.x;</div><div class="line">        <span class="keyword">var</span> topOffset = <span class="keyword">this</span>.map.layerContainerOriginPx.y;</div><div class="line">        backBuffer.style.left = <span class="built_in">Math</span>.round(position.x - leftOffset) + <span class="string">'px'</span>;</div><div class="line">        backBuffer.style.top = <span class="built_in">Math</span>.round(position.y - topOffset) + <span class="string">'px'</span>;</div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="comment">// 创建背景画布</span></div><div class="line">    createBackBuffer: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> backBuffer;</div><div class="line">        <span class="keyword">if</span>(<span class="keyword">this</span>.grid.length &gt; <span class="number">0</span>) &#123;</div><div class="line">            backBuffer = <span class="built_in">document</span>.createElement(<span class="string">'div'</span>);</div><div class="line">            backBuffer.id = <span class="keyword">this</span>.div.id + <span class="string">'_bb'</span>;<span class="comment">//backBuffer</span></div><div class="line">            backBuffer.className = <span class="string">'olBackBuffer'</span>;</div><div class="line">            backBuffer.style.position = <span class="string">'absolute'</span>;</div><div class="line">            <span class="keyword">var</span> map = <span class="keyword">this</span>.map;</div><div class="line">            backBuffer.style.zIndex = <span class="keyword">this</span>.transitionEffect === <span class="string">'resize'</span> ?</div><div class="line">                    <span class="keyword">this</span>.getZIndex() - <span class="number">1</span> :</div><div class="line">                    <span class="comment">// 'map-resize':</span></div><div class="line">                    map.Z_INDEX_BASE.BaseLayer -</div><div class="line">                            (map.getNumLayers() - map.getLayerIndex(<span class="keyword">this</span>));<span class="comment">//各种情况的z-index</span></div><div class="line">            <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>, lenI=<span class="keyword">this</span>.grid.length; i&lt;lenI; i++) &#123;</div><div class="line">                <span class="keyword">for</span>(<span class="keyword">var</span> j=<span class="number">0</span>, lenJ=<span class="keyword">this</span>.grid[i].length; j&lt;lenJ; j++) &#123;</div><div class="line">                    <span class="keyword">var</span> tile = <span class="keyword">this</span>.grid[i][j],</div><div class="line">                        markup = <span class="keyword">this</span>.grid[i][j].createBackBuffer();<span class="comment">//瓦片的createBackBuffer</span></div><div class="line">                    <span class="keyword">if</span> (markup) &#123;</div><div class="line">                        markup._i = i;<span class="comment">//单张瓦片的各个属性</span></div><div class="line">                        markup._j = j;</div><div class="line">                        markup._w = tile.size.w;</div><div class="line">                        markup._h = tile.size.h;</div><div class="line">                        markup.id = tile.id + <span class="string">'_bb'</span>;</div><div class="line">                        backBuffer.appendChild(markup);</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> backBuffer;</div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="comment">// 从dom里删除bb</span></div><div class="line">    removeBackBuffer: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>._transitionElement) &#123;<span class="comment">//不知道这个是什么变换</span></div><div class="line">            <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="keyword">this</span>.transitionendEvents.length<span class="number">-1</span>; i&gt;=<span class="number">0</span>; --i) &#123;</div><div class="line">                OpenLayers.Event.stopObserving(<span class="keyword">this</span>._transitionElement,</div><div class="line">                    <span class="keyword">this</span>.transitionendEvents[i], <span class="keyword">this</span>._removeBackBuffer);</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">delete</span> <span class="keyword">this</span>._transitionElement;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span>(<span class="keyword">this</span>.backBuffer) &#123;</div><div class="line">            <span class="keyword">if</span> (<span class="keyword">this</span>.backBuffer.parentNode) &#123;</div><div class="line">                <span class="keyword">this</span>.backBuffer.parentNode.removeChild(<span class="keyword">this</span>.backBuffer);<span class="comment">//删除dom</span></div><div class="line">            &#125;</div><div class="line">            <span class="keyword">this</span>.backBuffer = <span class="literal">null</span>;</div><div class="line">            <span class="keyword">this</span>.backBufferResolution = <span class="literal">null</span>;</div><div class="line">            <span class="keyword">if</span>(<span class="keyword">this</span>.backBufferTimerId !== <span class="literal">null</span>) &#123;</div><div class="line">                <span class="built_in">window</span>.clearTimeout(<span class="keyword">this</span>.backBufferTimerId);<span class="comment">//timer也得清掉</span></div><div class="line">                <span class="keyword">this</span>.backBufferTimerId = <span class="literal">null</span>;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="comment">// 移动图层</span></div><div class="line">    moveByPx: <span class="function"><span class="keyword">function</span>(<span class="params">dx, dy</span>) </span>&#123;</div><div class="line">        <span class="keyword">if</span> (!<span class="keyword">this</span>.singleTile) &#123;</div><div class="line">            <span class="keyword">this</span>.moveGriddedTiles();</div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    setTileSize: <span class="function"><span class="keyword">function</span>(<span class="params">size</span>) </span>&#123; </div><div class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.singleTile) &#123;</div><div class="line">            size = <span class="keyword">this</span>.map.getSize();</div><div class="line">            size.h = <span class="built_in">parseInt</span>(size.h * <span class="keyword">this</span>.ratio, <span class="number">10</span>);</div><div class="line">            size.w = <span class="built_in">parseInt</span>(size.w * <span class="keyword">this</span>.ratio, <span class="number">10</span>);</div><div class="line">        &#125; </div><div class="line">        OpenLayers.Layer.HTTPRequest.prototype.setTileSize.apply(<span class="keyword">this</span>, [size]);</div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="comment">// 获得瓦片边界</span></div><div class="line">    getTilesBounds: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;    </div><div class="line">        <span class="keyword">var</span> bounds = <span class="literal">null</span>; </div><div class="line">         </div><div class="line">        <span class="keyword">var</span> length = <span class="keyword">this</span>.grid.length;</div><div class="line">        <span class="keyword">if</span> (length) &#123;</div><div class="line">            <span class="keyword">var</span> bottomLeftTileBounds = <span class="keyword">this</span>.grid[length - <span class="number">1</span>][<span class="number">0</span>].bounds,<span class="comment">//角落的bounds</span></div><div class="line">                width = <span class="keyword">this</span>.grid[<span class="number">0</span>].length * bottomLeftTileBounds.getWidth(),<span class="comment">//行的瓦片数</span></div><div class="line">                height = <span class="keyword">this</span>.grid.length * bottomLeftTileBounds.getHeight();<span class="comment">//列内瓦片数</span></div><div class="line">             </div><div class="line">            bounds = <span class="keyword">new</span> OpenLayers.Bounds(bottomLeftTileBounds.left, </div><div class="line">                                           bottomLeftTileBounds.bottom,</div><div class="line">                                           bottomLeftTileBounds.left + width, </div><div class="line">                                           bottomLeftTileBounds.bottom + height);<span class="comment">//最大值</span></div><div class="line">        &#125;   </div><div class="line">        <span class="keyword">return</span> bounds;</div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="comment">//初始化单瓦片模式 </span></div><div class="line">    initSingleTile: <span class="function"><span class="keyword">function</span>(<span class="params">bounds</span>) </span>&#123;</div><div class="line">        <span class="comment">//触发事件</span></div><div class="line">        <span class="keyword">this</span>.events.triggerEvent(<span class="string">"retile"</span>);</div><div class="line"> </div><div class="line">        <span class="comment">//创建新的bound</span></div><div class="line">        <span class="keyword">var</span> center = bounds.getCenterLonLat();</div><div class="line">        <span class="keyword">var</span> tileWidth = bounds.getWidth() * <span class="keyword">this</span>.ratio;</div><div class="line">        <span class="keyword">var</span> tileHeight = bounds.getHeight() * <span class="keyword">this</span>.ratio;</div><div class="line">                                        </div><div class="line">        <span class="keyword">var</span> tileBounds = </div><div class="line">            <span class="keyword">new</span> OpenLayers.Bounds(center.lon - (tileWidth/<span class="number">2</span>),</div><div class="line">                                  center.lat - (tileHeight/<span class="number">2</span>),</div><div class="line">                                  center.lon + (tileWidth/<span class="number">2</span>),</div><div class="line">                                  center.lat + (tileHeight/<span class="number">2</span>));<span class="comment">//从中心点计算瓦片边界</span></div><div class="line">        <span class="comment">//转换到像素坐标</span></div><div class="line">        <span class="keyword">var</span> px = <span class="keyword">this</span>.map.getLayerPxFromLonLat(&#123;</div><div class="line">            lon: tileBounds.left,</div><div class="line">            lat: tileBounds.top</div><div class="line">        &#125;);</div><div class="line"> </div><div class="line">        <span class="keyword">if</span> (!<span class="keyword">this</span>.grid.length) &#123;</div><div class="line">            <span class="keyword">this</span>.grid[<span class="number">0</span>] = [];</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="keyword">var</span> tile = <span class="keyword">this</span>.grid[<span class="number">0</span>][<span class="number">0</span>];<span class="comment">//第一张</span></div><div class="line">        <span class="keyword">if</span> (!tile) &#123;</div><div class="line">            tile = <span class="keyword">this</span>.addTile(tileBounds, px);<span class="comment">//添加瓦片</span></div><div class="line">             </div><div class="line">            <span class="keyword">this</span>.addTileMonitoringHooks(tile);</div><div class="line">            tile.draw();<span class="comment">//绘制瓦片</span></div><div class="line">            <span class="keyword">this</span>.grid[<span class="number">0</span>][<span class="number">0</span>] = tile;</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            tile.moveTo(tileBounds, px);<span class="comment">//之前有就移动瓦片</span></div><div class="line">        &#125;           </div><div class="line">         </div><div class="line">        <span class="comment">//remove all but our single tile</span></div><div class="line">        <span class="keyword">this</span>.removeExcessTiles(<span class="number">1</span>,<span class="number">1</span>);</div><div class="line"> </div><div class="line">        <span class="comment">// 缓存分辨率</span></div><div class="line">        <span class="keyword">this</span>.gridResolution = <span class="keyword">this</span>.getServerResolution();</div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="comment">// 计算grid的布局</span></div><div class="line">    calculateGridLayout: <span class="function"><span class="keyword">function</span>(<span class="params">bounds, origin, resolution</span>) </span>&#123;</div><div class="line">        <span class="comment">//单张瓦片对应的经纬跨度</span></div><div class="line">        <span class="keyword">var</span> tilelon = resolution * <span class="keyword">this</span>.tileSize.w;</div><div class="line">        <span class="keyword">var</span> tilelat = resolution * <span class="keyword">this</span>.tileSize.h;</div><div class="line">        <span class="comment">//经度 全局偏移</span></div><div class="line">        <span class="keyword">var</span> offsetlon = bounds.left - origin.lon;</div><div class="line">        <span class="comment">//行号</span></div><div class="line">        <span class="keyword">var</span> tilecol = <span class="built_in">Math</span>.floor(offsetlon/tilelon) - <span class="keyword">this</span>.buffer;</div><div class="line">        <span class="comment">//</span></div><div class="line">        <span class="keyword">var</span> rowSign = <span class="keyword">this</span>.rowSign;</div><div class="line">        <span class="comment">//纬度 全局偏移</span></div><div class="line">        <span class="keyword">var</span> offsetlat = rowSign * (origin.lat - bounds.top + tilelat);  </div><div class="line">        <span class="comment">//列号</span></div><div class="line">        <span class="keyword">var</span> tilerow = <span class="built_in">Math</span>[~rowSign ? <span class="string">'floor'</span> : <span class="string">'ceil'</span>](offsetlat/tilelat) - <span class="keyword">this</span>.buffer * rowSign;</div><div class="line">         </div><div class="line">        <span class="keyword">return</span> &#123; </div><div class="line">          tilelon: tilelon, tilelat: tilelat,</div><div class="line">          startcol: tilecol, startrow: tilerow</div><div class="line">        &#125;;</div><div class="line"> </div><div class="line">    &#125;,</div><div class="line">     </div><div class="line">    <span class="comment">// 获得瓦片的原始位置</span></div><div class="line">    getTileOrigin: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> origin = <span class="keyword">this</span>.tileOrigin;</div><div class="line">        <span class="keyword">if</span> (!origin) &#123;</div><div class="line">            <span class="keyword">var</span> extent = <span class="keyword">this</span>.getMaxExtent();</div><div class="line">            <span class="keyword">var</span> edges = (&#123;</div><div class="line">                <span class="string">"tl"</span>: [<span class="string">"left"</span>, <span class="string">"top"</span>],</div><div class="line">                <span class="string">"tr"</span>: [<span class="string">"right"</span>, <span class="string">"top"</span>],</div><div class="line">                <span class="string">"bl"</span>: [<span class="string">"left"</span>, <span class="string">"bottom"</span>],</div><div class="line">                <span class="string">"br"</span>: [<span class="string">"right"</span>, <span class="string">"bottom"</span>]</div><div class="line">            &#125;)[<span class="keyword">this</span>.tileOriginCorner];</div><div class="line">            origin = <span class="keyword">new</span> OpenLayers.LonLat(extent[edges[<span class="number">0</span>]], extent[edges[<span class="number">1</span>]]);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> origin;</div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="comment">// 根据行列号去计算瓦片的bounds </span></div><div class="line">    getTileBoundsForGridIndex: <span class="function"><span class="keyword">function</span>(<span class="params">row, col</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> origin = <span class="keyword">this</span>.getTileOrigin();</div><div class="line">        <span class="keyword">var</span> tileLayout = <span class="keyword">this</span>.gridLayout;</div><div class="line">        <span class="keyword">var</span> tilelon = tileLayout.tilelon;</div><div class="line">        <span class="keyword">var</span> tilelat = tileLayout.tilelat;</div><div class="line">        <span class="keyword">var</span> startcol = tileLayout.startcol;</div><div class="line">        <span class="keyword">var</span> startrow = tileLayout.startrow;</div><div class="line">        <span class="keyword">var</span> rowSign = <span class="keyword">this</span>.rowSign;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> OpenLayers.Bounds(</div><div class="line">            origin.lon + (startcol + col) * tilelon,<span class="comment">//原始经度 + 行号x瓦片经度</span></div><div class="line">            origin.lat - (startrow + row * rowSign) * tilelat * rowSign,</div><div class="line">            origin.lon + (startcol + col + <span class="number">1</span>) * tilelon,</div><div class="line">            origin.lat - (startrow + (row - <span class="number">1</span>) * rowSign) * tilelat * rowSign</div><div class="line">        );</div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="comment">// 初始化排列好的瓦片</span></div><div class="line">    initGriddedTiles:<span class="function"><span class="keyword">function</span>(<span class="params">bounds</span>) </span>&#123;</div><div class="line">        <span class="keyword">this</span>.events.triggerEvent(<span class="string">"retile"</span>);</div><div class="line">        <span class="comment">//size</span></div><div class="line">        <span class="keyword">var</span> viewSize = <span class="keyword">this</span>.map.getSize();</div><div class="line">        <span class="comment">//瓦片原点</span></div><div class="line">        <span class="keyword">var</span> origin = <span class="keyword">this</span>.getTileOrigin();</div><div class="line">        <span class="keyword">var</span> resolution = <span class="keyword">this</span>.map.getResolution(),</div><div class="line">            serverResolution = <span class="keyword">this</span>.getServerResolution(),</div><div class="line">            ratio = resolution / serverResolution,</div><div class="line">            tileSize = &#123;</div><div class="line">                w: <span class="keyword">this</span>.tileSize.w / ratio,</div><div class="line">                h: <span class="keyword">this</span>.tileSize.h / ratio</div><div class="line">            &#125;;</div><div class="line">        <span class="comment">//最小行列号</span></div><div class="line">        <span class="keyword">var</span> minRows = <span class="built_in">Math</span>.ceil(viewSize.h/tileSize.h) + </div><div class="line">                      <span class="number">2</span> * <span class="keyword">this</span>.buffer + <span class="number">1</span>;</div><div class="line">        <span class="keyword">var</span> minCols = <span class="built_in">Math</span>.ceil(viewSize.w/tileSize.w) +</div><div class="line">                      <span class="number">2</span> * <span class="keyword">this</span>.buffer + <span class="number">1</span>;</div><div class="line">         </div><div class="line">        <span class="keyword">var</span> tileLayout = <span class="keyword">this</span>.calculateGridLayout(bounds, origin, serverResolution);</div><div class="line">        <span class="keyword">this</span>.gridLayout = tileLayout;</div><div class="line">         </div><div class="line">        <span class="keyword">var</span> tilelon = tileLayout.tilelon;</div><div class="line">        <span class="keyword">var</span> tilelat = tileLayout.tilelat;</div><div class="line">        <span class="comment">//图层容器的原始坐标</span></div><div class="line">        <span class="keyword">var</span> layerContainerDivLeft = <span class="keyword">this</span>.map.layerContainerOriginPx.x;</div><div class="line">        <span class="keyword">var</span> layerContainerDivTop = <span class="keyword">this</span>.map.layerContainerOriginPx.y;</div><div class="line"> </div><div class="line">        <span class="keyword">var</span> tileBounds = <span class="keyword">this</span>.getTileBoundsForGridIndex(<span class="number">0</span>, <span class="number">0</span>);</div><div class="line">        <span class="keyword">var</span> startPx = <span class="keyword">this</span>.map.getViewPortPxFromLonLat(</div><div class="line">            <span class="keyword">new</span> OpenLayers.LonLat(tileBounds.left, tileBounds.top)</div><div class="line">        );</div><div class="line">        <span class="comment">//计算起始px</span></div><div class="line">        startPx.x = <span class="built_in">Math</span>.round(startPx.x) - layerContainerDivLeft;</div><div class="line">        startPx.y = <span class="built_in">Math</span>.round(startPx.y) - layerContainerDivTop;</div><div class="line"> </div><div class="line">        <span class="keyword">var</span> tileData = [], center = <span class="keyword">this</span>.map.getCenter();</div><div class="line"> </div><div class="line">        <span class="keyword">var</span> rowidx = <span class="number">0</span>;</div><div class="line">        <span class="keyword">do</span> &#123;</div><div class="line">            <span class="keyword">var</span> row = <span class="keyword">this</span>.grid[rowidx];</div><div class="line">            <span class="keyword">if</span> (!row) &#123;<span class="comment">//新的一行</span></div><div class="line">                row = [];</div><div class="line">                <span class="keyword">this</span>.grid.push(row);</div><div class="line">            &#125;</div><div class="line">             </div><div class="line">            <span class="keyword">var</span> colidx = <span class="number">0</span>;</div><div class="line">            <span class="keyword">do</span> &#123;</div><div class="line">                tileBounds = <span class="keyword">this</span>.getTileBoundsForGridIndex(rowidx, colidx);</div><div class="line">                <span class="keyword">var</span> px = startPx.clone();</div><div class="line">                px.x = px.x + colidx * <span class="built_in">Math</span>.round(tileSize.w);<span class="comment">//像素偏移</span></div><div class="line">                px.y = px.y + rowidx * <span class="built_in">Math</span>.round(tileSize.h);</div><div class="line">                <span class="keyword">var</span> tile = row[colidx];</div><div class="line">                <span class="keyword">if</span> (!tile) &#123;<span class="comment">//此位置上没瓦片就得新建一个</span></div><div class="line">                    tile = <span class="keyword">this</span>.addTile(tileBounds, px);</div><div class="line">                    <span class="keyword">this</span>.addTileMonitoringHooks(tile);</div><div class="line">                    row.push(tile);</div><div class="line">                &#125; <span class="keyword">else</span> &#123;</div><div class="line">                    <span class="comment">//原先就有的话, 移动到指定位置</span></div><div class="line">                    tile.moveTo(tileBounds, px, <span class="literal">false</span>);</div><div class="line">                &#125;</div><div class="line">                <span class="keyword">var</span> tileCenter = tileBounds.getCenterLonLat();</div><div class="line">                tileData.push(&#123;</div><div class="line">                    tile: tile,</div><div class="line">                    distance: <span class="built_in">Math</span>.pow(tileCenter.lon - center.lon, <span class="number">2</span>) +</div><div class="line">                        <span class="built_in">Math</span>.pow(tileCenter.lat - center.lat, <span class="number">2</span>)<span class="comment">//缓存距离</span></div><div class="line">                &#125;);</div><div class="line">      </div><div class="line">                colidx += <span class="number">1</span>;</div><div class="line">            &#125; <span class="keyword">while</span> ((tileBounds.right &lt;= bounds.right + tilelon * <span class="keyword">this</span>.buffer)<span class="comment">//超过距离 或 超过编号就结束</span></div><div class="line">                     || colidx &lt; minCols);</div><div class="line">              </div><div class="line">            rowidx += <span class="number">1</span>;</div><div class="line">        &#125; <span class="keyword">while</span>((tileBounds.bottom &gt;= bounds.bottom - tilelat * <span class="keyword">this</span>.buffer)</div><div class="line">                || rowidx &lt; minRows);<span class="comment">//超过距离 或 超过编号结束</span></div><div class="line">         </div><div class="line">        <span class="comment">//去掉已经不用的瓦片</span></div><div class="line">        <span class="keyword">this</span>.removeExcessTiles(rowidx, colidx);</div><div class="line"> </div><div class="line">        <span class="keyword">var</span> resolution = <span class="keyword">this</span>.getServerResolution();</div><div class="line">        <span class="comment">// 缓存grid的分辨率</span></div><div class="line">        <span class="keyword">this</span>.gridResolution = resolution;</div><div class="line"> </div><div class="line">        <span class="comment">//给缓存tileData排序, 准备绘制</span></div><div class="line">        tileData.sort(<span class="function"><span class="keyword">function</span>(<span class="params">a, b</span>) </span>&#123;</div><div class="line">            <span class="keyword">return</span> a.distance - b.distance; </div><div class="line">        &#125;);</div><div class="line">        <span class="comment">//重绘瓦片</span></div><div class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>, ii=tileData.length; i&lt;ii; ++i) &#123;</div><div class="line">            tileData[i].tile.draw();</div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    getMaxExtent: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.maxExtent;</div><div class="line">    &#125;,</div><div class="line">     </div><div class="line">    <span class="comment">// 添加瓦片, 调用事件</span></div><div class="line">    addTile: <span class="function"><span class="keyword">function</span>(<span class="params">bounds, position</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> tile = <span class="keyword">new</span> <span class="keyword">this</span>.tileClass(</div><div class="line">            <span class="keyword">this</span>, position, bounds, <span class="literal">null</span>, <span class="keyword">this</span>.tileSize, <span class="keyword">this</span>.tileOptions</div><div class="line">        );</div><div class="line">        <span class="keyword">this</span>.events.triggerEvent(<span class="string">"addtile"</span>, &#123;tile: tile&#125;);</div><div class="line">        <span class="keyword">return</span> tile;</div><div class="line">    &#125;,</div><div class="line">     </div><div class="line"> </div><div class="line">    <span class="comment">// 添加瓦片的回调钩子</span></div><div class="line">    addTileMonitoringHooks: <span class="function"><span class="keyword">function</span>(<span class="params">tile</span>) </span>&#123;</div><div class="line">         </div><div class="line">        <span class="keyword">var</span> replacingCls = <span class="string">'olTileReplacing'</span>;</div><div class="line"> </div><div class="line">        tile.onLoadStart = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">            <span class="comment">//首次加载</span></div><div class="line">            <span class="keyword">if</span> (<span class="keyword">this</span>.loading === <span class="literal">false</span>) &#123;</div><div class="line">                <span class="keyword">this</span>.loading = <span class="literal">true</span>;</div><div class="line">                <span class="keyword">this</span>.events.triggerEvent(<span class="string">"loadstart"</span>);</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">this</span>.events.triggerEvent(<span class="string">"tileloadstart"</span>, &#123;tile: tile&#125;);</div><div class="line">            <span class="keyword">this</span>.numLoadingTiles++;<span class="comment">//正在加载计数器</span></div><div class="line">            <span class="keyword">if</span> (!<span class="keyword">this</span>.singleTile &amp;&amp; <span class="keyword">this</span>.backBuffer &amp;&amp; <span class="keyword">this</span>.gridResolution === <span class="keyword">this</span>.backBufferResolution) &#123;</div><div class="line">                OpenLayers.Element.addClass(tile.getTile(), replacingCls);</div><div class="line">            &#125;</div><div class="line">        &#125;;</div><div class="line">       </div><div class="line">        tile.onLoadEnd = <span class="function"><span class="keyword">function</span>(<span class="params">evt</span>) </span>&#123;</div><div class="line">            <span class="keyword">this</span>.numLoadingTiles--;<span class="comment">//计数器递减</span></div><div class="line">            <span class="keyword">var</span> aborted = evt.type === <span class="string">'unload'</span>;</div><div class="line">            <span class="keyword">this</span>.events.triggerEvent(<span class="string">"tileloaded"</span>, &#123;</div><div class="line">                tile: tile,</div><div class="line">                aborted: aborted</div><div class="line">            &#125;);</div><div class="line">            <span class="keyword">if</span> (!<span class="keyword">this</span>.singleTile &amp;&amp; !aborted &amp;&amp; <span class="keyword">this</span>.backBuffer &amp;&amp; <span class="keyword">this</span>.gridResolution === <span class="keyword">this</span>.backBufferResolution) &#123;</div><div class="line">                <span class="keyword">var</span> tileDiv = tile.getTile();</div><div class="line">                <span class="keyword">if</span> (OpenLayers.Element.getStyle(tileDiv, <span class="string">'display'</span>) === <span class="string">'none'</span>) &#123;</div><div class="line">                    <span class="keyword">var</span> bufferTile = <span class="built_in">document</span>.getElementById(tile.id + <span class="string">'_bb'</span>);</div><div class="line">                    <span class="keyword">if</span> (bufferTile) &#123;</div><div class="line">                        bufferTile.parentNode.removeChild(bufferTile);</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">                OpenLayers.Element.removeClass(tileDiv, replacingCls);</div><div class="line">            &#125;</div><div class="line">            <span class="comment">//全都加载完了</span></div><div class="line">            <span class="keyword">if</span> (<span class="keyword">this</span>.numLoadingTiles === <span class="number">0</span>) &#123;</div><div class="line">                <span class="keyword">if</span> (<span class="keyword">this</span>.backBuffer) &#123;</div><div class="line">                    <span class="keyword">if</span> (<span class="keyword">this</span>.backBuffer.childNodes.length === <span class="number">0</span>) &#123;</div><div class="line">                        <span class="comment">// bb没用了 删掉</span></div><div class="line">                        <span class="keyword">this</span>.removeBackBuffer();</div><div class="line">                    &#125; <span class="keyword">else</span> &#123;</div><div class="line">                        <span class="comment">// 对动画的操作</span></div><div class="line">                        <span class="keyword">this</span>._transitionElement = aborted ?</div><div class="line">                            <span class="keyword">this</span>.div.lastChild : tile.imgDiv;</div><div class="line">                        <span class="keyword">var</span> transitionendEvents = <span class="keyword">this</span>.transitionendEvents;</div><div class="line">                        <span class="keyword">for</span> (<span class="keyword">var</span> i=transitionendEvents.length<span class="number">-1</span>; i&gt;=<span class="number">0</span>; --i) &#123;</div><div class="line">                            OpenLayers.Event.observe(<span class="keyword">this</span>._transitionElement,</div><div class="line">                                transitionendEvents[i],</div><div class="line">                                <span class="keyword">this</span>._removeBackBuffer);</div><div class="line">                        &#125;</div><div class="line">                        <span class="comment">// 增加延迟</span></div><div class="line">                        <span class="keyword">this</span>.backBufferTimerId = <span class="built_in">window</span>.setTimeout(</div><div class="line">                            <span class="keyword">this</span>._removeBackBuffer, <span class="keyword">this</span>.removeBackBufferDelay</div><div class="line">                        );</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">                <span class="keyword">this</span>.loading = <span class="literal">false</span>;</div><div class="line">                <span class="keyword">this</span>.events.triggerEvent(<span class="string">"loadend"</span>);</div><div class="line">            &#125;</div><div class="line">        &#125;;</div><div class="line">         </div><div class="line">        tile.onLoadError = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">            <span class="keyword">this</span>.events.triggerEvent(<span class="string">"tileerror"</span>, &#123;tile: tile&#125;);</div><div class="line">        &#125;;</div><div class="line">         </div><div class="line">        <span class="comment">//初始化瓦片事件</span></div><div class="line">        tile.events.on(&#123;</div><div class="line">            <span class="string">"loadstart"</span>: tile.onLoadStart,</div><div class="line">            <span class="string">"loadend"</span>: tile.onLoadEnd,</div><div class="line">            <span class="string">"unload"</span>: tile.onLoadEnd,</div><div class="line">            <span class="string">"loaderror"</span>: tile.onLoadError,</div><div class="line">            scope: <span class="keyword">this</span></div><div class="line">        &#125;);</div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="comment">// 解绑瓦片事件</span></div><div class="line">    removeTileMonitoringHooks: <span class="function"><span class="keyword">function</span>(<span class="params">tile</span>) </span>&#123;</div><div class="line">        tile.unload();</div><div class="line">        tile.events.un(&#123;</div><div class="line">            <span class="string">"loadstart"</span>: tile.onLoadStart,</div><div class="line">            <span class="string">"loadend"</span>: tile.onLoadEnd,</div><div class="line">            <span class="string">"unload"</span>: tile.onLoadEnd,</div><div class="line">            <span class="string">"loaderror"</span>: tile.onLoadError,</div><div class="line">            scope: <span class="keyword">this</span></div><div class="line">        &#125;);</div><div class="line">    &#125;,</div><div class="line">     </div><div class="line">    <span class="comment">// 移动组织好的瓦片</span></div><div class="line">    moveGriddedTiles: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> buffer = <span class="keyword">this</span>.buffer + <span class="number">1</span>;</div><div class="line">        <span class="keyword">while</span>(<span class="literal">true</span>) &#123;</div><div class="line">            <span class="keyword">var</span> tlTile = <span class="keyword">this</span>.grid[<span class="number">0</span>][<span class="number">0</span>];<span class="comment">//top-left的瓦片</span></div><div class="line">            <span class="keyword">var</span> tlViewPort = &#123;</div><div class="line">                x: tlTile.position.x +</div><div class="line">                    <span class="keyword">this</span>.map.layerContainerOriginPx.x,<span class="comment">//计算左上角view port的x值</span></div><div class="line">                y: tlTile.position.y +</div><div class="line">                    <span class="keyword">this</span>.map.layerContainerOriginPx.y</div><div class="line">            &#125;;</div><div class="line">            <span class="keyword">var</span> ratio = <span class="keyword">this</span>.getServerResolution() / <span class="keyword">this</span>.map.getResolution();</div><div class="line">            <span class="keyword">var</span> tileSize = &#123;</div><div class="line">                w: <span class="built_in">Math</span>.round(<span class="keyword">this</span>.tileSize.w * ratio),<span class="comment">//根据比率放大后的瓦片尺寸</span></div><div class="line">                h: <span class="built_in">Math</span>.round(<span class="keyword">this</span>.tileSize.h * ratio)</div><div class="line">            &#125;;</div><div class="line">            <span class="comment">//判断是横向 还是纵向移动</span></div><div class="line">            <span class="keyword">if</span> (tlViewPort.x &gt; -tileSize.w * (buffer - <span class="number">1</span>)) &#123;</div><div class="line">                <span class="keyword">this</span>.shiftColumn(<span class="literal">true</span>, tileSize);</div><div class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (tlViewPort.x &lt; -tileSize.w * buffer) &#123;</div><div class="line">                <span class="keyword">this</span>.shiftColumn(<span class="literal">false</span>, tileSize);</div><div class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (tlViewPort.y &gt; -tileSize.h * (buffer - <span class="number">1</span>)) &#123;</div><div class="line">                <span class="keyword">this</span>.shiftRow(<span class="literal">true</span>, tileSize);</div><div class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (tlViewPort.y &lt; -tileSize.h * buffer) &#123;</div><div class="line">                <span class="keyword">this</span>.shiftRow(<span class="literal">false</span>, tileSize);</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="comment">//移动行 </span></div><div class="line">    <span class="comment">//prepend为真, 就是从0行开始 / 否则就是末行</span></div><div class="line">    shiftRow: <span class="function"><span class="keyword">function</span>(<span class="params">prepend, tileSize</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> grid = <span class="keyword">this</span>.grid;</div><div class="line">        <span class="keyword">var</span> rowIndex = prepend ? <span class="number">0</span> : (grid.length - <span class="number">1</span>);<span class="comment">//首行 / 末行</span></div><div class="line">        <span class="keyword">var</span> sign = prepend ? <span class="number">-1</span> : <span class="number">1</span>;<span class="comment">//向左是-1 , 向右是1</span></div><div class="line">        <span class="keyword">var</span> rowSign = <span class="keyword">this</span>.rowSign;</div><div class="line">        <span class="keyword">var</span> tileLayout = <span class="keyword">this</span>.gridLayout;</div><div class="line">        tileLayout.startrow += sign * rowSign;<span class="comment">//向左 / 向右移动</span></div><div class="line"> </div><div class="line">        <span class="keyword">var</span> modelRow = grid[rowIndex];<span class="comment">//共多少行</span></div><div class="line">        <span class="keyword">var</span> row = grid[prepend ? <span class="string">'pop'</span> : <span class="string">'shift'</span>]();</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>, len=row.length; i&lt;len; i++) &#123;</div><div class="line">            <span class="keyword">var</span> tile = row[i];</div><div class="line">            <span class="keyword">var</span> position = modelRow[i].position.clone();</div><div class="line">            position.y += tileSize.h * sign;<span class="comment">//y轴 偏移量</span></div><div class="line">            tile.moveTo(<span class="keyword">this</span>.getTileBoundsForGridIndex(rowIndex, i), position);<span class="comment">//y轴移动距离</span></div><div class="line">        &#125;</div><div class="line">        grid[prepend ? <span class="string">'unshift'</span> : <span class="string">'push'</span>](row);<span class="comment">//调用grid[1/-1]</span></div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="comment">//移动列 </span></div><div class="line">    shiftColumn: <span class="function"><span class="keyword">function</span>(<span class="params">prepend, tileSize</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> grid = <span class="keyword">this</span>.grid;</div><div class="line">        <span class="keyword">var</span> colIndex = prepend ? <span class="number">0</span> : (grid[<span class="number">0</span>].length - <span class="number">1</span>);<span class="comment">//true是第一列, false是末一列</span></div><div class="line">        <span class="keyword">var</span> sign = prepend ? <span class="number">-1</span> : <span class="number">1</span>;</div><div class="line">        <span class="keyword">var</span> tileLayout = <span class="keyword">this</span>.gridLayout;</div><div class="line">        tileLayout.startcol += sign;</div><div class="line"> </div><div class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>, len=grid.length; i&lt;len; i++) &#123;</div><div class="line">            <span class="keyword">var</span> row = grid[i];</div><div class="line">            <span class="keyword">var</span> position = row[colIndex].position.clone();</div><div class="line">            <span class="keyword">var</span> tile = row[prepend ? <span class="string">'pop'</span> : <span class="string">'shift'</span>]();            </div><div class="line">            position.x += tileSize.w * sign;</div><div class="line">            tile.moveTo(<span class="keyword">this</span>.getTileBoundsForGridIndex(i, colIndex), position);<span class="comment">//列移动</span></div><div class="line">            row[prepend ? <span class="string">'unshift'</span> : <span class="string">'push'</span>](tile);</div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="comment">//删掉多余瓦片 </span></div><div class="line">    removeExcessTiles: <span class="function"><span class="keyword">function</span>(<span class="params">rows, columns</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> i, l;</div><div class="line">        <span class="comment">//传入的r和l是保留的最大行列号</span></div><div class="line">        <span class="keyword">while</span> (<span class="keyword">this</span>.grid.length &gt; rows) &#123;</div><div class="line">            <span class="keyword">var</span> row = <span class="keyword">this</span>.grid.pop();</div><div class="line">            <span class="keyword">for</span> (i=<span class="number">0</span>, l=row.length; i&lt;l; i++) &#123;</div><div class="line">                <span class="keyword">var</span> tile = row[i];</div><div class="line">                <span class="keyword">this</span>.destroyTile(tile);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">for</span> (i=<span class="number">0</span>, l=<span class="keyword">this</span>.grid.length; i&lt;l; i++) &#123;</div><div class="line">            <span class="keyword">while</span> (<span class="keyword">this</span>.grid[i].length &gt; columns) &#123;</div><div class="line">                <span class="keyword">var</span> row = <span class="keyword">this</span>.grid[i];</div><div class="line">                <span class="keyword">var</span> tile = row.pop();</div><div class="line">                <span class="keyword">this</span>.destroyTile(tile);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="comment">// 单瓦片模式需要调整</span></div><div class="line">    onMapResize: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.singleTile) &#123;</div><div class="line">            <span class="keyword">this</span>.clearGrid();</div><div class="line">            <span class="keyword">this</span>.setTileSize();</div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line">     </div><div class="line">    <span class="comment">//获得瓦片边界</span></div><div class="line">    getTileBounds: <span class="function"><span class="keyword">function</span>(<span class="params">viewPortPx</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> maxExtent = <span class="keyword">this</span>.maxExtent;</div><div class="line">        <span class="keyword">var</span> resolution = <span class="keyword">this</span>.getResolution();</div><div class="line">        <span class="keyword">var</span> tileMapWidth = resolution * <span class="keyword">this</span>.tileSize.w;</div><div class="line">        <span class="keyword">var</span> tileMapHeight = resolution * <span class="keyword">this</span>.tileSize.h;</div><div class="line">        <span class="keyword">var</span> mapPoint = <span class="keyword">this</span>.getLonLatFromViewPortPx(viewPortPx);<span class="comment">//viewport的像素位置</span></div><div class="line">        <span class="keyword">var</span> tileLeft = maxExtent.left + (tileMapWidth *</div><div class="line">                                         <span class="built_in">Math</span>.floor((mapPoint.lon -</div><div class="line">                                                     maxExtent.left) /</div><div class="line">                                                    tileMapWidth));</div><div class="line">        <span class="keyword">var</span> tileBottom = maxExtent.bottom + (tileMapHeight *</div><div class="line">                                             <span class="built_in">Math</span>.floor((mapPoint.lat -</div><div class="line">                                                         maxExtent.bottom) /</div><div class="line">                                                        tileMapHeight));</div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> OpenLayers.Bounds(tileLeft, tileBottom,</div><div class="line">                                     tileLeft + tileMapWidth,</div><div class="line">                                     tileBottom + tileMapHeight);</div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    CLASS_NAME: <span class="string">"OpenLayers.Layer.Grid"</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/03/18/openLayers/openLayers-18-layer-grid/" rel="next" title="OpenLayers源码学习18:图层Layer.Grid_1">
+                <i class="fa fa-chevron-left"></i> OpenLayers源码学习18:图层Layer.Grid_1
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/03/18/openLayers/openLayers-19-tile/" rel="prev" title="OpenLayers源码学习19:瓦片">
+                OpenLayers源码学习19:瓦片 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2015/03/18/openLayers/openLayers-18-layer-grid2/"
+           data-title="OpenLayers源码学习18:图层Layer.Grid_2" data-url="http://ruantao1989.github.io/2015/03/18/openLayers/openLayers-18-layer-grid2/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars2.githubusercontent.com/u/1949437?v=3&s=460"
+               alt="ruantao1989" />
+          <p class="site-author-name" itemprop="name">ruantao1989</p>
+          <p class="site-description motion-element" itemprop="description">思行合一</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">68</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <p class="post-toc-empty">This post does not have a Table of Contents</p>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ruantao1989</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"ruantao1989"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

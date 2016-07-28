@@ -1,0 +1,634 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="ruantao1989" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="年后上班了, 这年过的比较累 各种串门…这个map类估计一次看不完, 分几次慢慢看吧">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenLayers源码学习15:地图Map_1">
+<meta property="og:url" content="http://ruantao1989.github.io/2015/02/28/openLayers/openLayers-15-map1/index.html">
+<meta property="og:site_name" content="ruantao1989">
+<meta property="og:description" content="年后上班了, 这年过的比较累 各种串门…这个map类估计一次看不完, 分几次慢慢看吧">
+<meta property="og:updated_time" content="2016-07-28T07:42:06.894Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OpenLayers源码学习15:地图Map_1">
+<meta name="twitter:description" content="年后上班了, 这年过的比较累 各种串门…这个map类估计一次看不完, 分几次慢慢看吧">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://ruantao1989.github.io/2015/02/28/openLayers/openLayers-15-map1/"/>
+
+  <title> OpenLayers源码学习15:地图Map_1 | ruantao1989 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">ruantao1989</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                OpenLayers源码学习15:地图Map_1
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2015-02-28T16:33:39+08:00" content="2015-02-28">
+              2015-02-28
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/OpenLayers学习/" itemprop="url" rel="index">
+                    <span itemprop="name">OpenLayers学习</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/02/28/openLayers/openLayers-15-map1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/02/28/openLayers/openLayers-15-map1/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>年后上班了, 这年过的比较累 各种串门…<br>这个map类估计一次看不完, 分几次慢慢看吧<br><a id="more"></a></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//OpenLayers.Map的实例, 注释说此类中只有必要方法(其实三千行...), 还需要配合OpenLayers.Control对地图进行操作</span></div><div class="line">OpenLayers.Map = OpenLayers.Class(&#123;</div><div class="line">     </div><div class="line">    <span class="comment">//不同class的z-index配置 </span></div><div class="line">    Z_INDEX_BASE: &#123;</div><div class="line">        BaseLayer: <span class="number">100</span>,</div><div class="line">        Overlay: <span class="number">325</span>,</div><div class="line">        Feature: <span class="number">725</span>,</div><div class="line">        Popup: <span class="number">750</span>,</div><div class="line">        Control: <span class="number">1000</span></div><div class="line">    &#125;,</div><div class="line"> </div><div class="line">    <span class="comment">/**</span></div><div class="line">     * Register a listener for a particular event with the following syntax:</div><div class="line">     * (code)</div><div class="line">     * map.events.register(type, obj, listener);</div><div class="line">     * (end)</div><div class="line">     *</div><div class="line">     * 支持的map事件类型:</div><div class="line">     * preaddlayer ,addlayer ,preremovelayer ,removelayer ,changelayer, movestart</div><div class="line">     * move,moveend,zoomend, mouseover, mouseout, mousemove, changebaselayer, updatesize</div><div class="line">     */</div><div class="line"> </div><div class="line">    <span class="comment">//map的唯一id </span></div><div class="line">    id: <span class="literal">null</span>,</div><div class="line">     </div><div class="line">    <span class="comment">//分数zoom值, base layer是否支持分数zoom值 </span></div><div class="line">    fractionalZoom: <span class="literal">false</span>,</div><div class="line">     </div><div class="line">    <span class="comment">//map对象持有的OpenLayers.Events实例 </span></div><div class="line">    events: <span class="literal">null</span>,</div><div class="line">     </div><div class="line">    <span class="comment">//如果为true, 绘制过程中最底层的layer就变成base layer了</span></div><div class="line">    allOverlays: <span class="literal">false</span>,</div><div class="line"> </div><div class="line">    <span class="comment">//map的包裹div, 应该在构造函数里指定 或者用render方法(如果调用render就不能用&lt;maxResolution&gt;  auto, 必须指定)</span></div><div class="line">    div: <span class="literal">null</span>,</div><div class="line">     </div><div class="line">    <span class="comment">//map当前是否正在被拖拽标志</span></div><div class="line">    dragging: <span class="literal">false</span>,</div><div class="line"> </div><div class="line">    <span class="comment">//当前map对象的 this.div&#123;&lt;OpenLayers.Size&gt;&#125;</span></div><div class="line">    size: <span class="literal">null</span>,</div><div class="line">     </div><div class="line">    <span class="comment">//map的viewport</span></div><div class="line">    viewPortDiv: <span class="literal">null</span>,</div><div class="line"> </div><div class="line">    <span class="comment">// 在zoom后图层容器的lonlat</span></div><div class="line">    layerContainerOrigin: <span class="literal">null</span>,</div><div class="line"> </div><div class="line">    <span class="comment">//图层的容器div </span></div><div class="line">    layerContainerDiv: <span class="literal">null</span>,</div><div class="line"> </div><div class="line">    <span class="comment">// &lt;OpenLayers.Layer&gt;的数组</span></div><div class="line">    layers: <span class="literal">null</span>,</div><div class="line"> </div><div class="line">    <span class="comment">// &lt;OpenLayers.Control&gt;数组, 如果没在构造里指定, 则默认有</span></div><div class="line">    <span class="comment">/*  - &lt;OpenLayers.Control.Navigation&gt; or &lt;OpenLayers.Control.TouchNavigation&gt;</span></div><div class="line">     *  - &lt;OpenLayers.Control.Zoom&gt; or &lt;OpenLayers.Control.PanZoom&gt;</div><div class="line">     *  - &lt;OpenLayers.Control.ArgParser&gt;</div><div class="line">     *  - &lt;OpenLayers.Control.Attribution&gt;</div><div class="line">     */</div><div class="line">    controls: <span class="literal">null</span>,</div><div class="line"> </div><div class="line">    <span class="comment">//&lt;OpenLayers.Popup&gt;数组 </span></div><div class="line">    popups: <span class="literal">null</span>,</div><div class="line"> </div><div class="line">    <span class="comment">//当前选择的base layer&lt;OpenLayers.Layer&gt;</span></div><div class="line">    baseLayer: <span class="literal">null</span>,</div><div class="line">     </div><div class="line">    <span class="comment">//缓存地图中心点&lt;OpenLayers.LonLat&gt;</span></div><div class="line">    center: <span class="literal">null</span>,</div><div class="line"> </div><div class="line">    <span class="comment">//缓存分辨率 </span></div><div class="line">    resolution: <span class="literal">null</span>,</div><div class="line"> </div><div class="line">    <span class="comment">//缓存zoom值 </span></div><div class="line">    zoom: <span class="number">0</span>,    </div><div class="line"> </div><div class="line">    <span class="comment">// 当前extent和panning的比值</span></div><div class="line">    panRatio: <span class="number">1.5</span>,    </div><div class="line"> </div><div class="line">    <span class="comment">//缓存options对象(只读), 通过构造传进来 </span></div><div class="line">    options: <span class="literal">null</span>,</div><div class="line"> </div><div class="line">  <span class="comment">// Options</span></div><div class="line"> </div><div class="line">    <span class="comment">//瓦片尺寸 &lt;OpenLayers.Size&gt;</span></div><div class="line">    tileSize: <span class="literal">null</span>,</div><div class="line"> </div><div class="line">    <span class="comment">//默认投影是经纬度, 用其他投影如墨卡托需要设置maxExtent, maxResolution.</span></div><div class="line">    <span class="comment">//投影由当前的baseLayer决定(see &lt;baseLayer&gt; and &lt;getProjectionObject&gt;).</span></div><div class="line">    projection: <span class="string">"EPSG:4326"</span>,    </div><div class="line">         </div><div class="line">    <span class="comment">//单位 'degrees' (or 'dd'), 'm', 'ft', 'km', 'mi', 'inches'.</span></div><div class="line">    units: <span class="literal">null</span>,</div><div class="line"> </div><div class="line">    <span class="comment">//分辨率数组(map units per pixel) </span></div><div class="line">    resolutions: <span class="literal">null</span>,</div><div class="line"> </div><div class="line">    <span class="comment">//最大分辨率</span></div><div class="line">    maxResolution: <span class="literal">null</span>,</div><div class="line"> </div><div class="line">    <span class="comment">//最小分辨率 </span></div><div class="line">    minResolution: <span class="literal">null</span>,</div><div class="line"> </div><div class="line">    <span class="comment">//最大缩放 </span></div><div class="line">    maxScale: <span class="literal">null</span>,</div><div class="line"> </div><div class="line">    <span class="comment">//最小缩放 </span></div><div class="line">    minScale: <span class="literal">null</span>,</div><div class="line"> </div><div class="line">    <span class="comment">// 最大范围. 如果是数组 则顺序为(left, bottom, right, top) , 否则是&lt;OpenLayers.Bounds&gt;</span></div><div class="line">    maxExtent: <span class="literal">null</span>,</div><div class="line">     </div><div class="line">    <span class="comment">//最小范围 </span></div><div class="line">    minExtent: <span class="literal">null</span>,</div><div class="line">     </div><div class="line">    <span class="comment">// 受限范围, 地图中心点将会被限制在此范围内. 要是想限制zoom的分辨率要用maxResolution</span></div><div class="line">    restrictedExtent: <span class="literal">null</span>,</div><div class="line"> </div><div class="line">    <span class="comment">// zoom等级数</span></div><div class="line">    numZoomLevels: <span class="number">16</span>,</div><div class="line"> </div><div class="line">    <span class="comment">//css风格 </span></div><div class="line">    theme: <span class="literal">null</span>,</div><div class="line">     </div><div class="line">    <span class="comment">// 显示投影&lt;OpenLayers.Projection&gt;</span></div><div class="line">    displayProjection: <span class="literal">null</span>,</div><div class="line"> </div><div class="line">    <span class="comment">/**</span></div><div class="line">     * APIProperty: tileManager</div><div class="line">     * &#123;&lt;OpenLayers.TileManager&gt;|Object&#125; By default, and if the build contains</div><div class="line">     * TileManager.js, the map will use the TileManager to queue image requests</div><div class="line">     * and to cache tile image elements. To create a map without a TileManager</div><div class="line">     * configure the map with tileManager: null. To create a TileManager with</div><div class="line">     * non-default options, supply the options instead or alternatively supply</div><div class="line">     * an instance of &#123;&lt;OpenLayers.TileManager&gt;&#125;.</div><div class="line">     */</div><div class="line"> </div><div class="line">    <span class="comment">// 是否把map接收的事件继续传递到当前页面上. 默认接收完阻止掉</span></div><div class="line">    fallThrough: <span class="literal">false</span>,</div><div class="line"> </div><div class="line">    <span class="comment">// resize事件触发时, 是否重新调整map的大小</span></div><div class="line">    autoUpdateSize: <span class="literal">true</span>,</div><div class="line">     </div><div class="line">    <span class="comment">// 随构造传入的监听器会被注册到&lt;OpenLayers.Events.on&gt;</span></div><div class="line">    eventListeners: <span class="literal">null</span>,</div><div class="line"> </div><div class="line">    <span class="comment">// 移动中心点后的&lt;OpenLayers.Tween&gt;动画对象see panTo(), 这个动画之前没看</span></div><div class="line">    panTween: <span class="literal">null</span>,</div><div class="line"> </div><div class="line">    <span class="comment">//移动中心点时候的动画, "null"可以关掉动画 </span></div><div class="line">    panMethod: OpenLayers.Easing.Expo.easeOut,</div><div class="line">     </div><div class="line">    <span class="comment">//动画步长参数 </span></div><div class="line">    panDuration: <span class="number">50</span>,</div><div class="line">     </div><div class="line">    <span class="comment">//zoom时候的动画策略 &lt;OpenLayers.Tween&gt;</span></div><div class="line">    zoomTween: <span class="literal">null</span>,</div><div class="line"> </div><div class="line">    <span class="comment">//缩放动画 </span></div><div class="line">    zoomMethod: OpenLayers.Easing.Quad.easeOut,</div><div class="line">     </div><div class="line">    <span class="comment">//zoom动画持续步长</span></div><div class="line">    zoomDuration: <span class="number">20</span>,</div><div class="line">     </div><div class="line">    <span class="comment">//气泡外围的padding值 </span></div><div class="line">    paddingForPopups : <span class="literal">null</span>,</div><div class="line">     </div><div class="line">    <span class="comment">// 图层容器得起始位置px</span></div><div class="line">    layerContainerOriginPx: <span class="literal">null</span>,</div><div class="line">     </div><div class="line">    <span class="comment">//最下最左值 , maxExtent和viewport的像素空隙 x,y </span></div><div class="line">    minPx: <span class="literal">null</span>,</div><div class="line">     </div><div class="line">    <span class="comment">//最顶最右值 , maxExtent和viewport的像素空隙 x,y  </span></div><div class="line">    maxPx: <span class="literal">null</span>,</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div><div class="line">202</div><div class="line">203</div><div class="line">204</div><div class="line">205</div><div class="line">206</div><div class="line">207</div><div class="line">208</div><div class="line">209</div><div class="line">210</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line">     * 创建一个新&lt;OpenLayers.Map&gt;实例</div><div class="line">     *</div><div class="line">     * 参数:</div><div class="line">     * div - &#123;DOMElement|String&#125;  地图所处div或div的id</div><div class="line">     * options - &#123;Object&#125; 配置对象</div><div class="line">     *</div><div class="line">     * 可以包含以下参数:</div><div class="line">     * center - &#123;&lt;OpenLayers.LonLat&gt;|Array&#125; 地图中心点</div><div class="line">     * zoom - &#123;Number&#125; 默认zoom值</div><div class="line">     * extent - &#123;&lt;OpenLayers.Bounds&gt;|Array&#125; 初始化范围, center和zoom指定的话这个就无效了</div><div class="line">     * </div><div class="line">     * 代码示例:</div><div class="line">     * var map = new OpenLayers.Map(&#123;</div><div class="line">     *     div: "map_id",</div><div class="line">     *     projection: "EPSG:3857",</div><div class="line">     *     maxExtent: [-18924313.432222, -15538711.094146, 18924313.432222, 15538711.094146],</div><div class="line">     *     restrictedExtent: [-13358338.893333, -9608371.5085962, 13358338.893333, 9608371.5085962],</div><div class="line">     *     center: [-12356463.476333, 5621521.4854095]</div><div class="line">     * &#125;);</div><div class="line">     *</div><div class="line">     * //没给中心点, 需要创建完再render一下</div><div class="line">     * var map = new OpenLayers.Map(&#123;</div><div class="line">     *     projection: "EPSG:3857",</div><div class="line">     *     maxExtent: new OpenLayers.Bounds(-200000, -200000, 200000, 200000)</div><div class="line">     * &#125;);</div><div class="line">     */    </div><div class="line">    initialize: <span class="function"><span class="keyword">function</span> (<span class="params">div, options</span>) </span>&#123;</div><div class="line">         </div><div class="line">        <span class="comment">//就一个参数的情况, 就像示例1. div实际上是参数对象的"div"项</span></div><div class="line">        <span class="keyword">if</span>(<span class="built_in">arguments</span>.length === <span class="number">1</span> &amp;&amp; <span class="keyword">typeof</span> div === <span class="string">"object"</span>) &#123;</div><div class="line">            options = div;</div><div class="line">            div = options &amp;&amp; options.div;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//读取OpenLayers.Map.里的配置项</span></div><div class="line">        <span class="keyword">this</span>.tileSize = <span class="keyword">new</span> OpenLayers.Size(OpenLayers.Map.TILE_WIDTH,</div><div class="line">                                            OpenLayers.Map.TILE_HEIGHT);</div><div class="line">        <span class="comment">//默认气泡的padding是15</span></div><div class="line">        <span class="keyword">this</span>.paddingForPopups = <span class="keyword">new</span> OpenLayers.Bounds(<span class="number">15</span>, <span class="number">15</span>, <span class="number">15</span>, <span class="number">15</span>);</div><div class="line">        <span class="comment">//默认css风格</span></div><div class="line">        <span class="keyword">this</span>.theme = OpenLayers._getScriptLocation() + </div><div class="line">                             <span class="string">'theme/default/style.css'</span>; </div><div class="line"> </div><div class="line">        <span class="comment">//缓存最原始的options, 用Util.extend闭包缓存</span></div><div class="line">        <span class="keyword">this</span>.options = OpenLayers.Util.extend(&#123;&#125;, options);</div><div class="line"> </div><div class="line">        <span class="comment">//覆盖掉this里的默认配置 </span></div><div class="line">        OpenLayers.Util.extend(<span class="keyword">this</span>, options);</div><div class="line">        <span class="comment">//查询到projCode</span></div><div class="line">        <span class="keyword">var</span> projCode = <span class="keyword">this</span>.projection <span class="keyword">instanceof</span> OpenLayers.Projection ?</div><div class="line">            <span class="keyword">this</span>.projection.projCode : <span class="keyword">this</span>.projection;</div><div class="line">        OpenLayers.Util.applyDefaults(<span class="keyword">this</span>, OpenLayers.Projection.defaults[projCode]);</div><div class="line">         </div><div class="line">        <span class="comment">//最大 最小 受限范围, 统一处理&lt;OpenLayers.Bounds&gt;或数组</span></div><div class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.maxExtent &amp;&amp; !(<span class="keyword">this</span>.maxExtent <span class="keyword">instanceof</span> OpenLayers.Bounds)) &#123;</div><div class="line">            <span class="keyword">this</span>.maxExtent = <span class="keyword">new</span> OpenLayers.Bounds(<span class="keyword">this</span>.maxExtent);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.minExtent &amp;&amp; !(<span class="keyword">this</span>.minExtent <span class="keyword">instanceof</span> OpenLayers.Bounds)) &#123;</div><div class="line">            <span class="keyword">this</span>.minExtent = <span class="keyword">new</span> OpenLayers.Bounds(<span class="keyword">this</span>.minExtent);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.restrictedExtent &amp;&amp; !(<span class="keyword">this</span>.restrictedExtent <span class="keyword">instanceof</span> OpenLayers.Bounds)) &#123;</div><div class="line">            <span class="keyword">this</span>.restrictedExtent = <span class="keyword">new</span> OpenLayers.Bounds(<span class="keyword">this</span>.restrictedExtent);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.center &amp;&amp; !(<span class="keyword">this</span>.center <span class="keyword">instanceof</span> OpenLayers.LonLat)) &#123;</div><div class="line">            <span class="keyword">this</span>.center = <span class="keyword">new</span> OpenLayers.LonLat(<span class="keyword">this</span>.center);</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//准备一个新数组</span></div><div class="line">        <span class="keyword">this</span>.layers = [];</div><div class="line">        <span class="comment">//唯一id</span></div><div class="line">        <span class="keyword">this</span>.id = OpenLayers.Util.createUniqueID(<span class="string">"OpenLayers.Map_"</span>);</div><div class="line">        <span class="comment">//map需要绑定的dom元素</span></div><div class="line">        <span class="keyword">this</span>.div = OpenLayers.Util.getElement(div);</div><div class="line">        <span class="keyword">if</span>(!<span class="keyword">this</span>.div) &#123;</div><div class="line">            <span class="keyword">this</span>.div = <span class="built_in">document</span>.createElement(<span class="string">"div"</span>);<span class="comment">//没找到dom的创建一个, 宽高为1</span></div><div class="line">            <span class="keyword">this</span>.div.style.height = <span class="string">"1px"</span>;</div><div class="line">            <span class="keyword">this</span>.div.style.width = <span class="string">"1px"</span>;</div><div class="line">        &#125;</div><div class="line">         </div><div class="line">        OpenLayers.Element.addClass(<span class="keyword">this</span>.div, <span class="string">'olMap'</span>);</div><div class="line"> </div><div class="line">        <span class="comment">//viewpoint是div里最外层的</span></div><div class="line">        <span class="keyword">var</span> id = <span class="keyword">this</span>.id + <span class="string">"_OpenLayers_ViewPort"</span>;</div><div class="line">        <span class="keyword">this</span>.viewPortDiv = OpenLayers.Util.createDiv(id, <span class="literal">null</span>, <span class="literal">null</span>, <span class="literal">null</span>,</div><div class="line">                                                     <span class="string">"relative"</span>, <span class="literal">null</span>,</div><div class="line">                                                     <span class="string">"hidden"</span>);</div><div class="line">        <span class="keyword">this</span>.viewPortDiv.style.width = <span class="string">"100%"</span>;</div><div class="line">        <span class="keyword">this</span>.viewPortDiv.style.height = <span class="string">"100%"</span>;</div><div class="line">        <span class="keyword">this</span>.viewPortDiv.className = <span class="string">"olMapViewport"</span>;</div><div class="line">        <span class="keyword">this</span>.div.appendChild(<span class="keyword">this</span>.viewPortDiv);<span class="comment">//在map需要绑定的div里内层直接套viewport</span></div><div class="line"> </div><div class="line">        <span class="comment">//给this(新的map实例)绑定事件: 接收事件的对象是viewPort 监听事件暂时为空</span></div><div class="line">        <span class="keyword">this</span>.events = <span class="keyword">new</span> OpenLayers.Events(</div><div class="line">            <span class="keyword">this</span>, <span class="keyword">this</span>.viewPortDiv, <span class="literal">null</span>, <span class="keyword">this</span>.fallThrough, </div><div class="line">            &#123;includeXY: <span class="literal">true</span>&#125;</div><div class="line">        );</div><div class="line">         </div><div class="line">        <span class="comment">//瓦片管理, 这个没看</span></div><div class="line">        <span class="keyword">if</span> (OpenLayers.TileManager &amp;&amp; <span class="keyword">this</span>.tileManager !== <span class="literal">null</span>) &#123;</div><div class="line">            <span class="keyword">if</span> (!(<span class="keyword">this</span>.tileManager <span class="keyword">instanceof</span> OpenLayers.TileManager)) &#123;</div><div class="line">                <span class="keyword">this</span>.tileManager = <span class="keyword">new</span> OpenLayers.TileManager(<span class="keyword">this</span>.tileManager);</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">this</span>.tileManager.addMap(<span class="keyword">this</span>);</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">// 续写一个id, 根据此唯一id创建一个div</span></div><div class="line">        id = <span class="keyword">this</span>.id + <span class="string">"_OpenLayers_Container"</span>;</div><div class="line">        <span class="keyword">this</span>.layerContainerDiv = OpenLayers.Util.createDiv(id);</div><div class="line">        <span class="keyword">this</span>.layerContainerDiv.style.zIndex=<span class="keyword">this</span>.Z_INDEX_BASE[<span class="string">'Popup'</span>]<span class="number">-1</span>;<span class="comment">//比气泡z-index少1</span></div><div class="line">        <span class="keyword">this</span>.layerContainerOriginPx = &#123;x: <span class="number">0</span>, y: <span class="number">0</span>&#125;;</div><div class="line">        <span class="keyword">this</span>.applyTransform();</div><div class="line">         </div><div class="line">        <span class="keyword">this</span>.viewPortDiv.appendChild(<span class="keyword">this</span>.layerContainerDiv);</div><div class="line"> </div><div class="line">        <span class="keyword">this</span>.updateSize();</div><div class="line">        <span class="comment">//如果传入eventListeners对象的话, 就都on一下</span></div><div class="line">        <span class="keyword">if</span>(<span class="keyword">this</span>.eventListeners <span class="keyword">instanceof</span> <span class="built_in">Object</span>) &#123;</div><div class="line">            <span class="keyword">this</span>.events.on(<span class="keyword">this</span>.eventListeners);</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.autoUpdateSize === <span class="literal">true</span>) &#123;</div><div class="line">            <span class="comment">// 如果autoUpdateSize配置为true的话, 增加一个窗口的'resize'事件的监听</span></div><div class="line">            <span class="keyword">this</span>.updateSizeDestroy = OpenLayers.Function.bind(<span class="keyword">this</span>.updateSize, </div><div class="line">                <span class="keyword">this</span>);</div><div class="line">            OpenLayers.Event.observe(<span class="built_in">window</span>, <span class="string">'resize'</span>,</div><div class="line">                            <span class="keyword">this</span>.updateSizeDestroy);</div><div class="line">        &#125;</div><div class="line">         </div><div class="line">        <span class="comment">// 设置css风格的话</span></div><div class="line">        <span class="keyword">if</span>(<span class="keyword">this</span>.theme) &#123;</div><div class="line">            <span class="comment">// 检查是否已有相等的url</span></div><div class="line">            <span class="keyword">var</span> addNode = <span class="literal">true</span>;</div><div class="line">            <span class="keyword">var</span> nodes = <span class="built_in">document</span>.getElementsByTagName(<span class="string">'link'</span>);</div><div class="line">            <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>, len=nodes.length; i&lt;len; ++i) &#123;</div><div class="line">                <span class="keyword">if</span>(OpenLayers.Util.isEquivalentUrl(nodes.item(i).href,</div><div class="line">                                                   <span class="keyword">this</span>.theme)) &#123;</div><div class="line">                    addNode = <span class="literal">false</span>;</div><div class="line">                    <span class="keyword">break</span>;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            <span class="comment">// 需要把设置的风格url字串写入新的css外链元素, 而后去加载</span></div><div class="line">            <span class="keyword">if</span>(addNode) &#123;</div><div class="line">                <span class="keyword">var</span> cssNode = <span class="built_in">document</span>.createElement(<span class="string">'link'</span>);</div><div class="line">                cssNode.setAttribute(<span class="string">'rel'</span>, <span class="string">'stylesheet'</span>);</div><div class="line">                cssNode.setAttribute(<span class="string">'type'</span>, <span class="string">'text/css'</span>);</div><div class="line">                cssNode.setAttribute(<span class="string">'href'</span>, <span class="keyword">this</span>.theme);</div><div class="line">                <span class="built_in">document</span>.getElementsByTagName(<span class="string">'head'</span>)[<span class="number">0</span>].appendChild(cssNode);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">         </div><div class="line">        <span class="comment">//没传入控件, 默认的控件</span></div><div class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.controls == <span class="literal">null</span>) &#123;</div><div class="line">            <span class="keyword">this</span>.controls = [];</div><div class="line">            <span class="keyword">if</span> (OpenLayers.Control != <span class="literal">null</span>) &#123; <span class="comment">//在此之前已经加载过OpenLayers.Control</span></div><div class="line">                <span class="comment">//导航控件</span></div><div class="line">                <span class="keyword">if</span> (OpenLayers.Control.Navigation) &#123;</div><div class="line">                    <span class="keyword">this</span>.controls.push(<span class="keyword">new</span> OpenLayers.Control.Navigation());</div><div class="line">                &#125; <span class="keyword">else</span> <span class="keyword">if</span> (OpenLayers.Control.TouchNavigation) &#123;</div><div class="line">                    <span class="keyword">this</span>.controls.push(<span class="keyword">new</span> OpenLayers.Control.TouchNavigation());</div><div class="line">                &#125;</div><div class="line">                <span class="comment">//zoom控件</span></div><div class="line">                <span class="keyword">if</span> (OpenLayers.Control.Zoom) &#123;</div><div class="line">                    <span class="keyword">this</span>.controls.push(<span class="keyword">new</span> OpenLayers.Control.Zoom());</div><div class="line">                &#125; <span class="keyword">else</span> <span class="keyword">if</span> (OpenLayers.Control.PanZoom) &#123;</div><div class="line">                    <span class="keyword">this</span>.controls.push(<span class="keyword">new</span> OpenLayers.Control.PanZoom());</div><div class="line">                &#125;</div><div class="line">                <span class="comment">//url解析控件</span></div><div class="line">                <span class="keyword">if</span> (OpenLayers.Control.ArgParser) &#123;</div><div class="line">                    <span class="keyword">this</span>.controls.push(<span class="keyword">new</span> OpenLayers.Control.ArgParser());</div><div class="line">                &#125;</div><div class="line">                <span class="comment">//给图层增加属性的控件</span></div><div class="line">                <span class="keyword">if</span> (OpenLayers.Control.Attribution) &#123;</div><div class="line">                    <span class="keyword">this</span>.controls.push(<span class="keyword">new</span> OpenLayers.Control.Attribution());</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//遍历控件添加到map</span></div><div class="line">        <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>, len=<span class="keyword">this</span>.controls.length; i&lt;len; i++) &#123;</div><div class="line">            <span class="keyword">this</span>.addControlToMap(<span class="keyword">this</span>.controls[i]);</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="keyword">this</span>.popups = [];</div><div class="line">        <span class="comment">//销毁事件</span></div><div class="line">        <span class="keyword">this</span>.unloadDestroy = OpenLayers.Function.bind(<span class="keyword">this</span>.destroy, <span class="keyword">this</span>);</div><div class="line"> </div><div class="line">        <span class="comment">// 窗口关闭时调用销毁事件</span></div><div class="line">        OpenLayers.Event.observe(<span class="built_in">window</span>, <span class="string">'unload'</span>, <span class="keyword">this</span>.unloadDestroy);</div><div class="line">         </div><div class="line">        <span class="comment">// 初始化layers</span></div><div class="line">        <span class="keyword">if</span> (options &amp;&amp; options.layers) &#123;</div><div class="line">            <span class="comment">//运行顺序问题先删掉中心点和zoom</span></div><div class="line">            <span class="keyword">delete</span> <span class="keyword">this</span>.center;</div><div class="line">            <span class="keyword">delete</span> <span class="keyword">this</span>.zoom;</div><div class="line">            <span class="keyword">this</span>.addLayers(options.layers);</div><div class="line">            <span class="comment">//都添加完layers之后再set中心点+zoom</span></div><div class="line">            <span class="keyword">if</span> (options.center &amp;&amp; !<span class="keyword">this</span>.getCenter()) &#123;</div><div class="line">                <span class="keyword">this</span>.setCenter(options.center, options.zoom);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//默认的移动和zoom方法</span></div><div class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.panMethod) &#123;</div><div class="line">            <span class="keyword">this</span>.panTween = <span class="keyword">new</span> OpenLayers.Tween(<span class="keyword">this</span>.panMethod);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.zoomMethod &amp;&amp; <span class="keyword">this</span>.applyTransform.transform) &#123;</div><div class="line">            <span class="keyword">this</span>.zoomTween = <span class="keyword">new</span> OpenLayers.Tween(<span class="keyword">this</span>.zoomMethod);</div><div class="line">        &#125;</div><div class="line">    &#125;,</div></pre></td></tr></table></figure>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/02/13/tools/phoneGap/" rel="next" title="phoneGap环境搭建">
+                <i class="fa fa-chevron-left"></i> phoneGap环境搭建
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/03/02/openLayers/openLayers-15-map2/" rel="prev" title="OpenLayers源码学习15:地图Map_2">
+                OpenLayers源码学习15:地图Map_2 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2015/02/28/openLayers/openLayers-15-map1/"
+           data-title="OpenLayers源码学习15:地图Map_1" data-url="http://ruantao1989.github.io/2015/02/28/openLayers/openLayers-15-map1/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars2.githubusercontent.com/u/1949437?v=3&s=460"
+               alt="ruantao1989" />
+          <p class="site-author-name" itemprop="name">ruantao1989</p>
+          <p class="site-description motion-element" itemprop="description">思行合一</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">68</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <p class="post-toc-empty">This post does not have a Table of Contents</p>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ruantao1989</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"ruantao1989"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

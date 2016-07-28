@@ -260,8 +260,8 @@
             
               
                 
-                <a class="post-title-link" href="/2015/02/01/openLayers/openLayers-06-tool3/" itemprop="url">
-                  OpenLayers学习6-工具类Util_3
+                <a class="post-title-link" href="/2015/03/16/openLayers/openLayers-16-layer2/" itemprop="url">
+                  OpenLayers源码学习16:图层Layer_2
                 </a>
               
             
@@ -274,8 +274,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2015-02-01T22:55:23+08:00" content="2015-02-01">
-              2015-02-01
+            <time itemprop="dateCreated" datetime="2015-03-16T21:31:35+08:00" content="2015-03-16">
+              2015-03-16
             </time>
           </span>
 
@@ -304,8 +304,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2015/02/01/openLayers/openLayers-06-tool3/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/02/01/openLayers/openLayers-06-tool3/" itemprop="commentsCount"></span>
+                <a href="/2015/03/16/openLayers/openLayers-16-layer2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/03/16/openLayers/openLayers-16-layer2/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -329,257 +329,9 @@
 
       
         
-          
-            <a id="more"></a>
-<h2 id="一-DOM位置"><a href="#一-DOM位置" class="headerlink" title="一:DOM位置"></a>一:DOM位置</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//获取viewport元素 </span></div><div class="line"><span class="comment">//除了IE都是document.documentElement(XHTML)</span></div><div class="line"><span class="comment">//IE有两种可能: 可能是document.body(没doctype), 或document.documentElement(XHTML);</span></div><div class="line">OpenLayers.Util.getViewportElement = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> viewportElement = <span class="built_in">arguments</span>.callee.viewportElement;</div><div class="line">    <span class="keyword">if</span> (viewportElement == <span class="literal">undefined</span>) &#123;</div><div class="line">        viewportElement = (OpenLayers.BROWSER_NAME == <span class="string">"msie"</span> &amp;&amp;</div><div class="line">            <span class="built_in">document</span>.compatMode != <span class="string">'CSS1Compat'</span>) ? <span class="built_in">document</span>.body :</div><div class="line">            <span class="built_in">document</span>.documentElement;</div><div class="line">        <span class="built_in">arguments</span>.callee.viewportElement = viewportElement;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> viewportElement;</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">//计算一个DOM元素在页面上的位置(隐藏的元素返回0,0)</span></div><div class="line"><span class="comment">//结果是数组[left, top]</span></div><div class="line">OpenLayers.Util.pagePosition =  <span class="function"><span class="keyword">function</span>(<span class="params">forElement</span>) </span>&#123;</div><div class="line">    <span class="comment">//</span></div><div class="line">    <span class="keyword">var</span> pos = [<span class="number">0</span>, <span class="number">0</span>];</div><div class="line">    <span class="keyword">var</span> viewportElement = OpenLayers.Util.getViewportElement();</div><div class="line">    <span class="keyword">if</span> (!forElement || forElement == <span class="built_in">window</span> || forElement == viewportElement) &#123;</div><div class="line">        <span class="comment">//根对象和window返回0,0</span></div><div class="line">        <span class="keyword">return</span> pos;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="comment">// 判断是否是Gecko内核, </span></div><div class="line">    <span class="comment">//查了一下FF 3.6之前的Gecko内核使用document.getBoxObjectFor</span></div><div class="line">    <span class="keyword">var</span> BUGGY_GECKO_BOX_OBJECT =</div><div class="line">        OpenLayers.IS_GECKO &amp;&amp; <span class="built_in">document</span>.getBoxObjectFor &amp;&amp;</div><div class="line">        OpenLayers.Element.getStyle(forElement, <span class="string">'position'</span>) == <span class="string">'absolute'</span> &amp;&amp;</div><div class="line">        (forElement.style.top == <span class="string">''</span> || forElement.style.left == <span class="string">''</span>);</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> parent = <span class="literal">null</span>;</div><div class="line">    <span class="keyword">var</span> box;</div><div class="line"> </div><div class="line">    <span class="keyword">if</span> (forElement.getBoundingClientRect) &#123; <span class="comment">// IE</span></div><div class="line">        <span class="comment">//其实IE6+都支持, 包括ff和chrome等</span></div><div class="line">        box = forElement.getBoundingClientRect();</div><div class="line">        <span class="keyword">var</span> scrollTop = <span class="built_in">window</span>.pageYOffset || viewportElement.scrollTop;</div><div class="line">        <span class="keyword">var</span> scrollLeft = <span class="built_in">window</span>.pageXOffset || viewportElement.scrollLeft;</div><div class="line">         </div><div class="line">        pos[<span class="number">0</span>] = box.left + scrollLeft;</div><div class="line">        pos[<span class="number">1</span>] = box.top + scrollTop;</div><div class="line"> </div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="built_in">document</span>.getBoxObjectFor &amp;&amp; !BUGGY_GECKO_BOX_OBJECT) &#123; <span class="comment">// gecko</span></div><div class="line">        <span class="comment">//估计新的ff到不了这个判断了</span></div><div class="line">        box = <span class="built_in">document</span>.getBoxObjectFor(forElement);</div><div class="line">        <span class="keyword">var</span> vpBox = <span class="built_in">document</span>.getBoxObjectFor(viewportElement);</div><div class="line">        pos[<span class="number">0</span>] = box.screenX - vpBox.screenX;</div><div class="line">        pos[<span class="number">1</span>] = box.screenY - vpBox.screenY;</div><div class="line"> </div><div class="line">    &#125; <span class="keyword">else</span> &#123; <span class="comment">// safari/opera</span></div><div class="line">        pos[<span class="number">0</span>] = forElement.offsetLeft;</div><div class="line">        pos[<span class="number">1</span>] = forElement.offsetTop;</div><div class="line">        parent = forElement.offsetParent;</div><div class="line">        <span class="keyword">if</span> (parent != forElement) &#123;</div><div class="line">            <span class="keyword">while</span> (parent) &#123;</div><div class="line">                pos[<span class="number">0</span>] += parent.offsetLeft;</div><div class="line">                pos[<span class="number">1</span>] += parent.offsetTop;</div><div class="line">                parent = parent.offsetParent;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="keyword">var</span> browser = OpenLayers.BROWSER_NAME;</div><div class="line"> </div><div class="line">        <span class="comment">//减掉body.offsetTop</span></div><div class="line">        <span class="keyword">if</span> (browser == <span class="string">"opera"</span> || (browser == <span class="string">"safari"</span> &amp;&amp;</div><div class="line">              OpenLayers.Element.getStyle(forElement, <span class="string">'position'</span>) == <span class="string">'absolute'</span>)) &#123;</div><div class="line">            pos[<span class="number">1</span>] -= <span class="built_in">document</span>.body.offsetTop;</div><div class="line">        &#125;</div><div class="line"> </div><div class="line">        <span class="comment">//处理滚动的情况(body不减scrollLeft和scrollTop)</span></div><div class="line">        parent = forElement.offsetParent;</div><div class="line">        <span class="keyword">while</span> (parent &amp;&amp; parent != <span class="built_in">document</span>.body) &#123;</div><div class="line">            pos[<span class="number">0</span>] -= parent.scrollLeft;</div><div class="line">            <span class="keyword">if</span> (browser != <span class="string">"opera"</span> || parent.tagName != <span class="string">'TR'</span>) &#123;</div><div class="line">                pos[<span class="number">1</span>] -= parent.scrollTop;</div><div class="line">            &#125;</div><div class="line">            parent = parent.offsetParent;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">     </div><div class="line">    <span class="keyword">return</span> pos;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<h2 id="二-URL操作"><a href="#二-URL操作" class="headerlink" title="二: URL操作"></a>二: URL操作</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//返回url+ port+ args</span></div><div class="line"><span class="comment">/*</span></div><div class="line"> * Valid options:</div><div class="line"> *   ignoreCase - &#123;Boolean&#125; lowercase url,</div><div class="line"> *   ignorePort80 - &#123;Boolean&#125; don't include explicit port if port is 80,</div><div class="line"> *   ignoreHash - &#123;Boolean&#125; Don't include part of url after the hash (#).</div><div class="line"> *   splitArgs - &#123;Boolean&#125; Split comma delimited params into arrays? Default is</div><div class="line"> *       true.</div><div class="line"> */</div><div class="line">OpenLayers.Util.createUrlObject = <span class="function"><span class="keyword">function</span>(<span class="params">url, options</span>) </span>&#123;</div><div class="line">    options = options || &#123;&#125;;</div><div class="line"> </div><div class="line">    <span class="comment">// 不是以"字串://"开头</span></div><div class="line">    <span class="keyword">if</span>(!(<span class="regexp">/^\w+:\/\//</span>).test(url)) &#123;</div><div class="line">        <span class="keyword">var</span> loc = <span class="built_in">window</span>.location;</div><div class="line">        <span class="keyword">var</span> port = loc.port ? <span class="string">":"</span> + loc.port : <span class="string">""</span>;</div><div class="line">        <span class="comment">//组装完整url</span></div><div class="line">        <span class="comment">//host.split(":")先按冒号切成数组, shift()把[1]也就是冒号后边的端口号给弹出</span></div><div class="line">        <span class="keyword">var</span> fullUrl = loc.protocol + <span class="string">"//"</span> + loc.host.split(<span class="string">":"</span>).shift() + port;</div><div class="line">        <span class="keyword">if</span>(url.indexOf(<span class="string">"/"</span>) === <span class="number">0</span>) &#123;</div><div class="line">            <span class="comment">//相对路径, 第一位是"/"</span></div><div class="line">            url = fullUrl + url;</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="comment">//相对路径, 第一位不是"/", 组装一下</span></div><div class="line">            <span class="keyword">var</span> parts = loc.pathname.split(<span class="string">"/"</span>);</div><div class="line">            parts.pop();</div><div class="line">            url = fullUrl + parts.join(<span class="string">"/"</span>) + <span class="string">"/"</span> + url;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">     </div><div class="line">    <span class="comment">//忽略大小写, 就都转成小写</span></div><div class="line">    <span class="keyword">if</span> (options.ignoreCase) &#123;</div><div class="line">        url = url.toLowerCase(); </div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="comment">//新建a标签DOM, 借用a处理url</span></div><div class="line">    <span class="keyword">var</span> a = <span class="built_in">document</span>.createElement(<span class="string">'a'</span>);</div><div class="line">    a.href = url;</div><div class="line">     </div><div class="line">    <span class="keyword">var</span> urlObject = &#123;&#125;;</div><div class="line">     </div><div class="line">    <span class="comment">//去掉host:port中的端口号</span></div><div class="line">    urlObject.host = a.host.split(<span class="string">":"</span>).shift();</div><div class="line"> </div><div class="line">    <span class="comment">//协议名</span></div><div class="line">    urlObject.protocol = a.protocol;  </div><div class="line"> </div><div class="line">    <span class="comment">//追加80端口</span></div><div class="line">    <span class="keyword">if</span>(options.ignorePort80) &#123;</div><div class="line">        urlObject.port = (a.port == <span class="string">"80"</span> || a.port == <span class="string">"0"</span>) ? <span class="string">""</span> : a.port;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        urlObject.port = (a.port == <span class="string">""</span> || a.port == <span class="string">"0"</span>) ? <span class="string">"80"</span> : a.port;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="comment">//井号</span></div><div class="line">    urlObject.hash = (options.ignoreHash || a.hash === <span class="string">"#"</span>) ? <span class="string">""</span> : a.hash;  </div><div class="line">     </div><div class="line">    <span class="comment">//args</span></div><div class="line">    <span class="keyword">var</span> queryString = a.search;</div><div class="line">    <span class="keyword">if</span> (!queryString) &#123;</div><div class="line">        <span class="keyword">var</span> qMark = url.indexOf(<span class="string">"?"</span>);</div><div class="line">        queryString = (qMark != <span class="number">-1</span>) ? url.substr(qMark) : <span class="string">""</span>;</div><div class="line">    &#125;</div><div class="line">    urlObject.args = OpenLayers.Util.getParameters(queryString,</div><div class="line">            &#123;splitArgs: options.splitArgs&#125;);</div><div class="line"> </div><div class="line">    <span class="comment">//针对IE, 第一位不是斜杠, 补一个"/"</span></div><div class="line">    urlObject.pathname = (a.pathname.charAt(<span class="number">0</span>) == <span class="string">"/"</span>) ? a.pathname : <span class="string">"/"</span> + a.pathname;</div><div class="line">     </div><div class="line">    <span class="keyword">return</span> urlObject; </div><div class="line">&#125;;</div><div class="line">  </div><div class="line"><span class="comment">//清掉url里"?"或"&amp;"末尾的字串</span></div><div class="line">OpenLayers.Util.removeTail = <span class="function"><span class="keyword">function</span>(<span class="params">url</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> head = <span class="literal">null</span>;</div><div class="line">     </div><div class="line">    <span class="keyword">var</span> qMark = url.indexOf(<span class="string">"?"</span>);</div><div class="line">    <span class="keyword">var</span> hashMark = url.indexOf(<span class="string">"#"</span>);</div><div class="line"> </div><div class="line">    <span class="keyword">if</span> (qMark == <span class="number">-1</span>) &#123;</div><div class="line">        <span class="comment">//没问号的, 有井号, 就截井号</span></div><div class="line">        head = (hashMark != <span class="number">-1</span>) ? url.substr(<span class="number">0</span>,hashMark) : url;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="comment">//有问号, 有井号, 用Math.min判断下哪个在前, 截取</span></div><div class="line">        head = (hashMark != <span class="number">-1</span>) ? url.substr(<span class="number">0</span>,<span class="built_in">Math</span>.min(qMark, hashMark)) </div><div class="line">                                  : url.substr(<span class="number">0</span>, qMark);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> head;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<h2 id="三-浏览器兼容检测"><a href="#三-浏览器兼容检测" class="headerlink" title="三:浏览器兼容检测"></a>三:浏览器兼容检测</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//从userAgent判断是不是gecko内核</span></div><div class="line">OpenLayers.IS_GECKO = (<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> ua = navigator.userAgent.toLowerCase();</div><div class="line">    <span class="keyword">return</span> ua.indexOf(<span class="string">"webkit"</span>) == <span class="number">-1</span> &amp;&amp; ua.indexOf(<span class="string">"gecko"</span>) != <span class="number">-1</span>;</div><div class="line">&#125;)();</div><div class="line"> </div><div class="line"><span class="comment">//测试是否支持canvas</span></div><div class="line"><span class="comment">//反正如果支持canvas的话也不用考虑内存回收的问题</span></div><div class="line">OpenLayers.CANVAS_SUPPORTED = (<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> elem = <span class="built_in">document</span>.createElement(<span class="string">'canvas'</span>);</div><div class="line">    <span class="keyword">return</span> !!(elem.getContext &amp;&amp; elem.getContext(<span class="string">'2d'</span>));</div><div class="line">&#125;)();</div><div class="line"> </div><div class="line"><span class="comment">//配置项: 立即执行从navigator.userAgent获取浏览器名称</span></div><div class="line">OpenLayers.BROWSER_NAME = (<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> name = <span class="string">""</span>;</div><div class="line">    <span class="keyword">var</span> ua = navigator.userAgent.toLowerCase();</div><div class="line">    <span class="keyword">if</span> (ua.indexOf(<span class="string">"opera"</span>) != <span class="number">-1</span>) &#123;</div><div class="line">        name = <span class="string">"opera"</span>;</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (ua.indexOf(<span class="string">"msie"</span>) != <span class="number">-1</span>) &#123;</div><div class="line">        name = <span class="string">"msie"</span>;</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (ua.indexOf(<span class="string">"safari"</span>) != <span class="number">-1</span>) &#123;</div><div class="line">        name = <span class="string">"safari"</span>;</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (ua.indexOf(<span class="string">"mozilla"</span>) != <span class="number">-1</span>) &#123;</div><div class="line">        <span class="keyword">if</span> (ua.indexOf(<span class="string">"firefox"</span>) != <span class="number">-1</span>) &#123;</div><div class="line">            name = <span class="string">"firefox"</span>;</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            name = <span class="string">"mozilla"</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> name;</div><div class="line">&#125;)();</div><div class="line"> </div><div class="line"><span class="comment">//获取配置项</span></div><div class="line">OpenLayers.Util.getBrowserName = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> OpenLayers.BROWSER_NAME;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/02/01/openLayers/openLayers-05-tool2/" itemprop="url">
-                  OpenLayers学习5-工具类Util_2
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2015-02-01T22:52:23+08:00" content="2015-02-01">
-              2015-02-01
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/OpenLayers学习/" itemprop="url" rel="index">
-                    <span itemprop="name">OpenLayers学习</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/02/01/openLayers/openLayers-05-tool2/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/02/01/openLayers/openLayers-05-tool2/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <a id="more"></a>
-<h2 id="一-鼠标操作"><a href="#一-鼠标操作" class="headerlink" title="一: 鼠标操作"></a>一: 鼠标操作</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//判断div是不是触发evt对象的根对象(最父级对象)</span></div><div class="line"><span class="comment">//这个和事件关系比较紧密, 还不知道为什么这么处理...</span></div><div class="line">OpenLayers.Util.mouseLeft = <span class="function"><span class="keyword">function</span> (<span class="params">evt, div</span>) </span>&#123;</div><div class="line">    <span class="comment">//兼容IE, 获得事件源</span></div><div class="line">    <span class="keyword">var</span> target = (evt.relatedTarget) ? evt.relatedTarget : evt.toElement;</div><div class="line">    <span class="comment">//直到追溯至根节点</span></div><div class="line">    <span class="keyword">while</span> (target != div &amp;&amp; target != <span class="literal">null</span>) &#123;</div><div class="line">        target = target.parentNode;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//如果div是根对象, 返回true</span></div><div class="line">    <span class="keyword">return</span> (target != div);</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">//浮点精度</span></div><div class="line">OpenLayers.Util.DEFAULT_PRECISION = <span class="number">14</span>;</div><div class="line"><span class="comment">//把对象转成浮点型</span></div><div class="line">OpenLayers.Util.toFloat = <span class="function"><span class="keyword">function</span> (<span class="params">number, precision</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (precision == <span class="literal">null</span>) &#123;</div><div class="line">        precision = OpenLayers.Util.DEFAULT_PRECISION;<span class="comment">//默认精度</span></div><div class="line">    &#125;</div><div class="line">    <span class="comment">//本来就是"number"型, 直接parseFloat</span></div><div class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> number !== <span class="string">"number"</span>) &#123;</div><div class="line">        number = <span class="built_in">parseFloat</span>(number);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> precision === <span class="number">0</span> ? number : <span class="comment">//精度0</span></div><div class="line">                             <span class="built_in">parseFloat</span>(number.toPrecision(precision));<span class="comment">//指数形式</span></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<h2 id="二-距离计算"><a href="#二-距离计算" class="headerlink" title="二: 距离计算"></a>二: 距离计算</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//计算两点距离</span></div><div class="line"><span class="comment">//角度转弧度</span></div><div class="line">OpenLayers.Util.rad = <span class="function"><span class="keyword">function</span>(<span class="params">x</span>) </span>&#123;<span class="keyword">return</span> x*<span class="built_in">Math</span>.PI/<span class="number">180</span>;&#125;;</div><div class="line"><span class="comment">//弧度转角度</span></div><div class="line">OpenLayers.Util.deg = <span class="function"><span class="keyword">function</span>(<span class="params">x</span>) </span>&#123;<span class="keyword">return</span> x*<span class="number">180</span>/<span class="built_in">Math</span>.PI;&#125;;</div><div class="line"><span class="comment">//a:长半轴, b短半轴, c扁率</span></div><div class="line">OpenLayers.Util.VincentyConstants = &#123;</div><div class="line">    a: <span class="number">6378137</span>,</div><div class="line">    b: <span class="number">6356752.3142</span>,</div><div class="line">    f: <span class="number">1</span>/<span class="number">298.257223563</span></div><div class="line">&#125;;</div><div class="line"><span class="comment">//计算两点距离</span></div><div class="line"><span class="comment">//提供两个带lat和lon的对象, 计算出以km为单位的距离</span></div><div class="line"><span class="comment">//计算公式完全看不懂...</span></div><div class="line">OpenLayers.Util.distVincenty = <span class="function"><span class="keyword">function</span>(<span class="params">p1, p2</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> ct = OpenLayers.Util.VincentyConstants;</div><div class="line">    <span class="keyword">var</span> a = ct.a, b = ct.b, f = ct.f;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> L = OpenLayers.Util.rad(p2.lon - p1.lon);</div><div class="line">    <span class="keyword">var</span> U1 = <span class="built_in">Math</span>.atan((<span class="number">1</span>-f) * <span class="built_in">Math</span>.tan(OpenLayers.Util.rad(p1.lat)));</div><div class="line">    <span class="keyword">var</span> U2 = <span class="built_in">Math</span>.atan((<span class="number">1</span>-f) * <span class="built_in">Math</span>.tan(OpenLayers.Util.rad(p2.lat)));</div><div class="line">    <span class="keyword">var</span> sinU1 = <span class="built_in">Math</span>.sin(U1), cosU1 = <span class="built_in">Math</span>.cos(U1);</div><div class="line">    <span class="keyword">var</span> sinU2 = <span class="built_in">Math</span>.sin(U2), cosU2 = <span class="built_in">Math</span>.cos(U2);</div><div class="line">    <span class="keyword">var</span> lambda = L, lambdaP = <span class="number">2</span>*<span class="built_in">Math</span>.PI;</div><div class="line">    <span class="keyword">var</span> iterLimit = <span class="number">20</span>;</div><div class="line">    <span class="keyword">while</span> (<span class="built_in">Math</span>.abs(lambda-lambdaP) &gt; <span class="number">1e-12</span> &amp;&amp; --iterLimit&gt;<span class="number">0</span>) &#123;</div><div class="line">        <span class="keyword">var</span> sinLambda = <span class="built_in">Math</span>.sin(lambda), cosLambda = <span class="built_in">Math</span>.cos(lambda);</div><div class="line">        <span class="keyword">var</span> sinSigma = <span class="built_in">Math</span>.sqrt((cosU2*sinLambda) * (cosU2*sinLambda) +</div><div class="line">        (cosU1*sinU2-sinU1*cosU2*cosLambda) * (cosU1*sinU2-sinU1*cosU2*cosLambda));</div><div class="line">        <span class="keyword">if</span> (sinSigma==<span class="number">0</span>) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="number">0</span>;  <span class="comment">// co-incident points</span></div><div class="line">        &#125;</div><div class="line">        <span class="keyword">var</span> cosSigma = sinU1*sinU2 + cosU1*cosU2*cosLambda;</div><div class="line">        <span class="keyword">var</span> sigma = <span class="built_in">Math</span>.atan2(sinSigma, cosSigma);</div><div class="line">        <span class="keyword">var</span> alpha = <span class="built_in">Math</span>.asin(cosU1 * cosU2 * sinLambda / sinSigma);</div><div class="line">        <span class="keyword">var</span> cosSqAlpha = <span class="built_in">Math</span>.cos(alpha) * <span class="built_in">Math</span>.cos(alpha);</div><div class="line">        <span class="keyword">var</span> cos2SigmaM = cosSigma - <span class="number">2</span>*sinU1*sinU2/cosSqAlpha;</div><div class="line">        <span class="keyword">var</span> C = f/<span class="number">16</span>*cosSqAlpha*(<span class="number">4</span>+f*(<span class="number">4</span><span class="number">-3</span>*cosSqAlpha));</div><div class="line">        lambdaP = lambda;</div><div class="line">        lambda = L + (<span class="number">1</span>-C) * f * <span class="built_in">Math</span>.sin(alpha) *</div><div class="line">        (sigma + C*sinSigma*(cos2SigmaM+C*cosSigma*(<span class="number">-1</span>+<span class="number">2</span>*cos2SigmaM*cos2SigmaM)));</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (iterLimit==<span class="number">0</span>) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="literal">NaN</span>;  <span class="comment">// formula failed to converge</span></div><div class="line">    &#125;</div><div class="line">    <span class="keyword">var</span> uSq = cosSqAlpha * (a*a - b*b) / (b*b);</div><div class="line">    <span class="keyword">var</span> A = <span class="number">1</span> + uSq/<span class="number">16384</span>*(<span class="number">4096</span>+uSq*(<span class="number">-768</span>+uSq*(<span class="number">320</span><span class="number">-175</span>*uSq)));</div><div class="line">    <span class="keyword">var</span> B = uSq/<span class="number">1024</span> * (<span class="number">256</span>+uSq*(<span class="number">-128</span>+uSq*(<span class="number">74</span><span class="number">-47</span>*uSq)));</div><div class="line">    <span class="keyword">var</span> deltaSigma = B*sinSigma*(cos2SigmaM+B/<span class="number">4</span>*(cosSigma*(<span class="number">-1</span>+<span class="number">2</span>*cos2SigmaM*cos2SigmaM)-</div><div class="line">        B/<span class="number">6</span>*cos2SigmaM*(<span class="number">-3</span>+<span class="number">4</span>*sinSigma*sinSigma)*(<span class="number">-3</span>+<span class="number">4</span>*cos2SigmaM*cos2SigmaM)));</div><div class="line">    <span class="keyword">var</span> s = b*A*(sigma-deltaSigma);</div><div class="line">    <span class="keyword">var</span> d = s.toFixed(<span class="number">3</span>)/<span class="number">1000</span>; <span class="comment">// round to 1mm precision</span></div><div class="line">    <span class="keyword">return</span> d;</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">//计算出经纬度(给定经纬度, 角度, 距离)</span></div><div class="line"><span class="comment">//公式看不懂</span></div><div class="line">OpenLayers.Util.destinationVincenty = <span class="function"><span class="keyword">function</span>(<span class="params">lonlat, brng, dist</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> u = OpenLayers.Util;</div><div class="line">    <span class="keyword">var</span> ct = u.VincentyConstants;</div><div class="line">    <span class="keyword">var</span> a = ct.a, b = ct.b, f = ct.f;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> lon1 = lonlat.lon;</div><div class="line">    <span class="keyword">var</span> lat1 = lonlat.lat;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> s = dist;</div><div class="line">    <span class="keyword">var</span> alpha1 = u.rad(brng);</div><div class="line">    <span class="keyword">var</span> sinAlpha1 = <span class="built_in">Math</span>.sin(alpha1);</div><div class="line">    <span class="keyword">var</span> cosAlpha1 = <span class="built_in">Math</span>.cos(alpha1);</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> tanU1 = (<span class="number">1</span>-f) * <span class="built_in">Math</span>.tan(u.rad(lat1));</div><div class="line">    <span class="keyword">var</span> cosU1 = <span class="number">1</span> / <span class="built_in">Math</span>.sqrt((<span class="number">1</span> + tanU1*tanU1)), sinU1 = tanU1*cosU1;</div><div class="line">    <span class="keyword">var</span> sigma1 = <span class="built_in">Math</span>.atan2(tanU1, cosAlpha1);</div><div class="line">    <span class="keyword">var</span> sinAlpha = cosU1 * sinAlpha1;</div><div class="line">    <span class="keyword">var</span> cosSqAlpha = <span class="number">1</span> - sinAlpha*sinAlpha;</div><div class="line">    <span class="keyword">var</span> uSq = cosSqAlpha * (a*a - b*b) / (b*b);</div><div class="line">    <span class="keyword">var</span> A = <span class="number">1</span> + uSq/<span class="number">16384</span>*(<span class="number">4096</span>+uSq*(<span class="number">-768</span>+uSq*(<span class="number">320</span><span class="number">-175</span>*uSq)));</div><div class="line">    <span class="keyword">var</span> B = uSq/<span class="number">1024</span> * (<span class="number">256</span>+uSq*(<span class="number">-128</span>+uSq*(<span class="number">74</span><span class="number">-47</span>*uSq)));</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> sigma = s / (b*A), sigmaP = <span class="number">2</span>*<span class="built_in">Math</span>.PI;</div><div class="line">    <span class="keyword">while</span> (<span class="built_in">Math</span>.abs(sigma-sigmaP) &gt; <span class="number">1e-12</span>) &#123;</div><div class="line">        <span class="keyword">var</span> cos2SigmaM = <span class="built_in">Math</span>.cos(<span class="number">2</span>*sigma1 + sigma);</div><div class="line">        <span class="keyword">var</span> sinSigma = <span class="built_in">Math</span>.sin(sigma);</div><div class="line">        <span class="keyword">var</span> cosSigma = <span class="built_in">Math</span>.cos(sigma);</div><div class="line">        <span class="keyword">var</span> deltaSigma = B*sinSigma*(cos2SigmaM+B/<span class="number">4</span>*(cosSigma*(<span class="number">-1</span>+<span class="number">2</span>*cos2SigmaM*cos2SigmaM)-</div><div class="line">            B/<span class="number">6</span>*cos2SigmaM*(<span class="number">-3</span>+<span class="number">4</span>*sinSigma*sinSigma)*(<span class="number">-3</span>+<span class="number">4</span>*cos2SigmaM*cos2SigmaM)));</div><div class="line">        sigmaP = sigma;</div><div class="line">        sigma = s / (b*A) + deltaSigma;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> tmp = sinU1*sinSigma - cosU1*cosSigma*cosAlpha1;</div><div class="line">    <span class="keyword">var</span> lat2 = <span class="built_in">Math</span>.atan2(sinU1*cosSigma + cosU1*sinSigma*cosAlpha1,</div><div class="line">        (<span class="number">1</span>-f)*<span class="built_in">Math</span>.sqrt(sinAlpha*sinAlpha + tmp*tmp));</div><div class="line">    <span class="keyword">var</span> lambda = <span class="built_in">Math</span>.atan2(sinSigma*sinAlpha1, cosU1*cosSigma - sinU1*sinSigma*cosAlpha1);</div><div class="line">    <span class="keyword">var</span> C = f/<span class="number">16</span>*cosSqAlpha*(<span class="number">4</span>+f*(<span class="number">4</span><span class="number">-3</span>*cosSqAlpha));</div><div class="line">    <span class="keyword">var</span> L = lambda - (<span class="number">1</span>-C) * f * sinAlpha *</div><div class="line">        (sigma + C*sinSigma*(cos2SigmaM+C*cosSigma*(<span class="number">-1</span>+<span class="number">2</span>*cos2SigmaM*cos2SigmaM)));</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> revAz = <span class="built_in">Math</span>.atan2(sinAlpha, -tmp);  <span class="comment">// final bearing</span></div><div class="line"> </div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> OpenLayers.LonLat(lon1+u.deg(L), u.deg(lat2));</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<h2 id="三-URL操作"><a href="#三-URL操作" class="headerlink" title="三: URL操作"></a>三: URL操作</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//从URL里解析参数, 参数里有逗号的话会写入数组</span></div><div class="line"><span class="comment">//第二个参数options, 若true表示把含逗号的参数写入数组, 默认true</span></div><div class="line">OpenLayers.Util.getParameters = <span class="function"><span class="keyword">function</span>(<span class="params">url, options</span>) </span>&#123;</div><div class="line">    options = options || &#123;&#125;;</div><div class="line">    <span class="comment">//优先用传入的url, 否则用location.href</span></div><div class="line">    url = (url === <span class="literal">null</span> || url === <span class="literal">undefined</span>) ? <span class="built_in">window</span>.location.href : url;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> paramsString = <span class="string">""</span>;</div><div class="line">    <span class="keyword">if</span> (OpenLayers.String.contains(url, <span class="string">'?'</span>)) &#123;</div><div class="line">        <span class="keyword">var</span> start = url.indexOf(<span class="string">'?'</span>) + <span class="number">1</span>;<span class="comment">//从?后边开始截取</span></div><div class="line">        <span class="keyword">var</span> end = OpenLayers.String.contains(url, <span class="string">"#"</span>) ?</div><div class="line">                    url.indexOf(<span class="string">'#'</span>) : url.length;<span class="comment">//有#截到#, 否则截到最后一位</span></div><div class="line">        paramsString = url.substring(start, end);</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> parameters = &#123;&#125;;<span class="comment">//准备空的结果对象</span></div><div class="line">    <span class="keyword">var</span> pairs = paramsString.split(<span class="regexp">/[&amp;;]/</span>);<span class="comment">//按照"&amp;"切分成数组</span></div><div class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>, len=pairs.length; i&lt;len; ++i) &#123;</div><div class="line">        <span class="keyword">var</span> keyValue = pairs[i].split(<span class="string">'='</span>);<span class="comment">//每个部分按"="切分</span></div><div class="line">        <span class="comment">//若有key</span></div><div class="line">        <span class="keyword">if</span> (keyValue[<span class="number">0</span>]) &#123;</div><div class="line"> </div><div class="line">            <span class="keyword">var</span> key = keyValue[<span class="number">0</span>];</div><div class="line">            <span class="comment">//对key解码</span></div><div class="line">            <span class="keyword">try</span> &#123;</div><div class="line">                key = <span class="built_in">decodeURIComponent</span>(key);</div><div class="line">            &#125; <span class="keyword">catch</span> (err) &#123;</div><div class="line">                key = <span class="built_in">unescape</span>(key);</div><div class="line">            &#125;</div><div class="line">             </div><div class="line">            <span class="comment">//val里"+"替换成空格</span></div><div class="line">            <span class="keyword">var</span> value = (keyValue[<span class="number">1</span>] || <span class="string">''</span>).replace(<span class="regexp">/\+/g</span>, <span class="string">" "</span>);</div><div class="line">            <span class="comment">//对val解码</span></div><div class="line">            <span class="keyword">try</span> &#123;</div><div class="line">                value = <span class="built_in">decodeURIComponent</span>(value);</div><div class="line">            &#125; <span class="keyword">catch</span> (err) &#123;</div><div class="line">                value = <span class="built_in">unescape</span>(value);</div><div class="line">            &#125;</div><div class="line">             </div><div class="line">            <span class="comment">//有些OGC的参数里带"," 按逗号切分</span></div><div class="line">            <span class="keyword">if</span> (options.splitArgs !== <span class="literal">false</span>) &#123;</div><div class="line">                value = value.split(<span class="string">","</span>);</div><div class="line">            &#125;</div><div class="line"> </div><div class="line">            <span class="comment">//要是没逗号, 就不写入数组                   </span></div><div class="line">            <span class="keyword">if</span> (value.length == <span class="number">1</span>) &#123;</div><div class="line">                value = value[<span class="number">0</span>];</div><div class="line">            &#125;                </div><div class="line">             </div><div class="line">            parameters[key] = value;<span class="comment">//写入对象</span></div><div class="line">         &#125;</div><div class="line">     &#125;</div><div class="line">    <span class="keyword">return</span> parameters;</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"> </div><div class="line"> </div><div class="line"><span class="comment">//自增id的记录</span></div><div class="line">OpenLayers.Util.lastSeqID = <span class="number">0</span>;</div><div class="line"><span class="comment">//根据前缀,生成"前缀_自增id"</span></div><div class="line">OpenLayers.Util.createUniqueID = <span class="function"><span class="keyword">function</span>(<span class="params">prefix</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (prefix == <span class="literal">null</span>) &#123;</div><div class="line">        prefix = <span class="string">"id_"</span>;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        prefix = prefix.replace(OpenLayers.Util.dotless, <span class="string">"_"</span>);<span class="comment">//把"."换成"_"</span></div><div class="line">    &#125;</div><div class="line">    OpenLayers.Util.lastSeqID += <span class="number">1</span>; <span class="comment">//自增</span></div><div class="line">    <span class="keyword">return</span> prefix + OpenLayers.Util.lastSeqID;        </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<h2 id="四-比例尺相关的计算"><a href="#四-比例尺相关的计算" class="headerlink" title="四: 比例尺相关的计算"></a>四: 比例尺相关的计算</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//Scale = 图上距离/实地距离 , Resolution = 一像素代表多少地图单位</span></div><div class="line"> </div><div class="line"><span class="comment">//单位对象配置</span></div><div class="line"><span class="comment">//相对来说是动态的配置对象, 比我之前在init函数里计算的思路要好</span></div><div class="line">OpenLayers.INCHES_PER_UNIT = &#123; </div><div class="line">    <span class="string">'inches'</span>: <span class="number">1.0</span>,</div><div class="line">    <span class="string">'ft'</span>: <span class="number">12.0</span>,</div><div class="line">    <span class="string">'mi'</span>: <span class="number">63360.0</span>,</div><div class="line">    <span class="string">'m'</span>: <span class="number">39.37</span>,</div><div class="line">    <span class="string">'km'</span>: <span class="number">39370</span>,</div><div class="line">    <span class="string">'dd'</span>: <span class="number">4374754</span>,</div><div class="line">    <span class="string">'yd'</span>: <span class="number">36</span></div><div class="line">&#125;;</div><div class="line">OpenLayers.INCHES_PER_UNIT[<span class="string">"in"</span>]= OpenLayers.INCHES_PER_UNIT.inches;</div><div class="line">OpenLayers.INCHES_PER_UNIT[<span class="string">"degrees"</span>] = OpenLayers.INCHES_PER_UNIT.dd;</div><div class="line">OpenLayers.INCHES_PER_UNIT[<span class="string">"nmi"</span>] = <span class="number">1852</span> * OpenLayers.INCHES_PER_UNIT.m;<span class="comment">//动态的配置</span></div><div class="line"> </div><div class="line">OpenLayers.METERS_PER_INCH = <span class="number">0.02540005080010160020</span>;</div><div class="line">OpenLayers.Util.extend(OpenLayers.INCHES_PER_UNIT, &#123;</div><div class="line">    <span class="string">"Meter"</span>: <span class="number">1.0</span> / OpenLayers.METERS_PER_INCH,   <span class="comment">//EPSG:9001</span></div><div class="line">    <span class="string">"Foot"</span>: <span class="number">0.30480060960121920243</span> / OpenLayers.METERS_PER_INCH,   <span class="comment">//EPSG:9003</span></div><div class="line">    ...</div><div class="line"> </div><div class="line"> </div><div class="line"> </div><div class="line"><span class="comment">//DPI的默认值</span></div><div class="line">OpenLayers.DOTS_PER_INCH = <span class="number">72</span>;</div><div class="line"><span class="comment">//比例尺计算, </span></div><div class="line"><span class="comment">//已经是分数形式的( 1.0) ? (1.0 / scale) </span></div><div class="line">                                  : scale;</div><div class="line">    <span class="keyword">return</span> normScale;</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">//由Scale计算出Resolution, 默认单位是"degrees"</span></div><div class="line">OpenLayers.Util.getResolutionFromScale = <span class="function"><span class="keyword">function</span> (<span class="params">scale, units</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> resolution;</div><div class="line">    <span class="keyword">if</span> (scale) &#123;</div><div class="line">        <span class="keyword">if</span> (units == <span class="literal">null</span>) &#123;</div><div class="line">            units = <span class="string">"degrees"</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">var</span> normScale = OpenLayers.Util.normalizeScale(scale);</div><div class="line">        resolution = <span class="number">1</span> / (normScale * OpenLayers.INCHES_PER_UNIT[units]</div><div class="line">                                        * OpenLayers.DOTS_PER_INCH);        </div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> resolution;</div><div class="line">&#125;;</div><div class="line"><span class="comment">//由Resolution计算对应的Scale, 默认单位是"degrees"</span></div><div class="line">OpenLayers.Util.getScaleFromResolution = <span class="function"><span class="keyword">function</span> (<span class="params">resolution, units</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">if</span> (units == <span class="literal">null</span>) &#123;</div><div class="line">        units = <span class="string">"degrees"</span>;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> scale = resolution * OpenLayers.INCHES_PER_UNIT[units] *</div><div class="line">                    OpenLayers.DOTS_PER_INCH;</div><div class="line">    <span class="keyword">return</span> scale;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/01/29/openLayers/openLayers-04-tool1/" itemprop="url">
-                  OpenLayers学习4-工具类Util_1
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2015-01-29T23:09:23+08:00" content="2015-01-29">
-              2015-01-29
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/OpenLayers学习/" itemprop="url" rel="index">
-                    <span itemprop="name">OpenLayers学习</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/01/29/openLayers/openLayers-04-tool1/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/01/29/openLayers/openLayers-04-tool1/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>本来想直接看OpenLayers.Map对象(7277行), 然后按着使用api的顺序继续读代码<br>后来看了下估计直接看看不懂, 先扫一扫零碎和独立的代码吧.</p>
-<p>最独立的应该就是Util 先从Util开始, 预计Util写两到三篇(看了三分之一就感觉收获颇丰, 真tmNb)<br>
+          <p>这里边是layer的基本功能, 主要是Baselayer Functions<br>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2015/01/29/openLayers/openLayers-04-tool1/#more" rel="contents">
+            <a class="btn" href="/2015/03/16/openLayers/openLayers-16-layer2/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -630,8 +382,8 @@
             
               
                 
-                <a class="post-title-link" href="/2015/01/27/openLayers/openLayers-03/" itemprop="url">
-                  OpenLayers学习3-BaseTypes对基础类型对象的扩展
+                <a class="post-title-link" href="/2015/03/12/openLayers/openLayers-16-layer1/" itemprop="url">
+                  OpenLayers源码学习16:图层Layer_1
                 </a>
               
             
@@ -644,8 +396,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2015-01-27T00:15:31+08:00" content="2015-01-27">
-              2015-01-27
+            <time itemprop="dateCreated" datetime="2015-03-12T20:55:54+08:00" content="2015-03-12">
+              2015-03-12
             </time>
           </span>
 
@@ -674,8 +426,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2015/01/27/openLayers/openLayers-03/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/01/27/openLayers/openLayers-03/" itemprop="commentsCount"></span>
+                <a href="/2015/03/12/openLayers/openLayers-16-layer1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/03/12/openLayers/openLayers-16-layer1/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -699,10 +451,9 @@
 
       
         
-          <p>OpenLayers里从新封装了原生的基本对象, 比如String对象,<br>设计上, 解决了原生方法不够使的问题, 也没破坏基本对象的prototype, 不会和其他类库冲突</p>
-<p>这些类就像Util工具, 没什么上下文的状态,<br>调用时候就直接调用: OpenLayers.String.startsWith(AAA,BBB) 通过处理拿到结果完事<br>
+          <p>从图层开始才是真正的地图展示, 看了一半最迷糊的是scale, resolutions, bounds的换算,<br>这回先把之前的通用函数扫清, 下次分析具体换算<br>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2015/01/27/openLayers/openLayers-03/#more" rel="contents">
+            <a class="btn" href="/2015/03/12/openLayers/openLayers-16-layer1/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -753,8 +504,8 @@
             
               
                 
-                <a class="post-title-link" href="/2015/01/25/openLayers/openLayers-02-geoserver/" itemprop="url">
-                  OpenLayers学习-使用geoServer发布的本地WMS服务
+                <a class="post-title-link" href="/2015/03/02/openLayers/openLayers-15-map2/" itemprop="url">
+                  OpenLayers源码学习15:地图Map_2
                 </a>
               
             
@@ -767,8 +518,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2015-01-25T21:32:32+08:00" content="2015-01-25">
-              2015-01-25
+            <time itemprop="dateCreated" datetime="2015-03-02T22:22:27+08:00" content="2015-03-02">
+              2015-03-02
             </time>
           </span>
 
@@ -797,8 +548,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2015/01/25/openLayers/openLayers-02-geoserver/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/01/25/openLayers/openLayers-02-geoserver/" itemprop="commentsCount"></span>
+                <a href="/2015/03/02/openLayers/openLayers-15-map2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/03/02/openLayers/openLayers-15-map2/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -822,9 +573,9 @@
 
       
         
-          <p>公司的API和OpenLayers都用了好长时间了, 从没研究过调用的服务是怎么发出来的.<br>今天用geoServer学一下. 这博文没什么技术含量, 就是步骤太多 记录下:<br>
+          <p>map类这回看的是”构造”和”控件”之前的函数. 包括一些工具函数和”layers”方法<br>估计”控件”的方法也类似, 但”控件”类我还没看… 还是穿插着看吧 会比较快<br>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2015/01/25/openLayers/openLayers-02-geoserver/#more" rel="contents">
+            <a class="btn" href="/2015/03/02/openLayers/openLayers-15-map2/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -875,8 +626,8 @@
             
               
                 
-                <a class="post-title-link" href="/2015/01/09/openLayers/openLayers-02-layer/" itemprop="url">
-                  OpenLayers学习-示例学习2:图层
+                <a class="post-title-link" href="/2015/02/28/openLayers/openLayers-15-map1/" itemprop="url">
+                  OpenLayers源码学习15:地图Map_1
                 </a>
               
             
@@ -889,8 +640,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2015-01-09T21:36:00+08:00" content="2015-01-09">
-              2015-01-09
+            <time itemprop="dateCreated" datetime="2015-02-28T16:33:39+08:00" content="2015-02-28">
+              2015-02-28
             </time>
           </span>
 
@@ -919,8 +670,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2015/01/09/openLayers/openLayers-02-layer/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/01/09/openLayers/openLayers-02-layer/" itemprop="commentsCount"></span>
+                <a href="/2015/02/28/openLayers/openLayers-15-map1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/02/28/openLayers/openLayers-15-map1/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -944,9 +695,9 @@
 
       
         
-          <p>博文作者:ruantao1989{@}gmail.com<br>引自博客:ruantao.duapp.com/blog<br>
+          <p>年后上班了, 这年过的比较累 各种串门…<br>这个map类估计一次看不完, 分几次慢慢看吧<br>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2015/01/09/openLayers/openLayers-02-layer/#more" rel="contents">
+            <a class="btn" href="/2015/02/28/openLayers/openLayers-15-map1/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -997,8 +748,8 @@
             
               
                 
-                <a class="post-title-link" href="/2015/01/09/openLayers/openLayers-01-map/" itemprop="url">
-                  OpenLayers学习-示例学习1:Map
+                <a class="post-title-link" href="/2015/02/13/tools/phoneGap/" itemprop="url">
+                  phoneGap环境搭建
                 </a>
               
             
@@ -1011,254 +762,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2015-01-09T21:07:00+08:00" content="2015-01-09">
-              2015-01-09
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/OpenLayers学习/" itemprop="url" rel="index">
-                    <span itemprop="name">OpenLayers学习</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/01/09/openLayers/openLayers-01-map/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/01/09/openLayers/openLayers-01-map/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>先学下OpenLayers 再分析源代码<br>一来是之前一直用公司的js地图api开发, 有时会感觉有些受限. 希望通过源代码学下js实现<br>二来在职研考过了, 怎么也是地质大学的 多少也得学点儿gis的东西吧…先按自己的理解分类记录下<br>这份东西每天晚上弄到12点弄了一个礼拜, 弄完以后感觉主要还是要从openlayers学些组织代码 解决具体问题的方法, 这点上openlayers做的太nb了<br>放个笔记的GitHub地址: <a href="https://github.com/ruantao1989/read_OpenLayers">https://github.com/ruantao1989/read_OpenLayers</a><br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2015/01/09/openLayers/openLayers-01-map/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/12/04/js/js-inheritance-01/" itemprop="url">
-                  js继承1:apply继承和类拷贝继承
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2014-12-04T00:04:00+08:00" content="2014-12-04">
-              2014-12-04
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/js入门/" itemprop="url" rel="index">
-                    <span itemprop="name">js入门</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2014/12/04/js/js-inheritance-01/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/12/04/js/js-inheritance-01/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>俩月没更新博客,10月GCT考试 11月结婚 这又连续加班半个月了, 马上又要去普吉岛蜜月, 都完事儿了就踏实了…<br>这几天自己瞎研究了一下js的继承, 现在写的肯定会有出错的地方, 先记下来 等回头学精了再来查错.</p>
-<p>先从继承的宿主 也就是从对象上分, 对象的声明方式上分为:<br>一: 使用”构造函数”模式, 二: 使用字面量声明对象,<br>先说第二种,字面量因为没有用new, 所以只能手动去拷贝. 可玩性比较低, 以我现在的水平看不合适做继承.</p>
-<p>重点说第一种”构造函数”模式,<br>这种继承从具体的继承方法上分:1.apply继承: 2.类拷贝继承<br>目前实验得出的结论是:<br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2014/12/04/js/js-inheritance-01/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/10/08/tools/grunt-02/" itemprop="url">
-                  Grunt使用2:自动化
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2014-10-08T20:00:00+08:00" content="2014-10-08">
-              2014-10-08
+            <time itemprop="dateCreated" datetime="2015-02-13T08:58:00+08:00" content="2015-02-13">
+              2015-02-13
             </time>
           </span>
 
@@ -1287,8 +792,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2014/10/08/tools/grunt-02/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/10/08/tools/grunt-02/" itemprop="commentsCount"></span>
+                <a href="/2015/02/13/tools/phoneGap/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/02/13/tools/phoneGap/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -1312,9 +817,9 @@
 
       
         
-          <p>记录一下前端自动化工具的使用, 慢慢结合起来用 逐步逃离这种刀耕火种一样的体力活儿…<br>
+          <p>最近这两天抽空试了一下混合应用, 实现了phonegap + node + openlayers安卓的apk打包<br>现在还停留在搭建环境阶段 优化什么的还没研究.<br>混合应用需要的东西比较多比较杂, 记一下环境配置<br>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2014/10/08/tools/grunt-02/#more" rel="contents">
+            <a class="btn" href="/2015/02/13/tools/phoneGap/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -1365,8 +870,8 @@
             
               
                 
-                <a class="post-title-link" href="/2014/09/30/tools/grunt-01/" itemprop="url">
-                  Grunt使用1:环境和入门
+                <a class="post-title-link" href="/2015/02/10/openLayers/openLayers-14-projection/" itemprop="url">
+                  OpenLayers学习14-投影Projection
                 </a>
               
             
@@ -1379,8 +884,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2014-09-30T16:12:00+08:00" content="2014-09-30">
-              2014-09-30
+            <time itemprop="dateCreated" datetime="2015-02-10T22:03:39+08:00" content="2015-02-10">
+              2015-02-10
             </time>
           </span>
 
@@ -1393,8 +898,8 @@
               <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/前端工具/" itemprop="url" rel="index">
-                    <span itemprop="name">前端工具</span>
+                  <a href="/categories/OpenLayers学习/" itemprop="url" rel="index">
+                    <span itemprop="name">OpenLayers学习</span>
                   </a>
                 </span>
 
@@ -1409,8 +914,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2014/09/30/tools/grunt-01/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/09/30/tools/grunt-01/" itemprop="commentsCount"></span>
+                <a href="/2015/02/10/openLayers/openLayers-14-projection/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/02/10/openLayers/openLayers-14-projection/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -1434,9 +939,500 @@
 
       
         
-          <p>记录一下前端自动化工具的使用, 慢慢结合起来用 逐步逃离这种刀耕火种一样的体力活儿…<br>
+          <p>做投影转换的类<br>默认可以转换 geographic (EPSG:4326等) 和 web mercator (EPSG:900913等), 计算公式在最后边<br>其他投影的转换需要单独引入proj4js : <a href="http://proj4js.org/">http://proj4js.org/</a><br>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2014/09/30/tools/grunt-01/#more" rel="contents">
+            <a class="btn" href="/2015/02/10/openLayers/openLayers-14-projection/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/02/10/openLayers/openLayers-13-event2/" itemprop="url">
+                  OpenLayers学习13-event2
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2015-02-10T00:23:39+08:00" content="2015-02-10">
+              2015-02-10
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/OpenLayers学习/" itemprop="url" rel="index">
+                    <span itemprop="name">OpenLayers学习</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/02/10/openLayers/openLayers-13-event2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/02/10/openLayers/openLayers-13-event2/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>事件类好些没看懂… 细节比较复杂 等用到时候再返回头来查吧<br>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/02/10/openLayers/openLayers-13-event2/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/02/08/openLayers/openLayers-12-event1/" itemprop="url">
+                  OpenLayers学习12-事件Event_1
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2015-02-08T22:15:39+08:00" content="2015-02-08">
+              2015-02-08
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/OpenLayers学习/" itemprop="url" rel="index">
+                    <span itemprop="name">OpenLayers学习</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/02/08/openLayers/openLayers-12-event1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/02/08/openLayers/openLayers-12-event1/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>Event.observe(观察)方法 是核心方法, 相当于给dom注册事件.<br>主要思路是给接收冒泡的dom对象新建一个缓存OL事件数组, 数组里每个元素都是对evt和target的描述,<br>完成上述缓存后 最后再addEventListener/attachEvent</p>
+<p>Event.stopObserving是observe的逆操作<br>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/02/08/openLayers/openLayers-12-event1/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/02/08/openLayers/openLayers-11-format/" itemprop="url">
+                  OpenLayers学习11-格式Format控件Control
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2015-02-08T22:12:39+08:00" content="2015-02-08">
+              2015-02-08
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/OpenLayers学习/" itemprop="url" rel="index">
+                    <span itemprop="name">OpenLayers学习</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/02/08/openLayers/openLayers-11-format/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/02/08/openLayers/openLayers-11-format/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>Format,没太看懂, 应该只是个父类.<br>先看个大概齐, 回头看了别的类 再返回头来再补充吧</p>
+<p>Control类只定义了一堆接口, 如初始化, GC, 使能等等.<br>等看到他的子类估计才能用得上这些<br>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/02/08/openLayers/openLayers-11-format/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/02/05/openLayers/openLayers-10-lang/" itemprop="url">
+                  OpenLayers学习10-控制台Console语言Lang
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2015-02-05T21:54:39+08:00" content="2015-02-05">
+              2015-02-05
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/OpenLayers学习/" itemprop="url" rel="index">
+                    <span itemprop="name">OpenLayers学习</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/02/05/openLayers/openLayers-10-lang/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/02/05/openLayers/openLayers-10-lang/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>OpenLayers.Console和OpenLayers.Lang就是俩对象, 不是类<br>OpenLayers.Console通过自执行函数扩展, 配合firebug.js模拟了firebug控制台</p>
+<p>OpenLayers.Lang维护一个key-value字典,<br>需要i18n时候, 去这个字典取对应值<br>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/02/05/openLayers/openLayers-10-lang/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -1470,7 +1466,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1511,7 +1507,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">53</span>
+              <span class="site-state-item-count">68</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>

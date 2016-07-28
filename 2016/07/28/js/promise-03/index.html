@@ -1,0 +1,636 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="ruantao1989" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="从源码里看之前比迷糊的东西就比较容易了, 比如catch,defer">
+<meta property="og:type" content="article">
+<meta property="og:title" content="promise实现-3:catch,all,defer">
+<meta property="og:url" content="http://ruantao1989.github.io/2016/07/28/js/promise-03/index.html">
+<meta property="og:site_name" content="ruantao1989">
+<meta property="og:description" content="从源码里看之前比迷糊的东西就比较容易了, 比如catch,defer">
+<meta property="og:updated_time" content="2016-07-28T07:34:26.882Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="promise实现-3:catch,all,defer">
+<meta name="twitter:description" content="从源码里看之前比迷糊的东西就比较容易了, 比如catch,defer">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://ruantao1989.github.io/2016/07/28/js/promise-03/"/>
+
+  <title> promise实现-3:catch,all,defer | ruantao1989 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">ruantao1989</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                promise实现-3:catch,all,defer
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2016-07-28T15:30:00+08:00" content="2016-07-28">
+              2016-07-28
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/js入门/" itemprop="url" rel="index">
+                    <span itemprop="name">js入门</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/07/28/js/promise-03/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/28/js/promise-03/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>从源码里看之前比迷糊的东西就比较容易了, 比如catch,defer<br> <a id="more"></a></p>
+<h2 id="一-catch"><a href="#一-catch" class="headerlink" title="一.catch"></a>一.catch</h2><p>之前catch总是和try/catch混,<br>这回从源码看, 仅仅是给promise对象追加了一个只处理reject的then<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">catch</span>: <span class="function"><span class="keyword">function</span> (<span class="params">onFail</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.then(<span class="literal">null</span>, onFail);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>所以Promise中异步错误处理 都应该是reject(new Error(“XXX”));</p>
+<p>类似的还有Promise.resolve和Promise.reject,<br>就是返回一个新的Promise对象, 并立即执行resolve/reject方法<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Promise</span>.resolve = <span class="function"><span class="keyword">function</span> (<span class="params">value</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> promise = <span class="keyword">new</span> <span class="built_in">Promise</span>(empty);</div><div class="line">    resolve(promise, value);</div><div class="line">    <span class="keyword">return</span> promise;</div><div class="line">&#125;;</div><div class="line"><span class="built_in">Promise</span>.reject = <span class="function"><span class="keyword">function</span> (<span class="params">reason</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> promise = <span class="keyword">new</span> <span class="built_in">Promise</span>(empty);</div><div class="line">    reject(promise, reason);</div><div class="line">    <span class="keyword">return</span> promise;</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<h2 id="二-defer"><a href="#二-defer" class="headerlink" title="二.defer"></a>二.defer</h2><p>defer方法生成一个defer对象. 这个对象def具有一个promise对象属性<br>def.resolve会把管理的promise变成完成态<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Promise</span>.defer = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> promise = <span class="keyword">new</span> <span class="built_in">Promise</span>(empty);</div><div class="line"></div><div class="line">    <span class="comment">//返回一个带promise对象的对象</span></div><div class="line">    <span class="keyword">return</span> &#123;</div><div class="line">        promise: promise,</div><div class="line">        resolve: <span class="function"><span class="keyword">function</span> (<span class="params">data</span>) </span>&#123;</div><div class="line">            resolve(promise, data);</div><div class="line">        &#125;,</div><div class="line">        reject: <span class="function"><span class="keyword">function</span> (<span class="params">reason</span>) </span>&#123;</div><div class="line">            reject(promise, reason);</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<p>之前工具类里经常在方法最后返回defer对象, 异步操作中用def.resolve();和def.reject(err);其实就是省得new Promise的简便操作</p>
+<h2 id="三-all"><a href="#三-all" class="headerlink" title="三.all"></a>三.all</h2><p>all是所有传入的promise都成功才返回成功, 只要有一个reject, 那就返回reject<br>race是只要有一个resolve就执行resolve<br>all是一种与的关系，而race是一种或的关系。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Promise</span>.all = <span class="function"><span class="keyword">function</span> (<span class="params">iterable</span>) </span>&#123;</div><div class="line">    <span class="comment">//要求有length属性</span></div><div class="line">    <span class="keyword">if</span> (!iterable || !iterable.hasOwnProperty(<span class="string">'length'</span>)) &#123;</div><div class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">TypeError</span>(<span class="string">'TypeError: Parameter `iterable` must be a iterable object'</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">var</span> promise = <span class="keyword">new</span> <span class="built_in">Promise</span>(empty);</div><div class="line">    <span class="keyword">var</span> length = iterable.length;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; length; i++) &#123;</div><div class="line">        <span class="keyword">var</span> iterate = iterable[i];</div><div class="line">        <span class="comment">//非Promise类型转成Promise</span></div><div class="line">        <span class="keyword">if</span> (!(iterate <span class="keyword">instanceof</span> <span class="built_in">Promise</span>)) &#123;</div><div class="line">            iterate = <span class="built_in">Promise</span>.resolve(iterate);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        iterate.then(makeAllCallback(iterate, i, <span class="string">'resolve'</span>), makeAllCallback(iterate, i, <span class="string">'reject'</span>));</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">var</span> result = [];</div><div class="line">    <span class="keyword">var</span> count = <span class="number">0</span>;</div><div class="line"></div><div class="line">    <span class="comment">//闭包</span></div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">makeAllCallback</span>(<span class="params">iterate, index, action</span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">value</span>) </span>&#123;</div><div class="line">            <span class="comment">//出现reject就return</span></div><div class="line">            <span class="keyword">if</span> (action === <span class="string">'reject'</span>) &#123;</div><div class="line">                reject(promise, value);</div><div class="line">                <span class="keyword">return</span>;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            result[index] = value;</div><div class="line"></div><div class="line">            <span class="keyword">if</span> (++count === length) &#123;</div><div class="line">                <span class="comment">//最后一个遍历后resolve</span></div><div class="line">                resolve(promise, result);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<h2 id="四-全部源码"><a href="#四-全部源码" class="headerlink" title="四. 全部源码"></a>四. 全部源码</h2><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div><div class="line">202</div><div class="line">203</div><div class="line">204</div><div class="line">205</div><div class="line">206</div><div class="line">207</div><div class="line">208</div><div class="line">209</div><div class="line">210</div><div class="line">211</div><div class="line">212</div><div class="line">213</div><div class="line">214</div><div class="line">215</div><div class="line">216</div><div class="line">217</div><div class="line">218</div><div class="line">219</div><div class="line">220</div><div class="line">221</div><div class="line">222</div><div class="line">223</div><div class="line">224</div><div class="line">225</div><div class="line">226</div><div class="line">227</div><div class="line">228</div><div class="line">229</div><div class="line">230</div><div class="line">231</div><div class="line">232</div><div class="line">233</div><div class="line">234</div><div class="line">235</div><div class="line">236</div><div class="line">237</div><div class="line">238</div><div class="line">239</div><div class="line">240</div><div class="line">241</div><div class="line">242</div><div class="line">243</div><div class="line">244</div><div class="line">245</div><div class="line">246</div><div class="line">247</div><div class="line">248</div><div class="line">249</div><div class="line">250</div><div class="line">251</div><div class="line">252</div><div class="line">253</div><div class="line">254</div><div class="line">255</div><div class="line">256</div><div class="line">257</div><div class="line">258</div><div class="line">259</div><div class="line">260</div><div class="line">261</div><div class="line">262</div><div class="line">263</div><div class="line">264</div><div class="line">265</div><div class="line">266</div><div class="line">267</div><div class="line">268</div><div class="line">269</div><div class="line">270</div><div class="line">271</div><div class="line">272</div><div class="line">273</div><div class="line">274</div><div class="line">275</div><div class="line">276</div><div class="line">277</div><div class="line">278</div><div class="line">279</div><div class="line">280</div><div class="line">281</div><div class="line">282</div><div class="line">283</div><div class="line">284</div><div class="line">285</div><div class="line">286</div><div class="line">287</div><div class="line">288</div><div class="line">289</div><div class="line">290</div><div class="line">291</div><div class="line">292</div><div class="line">293</div><div class="line">294</div><div class="line">295</div><div class="line">296</div><div class="line">297</div><div class="line">298</div><div class="line">299</div><div class="line">300</div><div class="line">301</div><div class="line">302</div><div class="line">303</div><div class="line">304</div><div class="line">305</div><div class="line">306</div><div class="line">307</div><div class="line">308</div><div class="line">309</div><div class="line">310</div><div class="line">311</div><div class="line">312</div><div class="line">313</div><div class="line">314</div><div class="line">315</div><div class="line">316</div><div class="line">317</div><div class="line">318</div><div class="line">319</div><div class="line">320</div><div class="line">321</div><div class="line">322</div><div class="line">323</div><div class="line">324</div><div class="line">325</div><div class="line">326</div><div class="line">327</div><div class="line">328</div><div class="line">329</div><div class="line">330</div><div class="line">331</div><div class="line">332</div><div class="line">333</div><div class="line">334</div><div class="line">335</div><div class="line">336</div><div class="line">337</div><div class="line">338</div><div class="line">339</div><div class="line">340</div><div class="line">341</div><div class="line">342</div><div class="line">343</div><div class="line">344</div><div class="line">345</div><div class="line">346</div><div class="line">347</div><div class="line">348</div><div class="line">349</div><div class="line">350</div><div class="line">351</div><div class="line">352</div><div class="line">353</div><div class="line">354</div><div class="line">355</div><div class="line">356</div><div class="line">357</div><div class="line">358</div><div class="line">359</div><div class="line">360</div><div class="line">361</div><div class="line">362</div><div class="line">363</div><div class="line">364</div><div class="line">365</div><div class="line">366</div><div class="line">367</div><div class="line">368</div><div class="line">369</div><div class="line">370</div><div class="line">371</div><div class="line">372</div><div class="line">373</div><div class="line">374</div><div class="line">375</div><div class="line">376</div><div class="line">377</div><div class="line">378</div><div class="line">379</div><div class="line">380</div><div class="line">381</div><div class="line">382</div><div class="line">383</div><div class="line">384</div><div class="line">385</div><div class="line">386</div><div class="line">387</div><div class="line">388</div><div class="line">389</div><div class="line">390</div><div class="line">391</div><div class="line">392</div><div class="line">393</div><div class="line">394</div><div class="line">395</div><div class="line">396</div><div class="line">397</div><div class="line">398</div><div class="line">399</div><div class="line">400</div><div class="line">401</div><div class="line">402</div><div class="line">403</div><div class="line">404</div><div class="line">405</div><div class="line">406</div><div class="line">407</div><div class="line">408</div><div class="line">409</div><div class="line">410</div><div class="line">411</div><div class="line">412</div><div class="line">413</div><div class="line">414</div><div class="line">415</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * @file JS Promise实现</div><div class="line"> * @author bruxexu20@gmail.com</div><div class="line"> */</div><div class="line">(function (factory, global) &#123;</div><div class="line">    if (typeof define === 'function' &amp;&amp; define.amd) &#123;</div><div class="line">        define(factory);</div><div class="line">    &#125;</div><div class="line">    else if (typeof module === 'object' &amp;&amp; module.exports) &#123;</div><div class="line">        module.exports = exports = factory();</div><div class="line">    &#125;</div><div class="line">    else &#123;</div><div class="line">        global.Promise = factory();</div><div class="line">    &#125;</div><div class="line">&#125;(function () &#123;</div><div class="line"></div><div class="line">    /**</div><div class="line">     * Promise对象的内部状态</div><div class="line">     *</div><div class="line">     * @type &#123;Object&#125;</div><div class="line">     */</div><div class="line">    var Status = &#123;</div><div class="line">        PENDING: 'pending',</div><div class="line">        FULLFILLED: 'resolved',</div><div class="line">        REJECTED: 'rejected'</div><div class="line">    &#125;;</div><div class="line"></div><div class="line">    function empty() &#123;&#125;</div><div class="line"></div><div class="line">    /**</div><div class="line">     * Promise构造函数</div><div class="line">     *</div><div class="line">     * @constructor</div><div class="line">     * @param &#123;Function&#125; resolver 此Promise对象管理的任务</div><div class="line">     */</div><div class="line">    function Promise(resolver) &#123;</div><div class="line">        // ES6原生的Promise构造函数中，若不通过`new`调用Promise的构造函数，会抛出TypeError异常。此处与其一致</div><div class="line">        if (!(this instanceof Promise)) &#123;</div><div class="line">            throw new TypeError('TypeError: undefined is not a promise');</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        // ES6原生的Promise构造函数中，若无作为函数的resolver参数，会抛出TypeError异常。此处与其一致</div><div class="line">        if (typeof resolver !== 'function') &#123;</div><div class="line">            throw new TypeError('TypeError: Promise resolver undefined is not a function');</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        /**</div><div class="line">         * Promise对象内部的状态，初始为`pending`。状态只能由`pending`到`fullfilled`或`rejected`</div><div class="line">         *</div><div class="line">         * @type &#123;string&#125;</div><div class="line">         */</div><div class="line">        this._status = Status.PENDING;</div><div class="line"></div><div class="line">        /**</div><div class="line">         * Promise对象resolved/rejected后拥有的data/reason</div><div class="line">         *</div><div class="line">         *  - 此处保存此值是为了当一个Promise对象被resolved或rejected后，继续对其调用`then`添加任务，后续处理仍能获得当前Promise的值</div><div class="line">         *</div><div class="line">         * @type &#123;Mixed&#125;</div><div class="line">         */</div><div class="line">        this._value;</div><div class="line"></div><div class="line">        /**</div><div class="line">         * 当前Promise被resolved/rejected后，需处理的任务</div><div class="line">         *</div><div class="line">         *  - 由于同一个Promise对象可以调用多次`then`方法，以添加多个并行任务，所以此处是一个数组</div><div class="line">         *</div><div class="line">         * @type &#123;Array.&lt;Function&gt;&#125;</div><div class="line">         */</div><div class="line">        this._doneCallbacks = [];</div><div class="line">        this._failCallbacks = [];</div><div class="line"></div><div class="line">        var promise = this;</div><div class="line">        resolver(</div><div class="line">            function (data) &#123;</div><div class="line">                resolve(promise, data);</div><div class="line">            &#125;,</div><div class="line">            function (reason) &#123;</div><div class="line">                reject(promise, reason);</div><div class="line">            &#125;</div><div class="line">        );</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    Promise.prototype = &#123;</div><div class="line"></div><div class="line">        constructor: Promise,</div><div class="line"></div><div class="line">        /**</div><div class="line">         * Promise的`then`方法</div><div class="line">         *</div><div class="line">         * @param &#123;Function|Mixed&#125; onResolve 当前Promise对象被resolved后，需处理的任务</div><div class="line">         * @param &#123;Function|Mixed&#125; onReject 当前Promise对象被rejected后，需处理的任务</div><div class="line">         * @return &#123;Promise&#125; 返回一个新的Promise对象，用于链式操作</div><div class="line">         */</div><div class="line">        then: function (onResolve, onReject) &#123;</div><div class="line">            var promise = new Promise(empty);</div><div class="line"></div><div class="line">            this._doneCallbacks.push(makeCallback(promise, onResolve, 'resolve'));</div><div class="line">            this._failCallbacks.push(makeCallback(promise, onReject, 'reject'));</div><div class="line"></div><div class="line">            // 如果在一个已经被fullfilled或rejected的promise上调用then，则需要直接执行通过then注册的回调函数</div><div class="line">            run(this);</div><div class="line"></div><div class="line">            return promise;</div><div class="line">        &#125;,</div><div class="line"></div><div class="line">        /**</div><div class="line">         * Promise的`done`方法</div><div class="line">         *</div><div class="line">         * @param &#123;Function|Mixed&#125; onResolve 当前Promise对象被resolved后，需处理的任务</div><div class="line">         * @return &#123;Promise&#125; 返回一个新的Promise对象，用于链式操作</div><div class="line">         */</div><div class="line">        done: function (onResolve) &#123;</div><div class="line">            return this.then(onResolve, null);</div><div class="line">        &#125;,</div><div class="line"></div><div class="line">        /**</div><div class="line">         * Promise的`fail`方法</div><div class="line">         *</div><div class="line">         * @param &#123;Function|Mixed&#125; onReject 当前Promise对象被rejected后，需处理的任务</div><div class="line">         * @return &#123;Promise&#125; 返回一个新的Promise对象，用于链式操作</div><div class="line">         */</div><div class="line">        fail: function (onReject) &#123;</div><div class="line">            return this.then(null, onReject);</div><div class="line">        &#125;,</div><div class="line"></div><div class="line">        /**</div><div class="line">         * Promise的`catch`方法</div><div class="line">         *</div><div class="line">         * @param &#123;Function|Mixed&#125; onFail 当前Promise对象被rejected后，需处理的任务</div><div class="line">         * @return &#123;Promise&#125; 返回一个新的Promise对象，用于链式操作</div><div class="line">         */</div><div class="line">        catch: function (onFail) &#123;</div><div class="line">            return this.then(null, onFail);</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line"></div><div class="line">    /**</div><div class="line">     * 创建一个Promise对象，并用给定值resolve它</div><div class="line">     *</div><div class="line">     * @param &#123;Mixed&#125; value 用于resolve新创建的Promise对象的值</div><div class="line">     * @return &#123;Promise&#125; 返回一个新的Promise对象，用于链式操作</div><div class="line">     */</div><div class="line">    Promise.resolve = function (value) &#123;</div><div class="line">        var promise = new Promise(empty);</div><div class="line">        resolve(promise, value);</div><div class="line">        return promise;</div><div class="line">    &#125;;</div><div class="line"></div><div class="line">    /**</div><div class="line">     * 创建一个Promise对象，并用给定值reject它</div><div class="line">     *</div><div class="line">     * @param &#123;Mixed&#125; reason 用于reject新创建的Promise对象的值</div><div class="line">     * @return &#123;Promise&#125; 返回一个新的Promise对象，用于链式操作</div><div class="line">     */</div><div class="line">    Promise.reject = function (reason) &#123;</div><div class="line">        var promise = new Promise(empty);</div><div class="line">        reject(promise, reason);</div><div class="line">        return promise;</div><div class="line">    &#125;;</div><div class="line"></div><div class="line">    /**</div><div class="line">     * 返回一个promise，这个promise在iterable中的任意一个promise被解决或拒绝后，</div><div class="line">     * 立刻以相同的解决值被解决或以相同的拒绝原因被拒绝</div><div class="line">     *</div><div class="line">     * @param &#123;Iterable.&lt;Promise|Mixed&gt;&#125; iterable 一组Promise对象或其它值</div><div class="line">     * @return &#123;Promise&#125; 返回一个新的Promise对象，用于链式操作</div><div class="line">     */</div><div class="line">    Promise.race = function (iterable) &#123;</div><div class="line">        if (!iterable || !iterable.hasOwnProperty('length')) &#123;</div><div class="line">            throw new TypeError('TypeError: Parameter `iterable` must be a iterable object');</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        var promise = new Promise(empty);</div><div class="line">        for (var i = 0, len = iterable.length; i &lt; len; i++) &#123;</div><div class="line">            var iterate = iterable[i];</div><div class="line">            if (!(iterate instanceof Promise)) &#123;</div><div class="line">                iterate = Promise.resolve(iterate);</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            iterate.then(resolveRaceCallback, rejectRaceCallback);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        var settled = false;</div><div class="line"></div><div class="line">        function resolveRaceCallback(data) &#123;</div><div class="line">            if (settled) &#123;</div><div class="line">                return;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            settled = true;</div><div class="line">            resolve(promise, data);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        function rejectRaceCallback(reason) &#123;</div><div class="line">            if (settled) &#123;</div><div class="line">                return;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            settled = true;</div><div class="line">            reject(promise, reason);</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line"></div><div class="line">    /**</div><div class="line">     * 返回一个promise，该promise会在iterable参数内的所有promise都被解决后被解决</div><div class="line">     *</div><div class="line">     * @param &#123;Iterable.&lt;Promise|Mixed&gt;&#125; iterable 一组Promise对象或其它值</div><div class="line">     * @return &#123;Promise&#125; 返回一个新的Promise对象，用于链式操作</div><div class="line">     */</div><div class="line">    Promise.all = function (iterable) &#123;</div><div class="line">        if (!iterable || !iterable.hasOwnProperty('length')) &#123;</div><div class="line">            throw new TypeError('TypeError: Parameter `iterable` must be a iterable object');</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        var promise = new Promise(empty);</div><div class="line">        var length = iterable.length;</div><div class="line">        for (var i = 0; i &lt; length; i++) &#123;</div><div class="line">            var iterate = iterable[i];</div><div class="line">            if (!(iterate instanceof Promise)) &#123;</div><div class="line">                iterate = Promise.resolve(iterate);</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            iterate.then(makeAllCallback(iterate, i, 'resolve'), makeAllCallback(iterate, i, 'reject'));</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        var result = [];</div><div class="line">        var count = 0;</div><div class="line"></div><div class="line">        function makeAllCallback(iterate, index, action) &#123;</div><div class="line">            return function (value) &#123;</div><div class="line">                if (action === 'reject') &#123;</div><div class="line">                    reject(promise, value);</div><div class="line">                    return;</div><div class="line">                &#125;</div><div class="line"></div><div class="line">                result[index] = value;</div><div class="line"></div><div class="line">                if (++count === length) &#123;</div><div class="line">                    resolve(promise, result);</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line"></div><div class="line">    /**</div><div class="line">     * 返回一个Deferred对象，包含一个新创建的Promise对象，以及`resolve`和`reject`方法</div><div class="line">     *</div><div class="line">     * @return &#123;Deferred&#125;</div><div class="line">     */</div><div class="line">    Promise.defer = function () &#123;</div><div class="line">        var promise = new Promise(empty);</div><div class="line"></div><div class="line">        return &#123;</div><div class="line">            promise: promise,</div><div class="line">            resolve: function (data) &#123;</div><div class="line">                resolve(promise, data);</div><div class="line">            &#125;,</div><div class="line">            reject: function (reason) &#123;</div><div class="line">                reject(promise, reason);</div><div class="line">            &#125;</div><div class="line">        &#125;;</div><div class="line">    &#125;;</div><div class="line"></div><div class="line">    function run(promise) &#123;</div><div class="line">        // `then`方法中也会调用，所以此处仍需做一次判断</div><div class="line">        if (promise._status === Status.PENDING) &#123;</div><div class="line">            return;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        var value = promise._value;</div><div class="line">        var callbacks = promise._status === Status.FULLFILLED</div><div class="line">            ? promise._doneCallbacks</div><div class="line">            : promise._failCallbacks;</div><div class="line"></div><div class="line">        // Promise需要异步操作</div><div class="line">        setTimeout(function () &#123;</div><div class="line">            for (var i = 0, len = callbacks.length; i &lt; len; i++) &#123;</div><div class="line">                callbacks[i](value);</div><div class="line">            &#125;</div><div class="line">        &#125;);</div><div class="line"></div><div class="line">        // 每个promise只能被执行一次。虽然`_doneCallbacks`和`_failCallbacks`用户不应该直接访问，</div><div class="line">        // 但还是可以访问到，保险起见，做清空处理。</div><div class="line">        promise._doneCallbacks = [];</div><div class="line">        promise._failCallbacks = [];</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    function resolve(promise, data) &#123;</div><div class="line">        if (promise._status !== Status.PENDING) &#123;</div><div class="line">            return;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        promise._status = Status.FULLFILLED;</div><div class="line">        promise._value = data;</div><div class="line"></div><div class="line">        run(promise);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    function reject(promise, reason) &#123;</div><div class="line">        if (promise._status !== Status.PENDING) &#123;</div><div class="line">            return;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        promise._status = Status.REJECTED;</div><div class="line">        promise._value = reason;</div><div class="line"></div><div class="line">        run(promise);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    function makeCallback(promise, callback, action) &#123;</div><div class="line">        return function promiseCallback(value) &#123;</div><div class="line">            // 如果传递了callback，则使用前一个promise传递过来的值作为参数调用callback，</div><div class="line">            // 并根据callback的调用结果来处理当前promise</div><div class="line">            if (typeof callback === 'function') &#123;</div><div class="line">                var x;</div><div class="line">                try &#123;</div><div class="line">                    x = callback(value);</div><div class="line">                &#125;</div><div class="line">                catch (e) &#123;</div><div class="line">                    // 如果调用callback时抛出异常，则直接用此异常对象reject当前promise</div><div class="line">                    reject(promise, e);</div><div class="line">                &#125;</div><div class="line"></div><div class="line">                // 如果callback的返回值是当前promise，为避免造成死循环，需要抛出异常</div><div class="line">                // 根据Promise+规范，此处应抛出TypeError异常</div><div class="line">                if (x === promise) &#123;</div><div class="line">                    var reason = new TypeError('TypeError: The return value could not be same with the promise');</div><div class="line">                    reject(promise, reason);</div><div class="line">                &#125;</div><div class="line">                // 如果返回值是一个Promise对象，则当返回的Promise对象被resolve/reject后，再resolve/reject当前Promise</div><div class="line">                else if (x instanceof Promise) &#123;</div><div class="line">                    x.then(</div><div class="line">                        function (data) &#123;</div><div class="line">                            resolve(promise, data);</div><div class="line">                        &#125;,</div><div class="line">                        function (reason) &#123;</div><div class="line">                            reject(promise, reason);</div><div class="line">                        &#125;</div><div class="line">                    );</div><div class="line">                &#125;</div><div class="line">                else &#123;</div><div class="line">                    var then;</div><div class="line">                    (function resolveThenable(x) &#123;</div><div class="line">                        // 如果返回的是一个Thenable对象（此处逻辑有点坑，参照Promise+的规范实现）</div><div class="line">                        if (x &amp;&amp; (typeof x === 'object'|| typeof x === 'function')) &#123;</div><div class="line">                            try &#123;</div><div class="line">                                then = x.then;</div><div class="line">                            &#125;</div><div class="line">                            catch (e) &#123;</div><div class="line">                                reject(promise, e);</div><div class="line">                                return;</div><div class="line">                            &#125;</div><div class="line"></div><div class="line">                            if (typeof then === 'function') &#123;</div><div class="line">                                // 调用Thenable对象的`then`方法时，传递进去的`resolvePromise`和`rejectPromise`方法（及下面的两个匿名方法）</div><div class="line">                                // 可能会被重复调用。但Promise+规范规定这两个方法有且只能有其中的一个被调用一次，多次调用将被忽略。</div><div class="line">                                // 此处通过`invoked`来处理重复调用</div><div class="line">                                var invoked = false;</div><div class="line">                                try &#123;</div><div class="line">                                    then.call(</div><div class="line">                                        x,</div><div class="line">                                        function (y) &#123;</div><div class="line">                                            if (invoked) &#123;</div><div class="line">                                                return;</div><div class="line">                                            &#125;</div><div class="line">                                            invoked = true;</div><div class="line"></div><div class="line">                                            // 避免死循环</div><div class="line">                                            if (y === x) &#123;</div><div class="line">                                                throw new TypeError('TypeError: The return value could not be same with the previous thenable object');</div><div class="line">                                            &#125;</div><div class="line"></div><div class="line">                                            // y仍有可能是thenable对象，递归调用</div><div class="line">                                            resolveThenable(y);</div><div class="line">                                        &#125;,</div><div class="line">                                        function (e) &#123;</div><div class="line">                                            if (invoked) &#123;</div><div class="line">                                                return;</div><div class="line">                                            &#125;</div><div class="line">                                            invoked = true;</div><div class="line"></div><div class="line">                                            reject(promise, e);</div><div class="line">                                        &#125;</div><div class="line">                                    );</div><div class="line">                                &#125;</div><div class="line">                                catch (e) &#123;</div><div class="line">                                    // 如果`resolvePromise`和`rejectPromise`方法被调用后，再抛出异常，则忽略异常</div><div class="line">                                    // 否则用异常对象reject此Promise对象</div><div class="line">                                    if (!invoked) &#123;</div><div class="line">                                        reject(promise, e);</div><div class="line">                                    &#125;</div><div class="line">                                &#125;</div><div class="line">                            &#125;</div><div class="line">                            else &#123;</div><div class="line">                                resolve(promise, x);</div><div class="line">                            &#125;</div><div class="line">                        &#125;</div><div class="line">                        else &#123;</div><div class="line">                            resolve(promise, x);</div><div class="line">                        &#125;</div><div class="line">                    &#125;(x));</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            // 如果未传递callback，直接用前一个promise传递过来的值resolve/reject当前Promise对象</div><div class="line">            else &#123;</div><div class="line">                action === 'resolve'</div><div class="line">                    ? resolve(promise, value)</div><div class="line">                    : reject(promise, value);</div><div class="line">            &#125;</div><div class="line">        &#125;;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    return Promise;</div><div class="line">&#125;, this));</div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/07/27/js/promise-02/" rel="next" title="promise实现-2:读别人的实现">
+                <i class="fa fa-chevron-left"></i> promise实现-2:读别人的实现
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/07/28/js/promise-03/"
+           data-title="promise实现-3:catch,all,defer" data-url="http://ruantao1989.github.io/2016/07/28/js/promise-03/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars2.githubusercontent.com/u/1949437?v=3&s=460"
+               alt="ruantao1989" />
+          <p class="site-author-name" itemprop="name">ruantao1989</p>
+          <p class="site-description motion-element" itemprop="description">思行合一</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">68</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-catch"><span class="nav-number">1.</span> <span class="nav-text">一.catch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-defer"><span class="nav-number">2.</span> <span class="nav-text">二.defer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三-all"><span class="nav-number">3.</span> <span class="nav-text">三.all</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四-全部源码"><span class="nav-number">4.</span> <span class="nav-text">四. 全部源码</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ruantao1989</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"ruantao1989"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
