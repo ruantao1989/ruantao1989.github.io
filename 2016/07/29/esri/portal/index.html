@@ -86,15 +86,16 @@
 
 
 
-<meta name="description" content="思行合一">
-<meta property="og:type" content="website">
-<meta property="og:title" content="ruantao1989">
-<meta property="og:url" content="http://ruantao1989.github.io/archives/2014/07/index.html">
+<meta name="description" content="又搭一次环境, 还是巨费劲…Portal是你花钱买完, 也不一定能自己给装上的软件…">
+<meta property="og:type" content="article">
+<meta property="og:title" content="arcgisPortal安装">
+<meta property="og:url" content="http://ruantao1989.github.io/2016/07/29/esri/portal/index.html">
 <meta property="og:site_name" content="ruantao1989">
-<meta property="og:description" content="思行合一">
+<meta property="og:description" content="又搭一次环境, 还是巨费劲…Portal是你花钱买完, 也不一定能自己给装上的软件…">
+<meta property="og:updated_time" content="2016-08-01T01:46:39.775Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ruantao1989">
-<meta name="twitter:description" content="思行合一">
+<meta name="twitter:title" content="arcgisPortal安装">
+<meta name="twitter:description" content="又搭一次环境, 还是巨费劲…Portal是你花钱买完, 也不一定能自己给装上的软件…">
 
 
 
@@ -115,9 +116,9 @@
 
 
 
-  <link rel="canonical" href="http://ruantao1989.github.io/archives/2014/07/"/>
+  <link rel="canonical" href="http://ruantao1989.github.io/2016/07/29/esri/portal/"/>
 
-  <title> Archive | ruantao1989 </title>
+  <title> arcgisPortal安装 | ruantao1989 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="en">
@@ -138,7 +139,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-right  page-archive  ">
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -236,65 +237,150 @@
           <div id="content" class="content">
             
 
-  <section id="posts" class="posts-collapse">
-    <span class="archive-move-on"></span>
-
-    <span class="archive-page-counter">
-      
-      
-       
-        
-      Nice! 69 posts in total. Keep on posting.
-    </span>
-
+  <div id="posts" class="posts-expand">
     
 
-      
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                arcgisPortal安装
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2016-07-29T17:45:00+08:00" content="2016-07-29">
+              2016-07-29
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/esri/" itemprop="url" rel="index">
+                    <span itemprop="name">esri</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/07/29/esri/portal/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/29/esri/portal/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
       
       
 
       
+        <p>又搭一次环境, 还是巨费劲…<br>Portal是你花钱买完, 也不一定能自己给装上的软件…<br><a id="more"></a></p>
+<h2 id="一-域"><a href="#一-域" class="headerlink" title="一.域"></a>一.域</h2><p>我的电脑右键 -&gt; 属性 -&gt; 计算机名选项卡-&gt; 更改(隶属于还是工作组,不要改成域) -&gt; 其他 -&gt; DNS后缀写 XXX.com<br>确定,之后重启生效</p>
+<h2 id="二-portal安装"><a href="#二-portal安装" class="headerlink" title="二.portal安装"></a>二.portal安装</h2><p>装时候要两个路径(否则默认装C盘)<br>导入授权文件</p>
+<p>创建一个admin<br>(创建之前那页的url记得存下来)</p>
+<h2 id="三-adaptor"><a href="#三-adaptor" class="headerlink" title="三.adaptor"></a>三.adaptor</h2><p>安装完后, 选portal for arcgis<br>(IIS的话要提前配置一下SSL的证书,自签名证书,然后绑定443)</p>
+<p>这块儿比较坑:<br>门户URL: 填你portal的地址(默认是7443的)<br>管理员账号密码是portal创建的admin的账号密码</p>
+<p>配置到这儿, IIS可能会重启一下,<br>之后在比较坑的页面最下边, 会显示一个绿框, 说: 门户成功配置了您的WebAdaptor</p>
+<h2 id="四-xt代码"><a href="#四-xt代码" class="headerlink" title="四.xt代码"></a>四.xt代码</h2><p>clone, update submodule</p>
+<h2 id="五-xt版配置"><a href="#五-xt版配置" class="headerlink" title="五.xt版配置"></a>五.xt版配置</h2><p>在Portal的apps目录下, 建软连接<br>XXX\ArcGIS\Portal\apps&gt; mklink /D webappbuilder XXX\WORK_ROOT\arcgis-webappbuilder\client<br>XXX\ArcGIS\Portal\apps&gt;mklink /D webappviewer3d XXX\WORK_ROOT\arcgis-webappbuilder\client\stemapp3d</p>
+
+      
+    </div>
+
+    <div>
+      
         
-        <div class="collection-title">
-          <h2 class="archive-year motion-element" id="archive-year-2014">2014</h2>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/07/28/js/promise-03/" rel="next" title="promise实现-3:catch,all,defer">
+                <i class="fa fa-chevron-left"></i> promise实现-3:catch,all,defer
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
         </div>
       
-      
 
       
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2014/07/06/css/margin-collapsing/" itemprop="url">
-              
-                <span itemprop="name">外边距叠加问题</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2014-07-06T19:42:00+08:00"
-              content="2014-07-06" >
-          07-06
-        </time>
-      </div>
-
-    </header>
+      
+    </footer>
   </article>
 
 
 
-    
-
-  </section>
-
-  
-
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -302,6 +388,14 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/07/29/esri/portal/"
+           data-title="arcgisPortal安装" data-url="http://ruantao1989.github.io/2016/07/29/esri/portal/">
+      </div>
+    
+  </div>
+
 
         </div>
         
@@ -321,8 +415,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+      <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="https://avatars2.githubusercontent.com/u/1949437?v=3&s=460"
@@ -372,6 +475,17 @@
 
       </section>
 
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-域"><span class="nav-number">1.</span> <span class="nav-text">一.域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-portal安装"><span class="nav-number">2.</span> <span class="nav-text">二.portal安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三-adaptor"><span class="nav-number">3.</span> <span class="nav-text">三.adaptor</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四-xt代码"><span class="nav-number">4.</span> <span class="nav-text">四.xt代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五-xt版配置"><span class="nav-number">5.</span> <span class="nav-text">五.xt版配置</span></a></li></ol></div>
+            
+          </div>
+        </section>
       
 
     </div>
@@ -468,11 +582,9 @@
   
 
   
-  
-    <script type="text/javascript" id="motion.page.archive">
-      $('.archive-year').velocity('transition.slideLeftIn');
-    </script>
-  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
 
 
   
