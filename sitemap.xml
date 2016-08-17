@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://ruantao1989.github.io/2016/08/17/css/background-size/</loc>
+    
+    <lastmod>2016-08-17T06:21:25.319Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://ruantao1989.github.io/2016/07/06/move-to-hexo/</loc>
+    
+    <lastmod>2016-08-08T08:55:26.399Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://ruantao1989.github.io/2016/07/29/esri/portal/</loc>
     
     <lastmod>2016-08-01T01:46:39.775Z</lastmod>
@@ -418,13 +432,6 @@
     <loc>http://ruantao1989.github.io/2016/07/07/css/scss-start1/</loc>
     
     <lastmod>2016-07-11T08:54:02.338Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://ruantao1989.github.io/2016/07/06/move-to-hexo/</loc>
-    
-    <lastmod>2016-07-11T08:52:15.523Z</lastmod>
     
   </url>
   

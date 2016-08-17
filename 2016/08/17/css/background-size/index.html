@@ -86,18 +86,19 @@
 
 
 
-<meta name="description" content="如图, 最外层容器内滚动条控制的内容 hidden没生效布局是这样的最外层wapper:负责画圆角(上中下仨图片)中间层scroll:负责画滚动条内层content:画两棵jstree画的树">
+<meta name="description" content="在做一个用户可配置的展示模块(类似阅读条款),背景图片需要做成可配置的, 图片填充样式比较麻烦参考windows里的配置win10 -&amp;gt; 个性化 -&amp;gt; 选择契合度, 里边有:1填充,适应,拉抻,平铺,居中,跨区(多屏不管)
+这几种, 需要和样式对应起来, 查了半天英文的资料都没把这些东西汇总起来…">
 <meta property="og:type" content="article">
-<meta property="og:title" content="ie6,7中overflow:hidden的bug">
-<meta property="og:url" content="http://ruantao1989.github.io/2014/06/12/css/ie-overflow-bug/index.html">
+<meta property="og:title" content="background-size效果(以壁纸填充效果为例)">
+<meta property="og:url" content="http://ruantao1989.github.io/2016/08/17/css/background-size/index.html">
 <meta property="og:site_name" content="ruantao1989">
-<meta property="og:description" content="如图, 最外层容器内滚动条控制的内容 hidden没生效布局是这样的最外层wapper:负责画圆角(上中下仨图片)中间层scroll:负责画滚动条内层content:画两棵jstree画的树">
-<meta property="og:image" content="http://7xw31x.com1.z0.glb.clouddn.com/css_ieOverflowBug.png">
-<meta property="og:updated_time" content="2016-07-08T07:22:37.276Z">
+<meta property="og:description" content="在做一个用户可配置的展示模块(类似阅读条款),背景图片需要做成可配置的, 图片填充样式比较麻烦参考windows里的配置win10 -&amp;gt; 个性化 -&amp;gt; 选择契合度, 里边有:1填充,适应,拉抻,平铺,居中,跨区(多屏不管)
+这几种, 需要和样式对应起来, 查了半天英文的资料都没把这些东西汇总起来…">
+<meta property="og:updated_time" content="2016-08-17T06:21:25.319Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ie6,7中overflow:hidden的bug">
-<meta name="twitter:description" content="如图, 最外层容器内滚动条控制的内容 hidden没生效布局是这样的最外层wapper:负责画圆角(上中下仨图片)中间层scroll:负责画滚动条内层content:画两棵jstree画的树">
-<meta name="twitter:image" content="http://7xw31x.com1.z0.glb.clouddn.com/css_ieOverflowBug.png">
+<meta name="twitter:title" content="background-size效果(以壁纸填充效果为例)">
+<meta name="twitter:description" content="在做一个用户可配置的展示模块(类似阅读条款),背景图片需要做成可配置的, 图片填充样式比较麻烦参考windows里的配置win10 -&amp;gt; 个性化 -&amp;gt; 选择契合度, 里边有:1填充,适应,拉抻,平铺,居中,跨区(多屏不管)
+这几种, 需要和样式对应起来, 查了半天英文的资料都没把这些东西汇总起来…">
 
 
 
@@ -118,9 +119,9 @@
 
 
 
-  <link rel="canonical" href="http://ruantao1989.github.io/2014/06/12/css/ie-overflow-bug/"/>
+  <link rel="canonical" href="http://ruantao1989.github.io/2016/08/17/css/background-size/"/>
 
-  <title> ie6,7中overflow:hidden的bug | ruantao1989 </title>
+  <title> background-size效果(以壁纸填充效果为例) | ruantao1989 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="en">
@@ -260,7 +261,7 @@
             
             
               
-                ie6,7中overflow:hidden的bug
+                background-size效果(以壁纸填充效果为例)
               
             
           </h1>
@@ -272,8 +273,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2014-06-12T22:21:00+08:00" content="2014-06-12">
-              2014-06-12
+            <time itemprop="dateCreated" datetime="2016-08-17T14:20:00+08:00" content="2016-08-17">
+              2016-08-17
             </time>
           </span>
 
@@ -302,8 +303,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2014/06/12/css/ie-overflow-bug/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/06/12/css/ie-overflow-bug/" itemprop="commentsCount"></span>
+                <a href="/2016/08/17/css/background-size/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/17/css/background-size/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -326,9 +327,17 @@
       
 
       
-        <p>如图, 最外层容器内滚动条控制的内容 hidden没生效<br><img src="http://7xw31x.com1.z0.glb.clouddn.com/css_ieOverflowBug.png" alt=""><br>布局是这样的<br>最外层wapper:负责画圆角(上中下仨图片)<br>中间层scroll:负责画滚动条<br>内层content:画两棵jstree画的树<br><a id="more"></a></p>
-<p>网上查了一下, 原因是:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ie6,<span class="number">7</span>当父元素的直接子元素或者下级子元素的样式拥有position:relative属性时，父元素的overflow:hidden属性就会失效。</div></pre></td></tr></table></figure></p>
-<p>解决办法也简单:<br>父元素中设置样式position:relative;<br>也就是中间层scroll应该有hidden, 加个样式*position:relative;</p>
+        <p>在做一个用户可配置的展示模块(类似阅读条款),背景图片需要做成可配置的, 图片填充样式比较麻烦<br>参考windows里的配置<br>win10 -&gt; 个性化 -&gt; 选择契合度, 里边有:<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">填充,适应,拉抻,平铺,居中,跨区(多屏不管)</div></pre></td></tr></table></figure></p>
+<p>这几种, 需要和样式对应起来, 查了半天英文的资料都没把这些东西汇总起来…<br><a id="more"></a></p>
+<h2 id="一-示例"><a href="#一-示例" class="headerlink" title="一.示例"></a>一.示例</h2><p>以<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">background: url(http://https://developer.mozilla.org/files/2917/fxlogo.png) no-repeat center center</div></pre></td></tr></table></figure></p>
+<p>为例(chrome以外的还没测)<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">background-size</span>:</div></pre></td></tr></table></figure></p>
+<p>有这么几个选项</p>
+<h3 id="1-contain"><a href="#1-contain" class="headerlink" title="1.contain"></a>1.contain</h3><p>contain:按图像原始比例拉伸,直到横向或者纵向碰边,则停止拉伸(有一边碰到边就停)<br>用于显示完整图像,原始比例,不剪裁,未碰边的方向会有留白</p>
+<h3 id="2-cover"><a href="#2-cover" class="headerlink" title="2.cover"></a>2.cover</h3><p>cover: 按图像原始比例拉伸,直到横纵两边全都碰边(第一边碰到后继续拉,另一边又碰边后停止)<br>用于充满背景画布,原始比例,图像和背景画布比例不一致时会剪裁,不会留白</p>
+<h3 id="3-initial"><a href="#3-initial" class="headerlink" title="3.initial"></a>3.initial</h3><p>initial: 按图片本来的像素长宽显示, 不操作图片<br>显示原始图片,原始比例,图片小的话大量留白,图片过大的话剪裁很多</p>
+<h3 id="4-100-100"><a href="#4-100-100" class="headerlink" title="4.100% 100%;"></a>4.100% 100%;</h3><p>除上述以外,另外还有个需求:扭曲图像,按背景画布的长款填满<br>background-size: 100% 100%;<br>非原始比例,不剪裁,不留白<br>(我觉得这个选项应该给个语法糖)</p>
+<h2 id="二-结论"><a href="#二-结论" class="headerlink" title="二.结论"></a>二.结论</h2><p>所以结论是:<br>填充(Fill) 对应cover<br>适应(Fit) 对应 contain<br>拉抻(Stretch) 对应100% 100%;<br>平铺(Tile) 对应Center且background:repeat<br>居中(Center) 对应initial且background:no-repeat<br>跨区(多屏不管)</p>
+<p>结果chrome里还不错, 仅用css3就能解决问题, js增减参数就可以了</p>
 
       
     </div>
@@ -354,17 +363,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2014/06/10/jQueryRead/jQuery-read-13-4/" rel="next" title="jQuery源码阅读13-4:事件委托delegate流程">
-                <i class="fa fa-chevron-left"></i> jQuery源码阅读13-4:事件委托delegate流程
+              <a href="/2016/07/29/esri/portal/" rel="next" title="arcgisPortal安装">
+                <i class="fa fa-chevron-left"></i> arcgisPortal安装
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2014/07/06/css/margin-collapsing/" rel="prev" title="外边距叠加问题">
-                外边距叠加问题 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -390,8 +395,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2014/06/12/css/ie-overflow-bug/"
-           data-title="ie6,7中overflow:hidden的bug" data-url="http://ruantao1989.github.io/2014/06/12/css/ie-overflow-bug/">
+      <div class="ds-thread" data-thread-key="2016/08/17/css/background-size/"
+           data-title="background-size效果(以壁纸填充效果为例)" data-url="http://ruantao1989.github.io/2016/08/17/css/background-size/">
       </div>
     
   </div>
@@ -482,7 +487,7 @@
               
             
             
-              <p class="post-toc-empty">This post does not have a Table of Contents</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-示例"><span class="nav-number">1.</span> <span class="nav-text">一.示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-contain"><span class="nav-number">1.1.</span> <span class="nav-text">1.contain</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-cover"><span class="nav-number">1.2.</span> <span class="nav-text">2.cover</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-initial"><span class="nav-number">1.3.</span> <span class="nav-text">3.initial</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-100-100"><span class="nav-number">1.4.</span> <span class="nav-text">4.100% 100%;</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-结论"><span class="nav-number">2.</span> <span class="nav-text">二.结论</span></a></li></ol></div>
             
           </div>
         </section>
