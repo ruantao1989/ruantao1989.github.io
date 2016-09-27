@@ -250,6 +250,129 @@
             
               
                 
+                <a class="post-title-link" href="/2014/05/20/jQueryRead/jQuery-read-08-2/" itemprop="url">
+                  jQuery源码阅读8-2:属性操作val(),removeAttr()
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2014-05-20T22:06:00+08:00" content="2014-05-20">
+              2014-05-20
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/jQuery源码阅读/" itemprop="url" rel="index">
+                    <span itemprop="name">jQuery源码阅读</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2014/05/20/jQueryRead/jQuery-read-08-2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/20/jQueryRead/jQuery-read-08-2/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>属性操作是比较独立的一块,<br>这次说下prop相关的, 和属性必须用的access 下次说更麻烦一点的attr,val 还有css相关的</p>
+<p>以prop的一次操作为例, 调用顺序是: fn.prop -&gt; access -&gt; jQuery.prop<br>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2014/05/20/jQueryRead/jQuery-read-08-2/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2014/05/20/jQueryRead/jQuery-read-09/" itemprop="url">
                   jQuery源码阅读9:css操作
                 </a>
@@ -1332,130 +1455,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/05/11/jQueryRead/jQuery-read-03/" itemprop="url">
-                  jQuery源码阅读3:each()方法
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2014-05-11T22:59:00+08:00" content="2014-05-11">
-              2014-05-11
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/jQuery源码阅读/" itemprop="url" rel="index">
-                    <span itemprop="name">jQuery源码阅读</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2014/05/11/jQueryRead/jQuery-read-03/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/11/jQueryRead/jQuery-read-03/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>1.each有俩形式, 一是$.each的静态方法, 二是$(“XX”).each的原型方法.<br>内部实现是一份代码, $(“XX”)each会经过选择器包装对象, 而后调用$.each静态方法</p>
-<p>2.具体实现上 each会处理两种情况, 一是处理对象, 二是处理数组类数组<br>都是callback.call( each内部遍历的当前项也就是替换this指针项, key, value )</p>
-<p>3.$.each静态方法, 对于内部调用 接收第三个参数, 这个参数用于callback.apply, 其余和第2点一样<br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2014/05/11/jQueryRead/jQuery-read-03/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1501,7 +1500,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">72</span>
+              <span class="site-state-item-count">73</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
