@@ -102,7 +102,7 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     scheme: 'Pisces',
-    sidebar: {"position":"left","display":"post"},
+    sidebar: {"position":"right","display":"post"},
     fancybox: true,
     motion: true,
     duoshuo: {
@@ -138,7 +138,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left 
+  <div class="container one-collumn sidebar-position-right 
    page-home 
  ">
     <div class="headband"></div>
@@ -228,6 +228,130 @@
           <div id="content" class="content">
             
   <section id="posts" class="posts-expand">
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/02/01/openLayers/openLayers-05-tool2/" itemprop="url">
+                  OpenLayers学习5-工具类Util_2
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2015-02-01T22:52:23+08:00" content="2015-02-01">
+              2015-02-01
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/OpenLayers学习/" itemprop="url" rel="index">
+                    <span itemprop="name">OpenLayers学习</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/02/01/openLayers/openLayers-05-tool2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/02/01/openLayers/openLayers-05-tool2/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <a id="more"></a>
+<h2 id="一-鼠标操作"><a href="#一-鼠标操作" class="headerlink" title="一: 鼠标操作"></a>一: 鼠标操作</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//判断div是不是触发evt对象的根对象(最父级对象)</span></div><div class="line"><span class="comment">//这个和事件关系比较紧密, 还不知道为什么这么处理...</span></div><div class="line">OpenLayers.Util.mouseLeft = <span class="function"><span class="keyword">function</span> (<span class="params">evt, div</span>) </span>&#123;</div><div class="line">    <span class="comment">//兼容IE, 获得事件源</span></div><div class="line">    <span class="keyword">var</span> target = (evt.relatedTarget) ? evt.relatedTarget : evt.toElement;</div><div class="line">    <span class="comment">//直到追溯至根节点</span></div><div class="line">    <span class="keyword">while</span> (target != div &amp;&amp; target != <span class="literal">null</span>) &#123;</div><div class="line">        target = target.parentNode;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//如果div是根对象, 返回true</span></div><div class="line">    <span class="keyword">return</span> (target != div);</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">//浮点精度</span></div><div class="line">OpenLayers.Util.DEFAULT_PRECISION = <span class="number">14</span>;</div><div class="line"><span class="comment">//把对象转成浮点型</span></div><div class="line">OpenLayers.Util.toFloat = <span class="function"><span class="keyword">function</span> (<span class="params">number, precision</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (precision == <span class="literal">null</span>) &#123;</div><div class="line">        precision = OpenLayers.Util.DEFAULT_PRECISION;<span class="comment">//默认精度</span></div><div class="line">    &#125;</div><div class="line">    <span class="comment">//本来就是"number"型, 直接parseFloat</span></div><div class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> number !== <span class="string">"number"</span>) &#123;</div><div class="line">        number = <span class="built_in">parseFloat</span>(number);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> precision === <span class="number">0</span> ? number : <span class="comment">//精度0</span></div><div class="line">                             <span class="built_in">parseFloat</span>(number.toPrecision(precision));<span class="comment">//指数形式</span></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h2 id="二-距离计算"><a href="#二-距离计算" class="headerlink" title="二: 距离计算"></a>二: 距离计算</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//计算两点距离</span></div><div class="line"><span class="comment">//角度转弧度</span></div><div class="line">OpenLayers.Util.rad = <span class="function"><span class="keyword">function</span>(<span class="params">x</span>) </span>&#123;<span class="keyword">return</span> x*<span class="built_in">Math</span>.PI/<span class="number">180</span>;&#125;;</div><div class="line"><span class="comment">//弧度转角度</span></div><div class="line">OpenLayers.Util.deg = <span class="function"><span class="keyword">function</span>(<span class="params">x</span>) </span>&#123;<span class="keyword">return</span> x*<span class="number">180</span>/<span class="built_in">Math</span>.PI;&#125;;</div><div class="line"><span class="comment">//a:长半轴, b短半轴, c扁率</span></div><div class="line">OpenLayers.Util.VincentyConstants = &#123;</div><div class="line">    a: <span class="number">6378137</span>,</div><div class="line">    b: <span class="number">6356752.3142</span>,</div><div class="line">    f: <span class="number">1</span>/<span class="number">298.257223563</span></div><div class="line">&#125;;</div><div class="line"><span class="comment">//计算两点距离</span></div><div class="line"><span class="comment">//提供两个带lat和lon的对象, 计算出以km为单位的距离</span></div><div class="line"><span class="comment">//计算公式完全看不懂...</span></div><div class="line">OpenLayers.Util.distVincenty = <span class="function"><span class="keyword">function</span>(<span class="params">p1, p2</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> ct = OpenLayers.Util.VincentyConstants;</div><div class="line">    <span class="keyword">var</span> a = ct.a, b = ct.b, f = ct.f;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> L = OpenLayers.Util.rad(p2.lon - p1.lon);</div><div class="line">    <span class="keyword">var</span> U1 = <span class="built_in">Math</span>.atan((<span class="number">1</span>-f) * <span class="built_in">Math</span>.tan(OpenLayers.Util.rad(p1.lat)));</div><div class="line">    <span class="keyword">var</span> U2 = <span class="built_in">Math</span>.atan((<span class="number">1</span>-f) * <span class="built_in">Math</span>.tan(OpenLayers.Util.rad(p2.lat)));</div><div class="line">    <span class="keyword">var</span> sinU1 = <span class="built_in">Math</span>.sin(U1), cosU1 = <span class="built_in">Math</span>.cos(U1);</div><div class="line">    <span class="keyword">var</span> sinU2 = <span class="built_in">Math</span>.sin(U2), cosU2 = <span class="built_in">Math</span>.cos(U2);</div><div class="line">    <span class="keyword">var</span> lambda = L, lambdaP = <span class="number">2</span>*<span class="built_in">Math</span>.PI;</div><div class="line">    <span class="keyword">var</span> iterLimit = <span class="number">20</span>;</div><div class="line">    <span class="keyword">while</span> (<span class="built_in">Math</span>.abs(lambda-lambdaP) &gt; <span class="number">1e-12</span> &amp;&amp; --iterLimit&gt;<span class="number">0</span>) &#123;</div><div class="line">        <span class="keyword">var</span> sinLambda = <span class="built_in">Math</span>.sin(lambda), cosLambda = <span class="built_in">Math</span>.cos(lambda);</div><div class="line">        <span class="keyword">var</span> sinSigma = <span class="built_in">Math</span>.sqrt((cosU2*sinLambda) * (cosU2*sinLambda) +</div><div class="line">        (cosU1*sinU2-sinU1*cosU2*cosLambda) * (cosU1*sinU2-sinU1*cosU2*cosLambda));</div><div class="line">        <span class="keyword">if</span> (sinSigma==<span class="number">0</span>) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="number">0</span>;  <span class="comment">// co-incident points</span></div><div class="line">        &#125;</div><div class="line">        <span class="keyword">var</span> cosSigma = sinU1*sinU2 + cosU1*cosU2*cosLambda;</div><div class="line">        <span class="keyword">var</span> sigma = <span class="built_in">Math</span>.atan2(sinSigma, cosSigma);</div><div class="line">        <span class="keyword">var</span> alpha = <span class="built_in">Math</span>.asin(cosU1 * cosU2 * sinLambda / sinSigma);</div><div class="line">        <span class="keyword">var</span> cosSqAlpha = <span class="built_in">Math</span>.cos(alpha) * <span class="built_in">Math</span>.cos(alpha);</div><div class="line">        <span class="keyword">var</span> cos2SigmaM = cosSigma - <span class="number">2</span>*sinU1*sinU2/cosSqAlpha;</div><div class="line">        <span class="keyword">var</span> C = f/<span class="number">16</span>*cosSqAlpha*(<span class="number">4</span>+f*(<span class="number">4</span><span class="number">-3</span>*cosSqAlpha));</div><div class="line">        lambdaP = lambda;</div><div class="line">        lambda = L + (<span class="number">1</span>-C) * f * <span class="built_in">Math</span>.sin(alpha) *</div><div class="line">        (sigma + C*sinSigma*(cos2SigmaM+C*cosSigma*(<span class="number">-1</span>+<span class="number">2</span>*cos2SigmaM*cos2SigmaM)));</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (iterLimit==<span class="number">0</span>) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="literal">NaN</span>;  <span class="comment">// formula failed to converge</span></div><div class="line">    &#125;</div><div class="line">    <span class="keyword">var</span> uSq = cosSqAlpha * (a*a - b*b) / (b*b);</div><div class="line">    <span class="keyword">var</span> A = <span class="number">1</span> + uSq/<span class="number">16384</span>*(<span class="number">4096</span>+uSq*(<span class="number">-768</span>+uSq*(<span class="number">320</span><span class="number">-175</span>*uSq)));</div><div class="line">    <span class="keyword">var</span> B = uSq/<span class="number">1024</span> * (<span class="number">256</span>+uSq*(<span class="number">-128</span>+uSq*(<span class="number">74</span><span class="number">-47</span>*uSq)));</div><div class="line">    <span class="keyword">var</span> deltaSigma = B*sinSigma*(cos2SigmaM+B/<span class="number">4</span>*(cosSigma*(<span class="number">-1</span>+<span class="number">2</span>*cos2SigmaM*cos2SigmaM)-</div><div class="line">        B/<span class="number">6</span>*cos2SigmaM*(<span class="number">-3</span>+<span class="number">4</span>*sinSigma*sinSigma)*(<span class="number">-3</span>+<span class="number">4</span>*cos2SigmaM*cos2SigmaM)));</div><div class="line">    <span class="keyword">var</span> s = b*A*(sigma-deltaSigma);</div><div class="line">    <span class="keyword">var</span> d = s.toFixed(<span class="number">3</span>)/<span class="number">1000</span>; <span class="comment">// round to 1mm precision</span></div><div class="line">    <span class="keyword">return</span> d;</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">//计算出经纬度(给定经纬度, 角度, 距离)</span></div><div class="line"><span class="comment">//公式看不懂</span></div><div class="line">OpenLayers.Util.destinationVincenty = <span class="function"><span class="keyword">function</span>(<span class="params">lonlat, brng, dist</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> u = OpenLayers.Util;</div><div class="line">    <span class="keyword">var</span> ct = u.VincentyConstants;</div><div class="line">    <span class="keyword">var</span> a = ct.a, b = ct.b, f = ct.f;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> lon1 = lonlat.lon;</div><div class="line">    <span class="keyword">var</span> lat1 = lonlat.lat;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> s = dist;</div><div class="line">    <span class="keyword">var</span> alpha1 = u.rad(brng);</div><div class="line">    <span class="keyword">var</span> sinAlpha1 = <span class="built_in">Math</span>.sin(alpha1);</div><div class="line">    <span class="keyword">var</span> cosAlpha1 = <span class="built_in">Math</span>.cos(alpha1);</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> tanU1 = (<span class="number">1</span>-f) * <span class="built_in">Math</span>.tan(u.rad(lat1));</div><div class="line">    <span class="keyword">var</span> cosU1 = <span class="number">1</span> / <span class="built_in">Math</span>.sqrt((<span class="number">1</span> + tanU1*tanU1)), sinU1 = tanU1*cosU1;</div><div class="line">    <span class="keyword">var</span> sigma1 = <span class="built_in">Math</span>.atan2(tanU1, cosAlpha1);</div><div class="line">    <span class="keyword">var</span> sinAlpha = cosU1 * sinAlpha1;</div><div class="line">    <span class="keyword">var</span> cosSqAlpha = <span class="number">1</span> - sinAlpha*sinAlpha;</div><div class="line">    <span class="keyword">var</span> uSq = cosSqAlpha * (a*a - b*b) / (b*b);</div><div class="line">    <span class="keyword">var</span> A = <span class="number">1</span> + uSq/<span class="number">16384</span>*(<span class="number">4096</span>+uSq*(<span class="number">-768</span>+uSq*(<span class="number">320</span><span class="number">-175</span>*uSq)));</div><div class="line">    <span class="keyword">var</span> B = uSq/<span class="number">1024</span> * (<span class="number">256</span>+uSq*(<span class="number">-128</span>+uSq*(<span class="number">74</span><span class="number">-47</span>*uSq)));</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> sigma = s / (b*A), sigmaP = <span class="number">2</span>*<span class="built_in">Math</span>.PI;</div><div class="line">    <span class="keyword">while</span> (<span class="built_in">Math</span>.abs(sigma-sigmaP) &gt; <span class="number">1e-12</span>) &#123;</div><div class="line">        <span class="keyword">var</span> cos2SigmaM = <span class="built_in">Math</span>.cos(<span class="number">2</span>*sigma1 + sigma);</div><div class="line">        <span class="keyword">var</span> sinSigma = <span class="built_in">Math</span>.sin(sigma);</div><div class="line">        <span class="keyword">var</span> cosSigma = <span class="built_in">Math</span>.cos(sigma);</div><div class="line">        <span class="keyword">var</span> deltaSigma = B*sinSigma*(cos2SigmaM+B/<span class="number">4</span>*(cosSigma*(<span class="number">-1</span>+<span class="number">2</span>*cos2SigmaM*cos2SigmaM)-</div><div class="line">            B/<span class="number">6</span>*cos2SigmaM*(<span class="number">-3</span>+<span class="number">4</span>*sinSigma*sinSigma)*(<span class="number">-3</span>+<span class="number">4</span>*cos2SigmaM*cos2SigmaM)));</div><div class="line">        sigmaP = sigma;</div><div class="line">        sigma = s / (b*A) + deltaSigma;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> tmp = sinU1*sinSigma - cosU1*cosSigma*cosAlpha1;</div><div class="line">    <span class="keyword">var</span> lat2 = <span class="built_in">Math</span>.atan2(sinU1*cosSigma + cosU1*sinSigma*cosAlpha1,</div><div class="line">        (<span class="number">1</span>-f)*<span class="built_in">Math</span>.sqrt(sinAlpha*sinAlpha + tmp*tmp));</div><div class="line">    <span class="keyword">var</span> lambda = <span class="built_in">Math</span>.atan2(sinSigma*sinAlpha1, cosU1*cosSigma - sinU1*sinSigma*cosAlpha1);</div><div class="line">    <span class="keyword">var</span> C = f/<span class="number">16</span>*cosSqAlpha*(<span class="number">4</span>+f*(<span class="number">4</span><span class="number">-3</span>*cosSqAlpha));</div><div class="line">    <span class="keyword">var</span> L = lambda - (<span class="number">1</span>-C) * f * sinAlpha *</div><div class="line">        (sigma + C*sinSigma*(cos2SigmaM+C*cosSigma*(<span class="number">-1</span>+<span class="number">2</span>*cos2SigmaM*cos2SigmaM)));</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> revAz = <span class="built_in">Math</span>.atan2(sinAlpha, -tmp);  <span class="comment">// final bearing</span></div><div class="line"> </div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> OpenLayers.LonLat(lon1+u.deg(L), u.deg(lat2));</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h2 id="三-URL操作"><a href="#三-URL操作" class="headerlink" title="三: URL操作"></a>三: URL操作</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//从URL里解析参数, 参数里有逗号的话会写入数组</span></div><div class="line"><span class="comment">//第二个参数options, 若true表示把含逗号的参数写入数组, 默认true</span></div><div class="line">OpenLayers.Util.getParameters = <span class="function"><span class="keyword">function</span>(<span class="params">url, options</span>) </span>&#123;</div><div class="line">    options = options || &#123;&#125;;</div><div class="line">    <span class="comment">//优先用传入的url, 否则用location.href</span></div><div class="line">    url = (url === <span class="literal">null</span> || url === <span class="literal">undefined</span>) ? <span class="built_in">window</span>.location.href : url;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> paramsString = <span class="string">""</span>;</div><div class="line">    <span class="keyword">if</span> (OpenLayers.String.contains(url, <span class="string">'?'</span>)) &#123;</div><div class="line">        <span class="keyword">var</span> start = url.indexOf(<span class="string">'?'</span>) + <span class="number">1</span>;<span class="comment">//从?后边开始截取</span></div><div class="line">        <span class="keyword">var</span> end = OpenLayers.String.contains(url, <span class="string">"#"</span>) ?</div><div class="line">                    url.indexOf(<span class="string">'#'</span>) : url.length;<span class="comment">//有#截到#, 否则截到最后一位</span></div><div class="line">        paramsString = url.substring(start, end);</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> parameters = &#123;&#125;;<span class="comment">//准备空的结果对象</span></div><div class="line">    <span class="keyword">var</span> pairs = paramsString.split(<span class="regexp">/[&amp;;]/</span>);<span class="comment">//按照"&amp;"切分成数组</span></div><div class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>, len=pairs.length; i&lt;len; ++i) &#123;</div><div class="line">        <span class="keyword">var</span> keyValue = pairs[i].split(<span class="string">'='</span>);<span class="comment">//每个部分按"="切分</span></div><div class="line">        <span class="comment">//若有key</span></div><div class="line">        <span class="keyword">if</span> (keyValue[<span class="number">0</span>]) &#123;</div><div class="line"> </div><div class="line">            <span class="keyword">var</span> key = keyValue[<span class="number">0</span>];</div><div class="line">            <span class="comment">//对key解码</span></div><div class="line">            <span class="keyword">try</span> &#123;</div><div class="line">                key = <span class="built_in">decodeURIComponent</span>(key);</div><div class="line">            &#125; <span class="keyword">catch</span> (err) &#123;</div><div class="line">                key = <span class="built_in">unescape</span>(key);</div><div class="line">            &#125;</div><div class="line">             </div><div class="line">            <span class="comment">//val里"+"替换成空格</span></div><div class="line">            <span class="keyword">var</span> value = (keyValue[<span class="number">1</span>] || <span class="string">''</span>).replace(<span class="regexp">/\+/g</span>, <span class="string">" "</span>);</div><div class="line">            <span class="comment">//对val解码</span></div><div class="line">            <span class="keyword">try</span> &#123;</div><div class="line">                value = <span class="built_in">decodeURIComponent</span>(value);</div><div class="line">            &#125; <span class="keyword">catch</span> (err) &#123;</div><div class="line">                value = <span class="built_in">unescape</span>(value);</div><div class="line">            &#125;</div><div class="line">             </div><div class="line">            <span class="comment">//有些OGC的参数里带"," 按逗号切分</span></div><div class="line">            <span class="keyword">if</span> (options.splitArgs !== <span class="literal">false</span>) &#123;</div><div class="line">                value = value.split(<span class="string">","</span>);</div><div class="line">            &#125;</div><div class="line"> </div><div class="line">            <span class="comment">//要是没逗号, 就不写入数组                   </span></div><div class="line">            <span class="keyword">if</span> (value.length == <span class="number">1</span>) &#123;</div><div class="line">                value = value[<span class="number">0</span>];</div><div class="line">            &#125;                </div><div class="line">             </div><div class="line">            parameters[key] = value;<span class="comment">//写入对象</span></div><div class="line">         &#125;</div><div class="line">     &#125;</div><div class="line">    <span class="keyword">return</span> parameters;</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"> </div><div class="line"> </div><div class="line"><span class="comment">//自增id的记录</span></div><div class="line">OpenLayers.Util.lastSeqID = <span class="number">0</span>;</div><div class="line"><span class="comment">//根据前缀,生成"前缀_自增id"</span></div><div class="line">OpenLayers.Util.createUniqueID = <span class="function"><span class="keyword">function</span>(<span class="params">prefix</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (prefix == <span class="literal">null</span>) &#123;</div><div class="line">        prefix = <span class="string">"id_"</span>;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        prefix = prefix.replace(OpenLayers.Util.dotless, <span class="string">"_"</span>);<span class="comment">//把"."换成"_"</span></div><div class="line">    &#125;</div><div class="line">    OpenLayers.Util.lastSeqID += <span class="number">1</span>; <span class="comment">//自增</span></div><div class="line">    <span class="keyword">return</span> prefix + OpenLayers.Util.lastSeqID;        </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h2 id="四-比例尺相关的计算"><a href="#四-比例尺相关的计算" class="headerlink" title="四: 比例尺相关的计算"></a>四: 比例尺相关的计算</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//Scale = 图上距离/实地距离 , Resolution = 一像素代表多少地图单位</span></div><div class="line"> </div><div class="line"><span class="comment">//单位对象配置</span></div><div class="line"><span class="comment">//相对来说是动态的配置对象, 比我之前在init函数里计算的思路要好</span></div><div class="line">OpenLayers.INCHES_PER_UNIT = &#123; </div><div class="line">    <span class="string">'inches'</span>: <span class="number">1.0</span>,</div><div class="line">    <span class="string">'ft'</span>: <span class="number">12.0</span>,</div><div class="line">    <span class="string">'mi'</span>: <span class="number">63360.0</span>,</div><div class="line">    <span class="string">'m'</span>: <span class="number">39.37</span>,</div><div class="line">    <span class="string">'km'</span>: <span class="number">39370</span>,</div><div class="line">    <span class="string">'dd'</span>: <span class="number">4374754</span>,</div><div class="line">    <span class="string">'yd'</span>: <span class="number">36</span></div><div class="line">&#125;;</div><div class="line">OpenLayers.INCHES_PER_UNIT[<span class="string">"in"</span>]= OpenLayers.INCHES_PER_UNIT.inches;</div><div class="line">OpenLayers.INCHES_PER_UNIT[<span class="string">"degrees"</span>] = OpenLayers.INCHES_PER_UNIT.dd;</div><div class="line">OpenLayers.INCHES_PER_UNIT[<span class="string">"nmi"</span>] = <span class="number">1852</span> * OpenLayers.INCHES_PER_UNIT.m;<span class="comment">//动态的配置</span></div><div class="line"> </div><div class="line">OpenLayers.METERS_PER_INCH = <span class="number">0.02540005080010160020</span>;</div><div class="line">OpenLayers.Util.extend(OpenLayers.INCHES_PER_UNIT, &#123;</div><div class="line">    <span class="string">"Meter"</span>: <span class="number">1.0</span> / OpenLayers.METERS_PER_INCH,   <span class="comment">//EPSG:9001</span></div><div class="line">    <span class="string">"Foot"</span>: <span class="number">0.30480060960121920243</span> / OpenLayers.METERS_PER_INCH,   <span class="comment">//EPSG:9003</span></div><div class="line">    ...</div><div class="line"> </div><div class="line"> </div><div class="line"> </div><div class="line"><span class="comment">//DPI的默认值</span></div><div class="line">OpenLayers.DOTS_PER_INCH = <span class="number">72</span>;</div><div class="line"><span class="comment">//比例尺计算, </span></div><div class="line"><span class="comment">//已经是分数形式的( 1.0) ? (1.0 / scale) </span></div><div class="line">                                  : scale;</div><div class="line">    <span class="keyword">return</span> normScale;</div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="comment">//由Scale计算出Resolution, 默认单位是"degrees"</span></div><div class="line">OpenLayers.Util.getResolutionFromScale = <span class="function"><span class="keyword">function</span> (<span class="params">scale, units</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> resolution;</div><div class="line">    <span class="keyword">if</span> (scale) &#123;</div><div class="line">        <span class="keyword">if</span> (units == <span class="literal">null</span>) &#123;</div><div class="line">            units = <span class="string">"degrees"</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">var</span> normScale = OpenLayers.Util.normalizeScale(scale);</div><div class="line">        resolution = <span class="number">1</span> / (normScale * OpenLayers.INCHES_PER_UNIT[units]</div><div class="line">                                        * OpenLayers.DOTS_PER_INCH);        </div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> resolution;</div><div class="line">&#125;;</div><div class="line"><span class="comment">//由Resolution计算对应的Scale, 默认单位是"degrees"</span></div><div class="line">OpenLayers.Util.getScaleFromResolution = <span class="function"><span class="keyword">function</span> (<span class="params">resolution, units</span>) </span>&#123;</div><div class="line"> </div><div class="line">    <span class="keyword">if</span> (units == <span class="literal">null</span>) &#123;</div><div class="line">        units = <span class="string">"degrees"</span>;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="keyword">var</span> scale = resolution * OpenLayers.INCHES_PER_UNIT[units] *</div><div class="line">                    OpenLayers.DOTS_PER_INCH;</div><div class="line">    <span class="keyword">return</span> scale;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
     
       
 
@@ -1342,128 +1466,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/09/30/tools/grunt-01/" itemprop="url">
-                  Grunt使用1:环境和入门
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2014-09-30T16:12:00+08:00" content="2014-09-30">
-              2014-09-30
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/前端工具/" itemprop="url" rel="index">
-                    <span itemprop="name">前端工具</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2014/09/30/tools/grunt-01/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/09/30/tools/grunt-01/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>记录一下前端自动化工具的使用, 慢慢结合起来用 逐步逃离这种刀耕火种一样的体力活儿…<br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2014/09/30/tools/grunt-01/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1509,7 +1511,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">73</span>
+              <span class="site-state-item-count">74</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
