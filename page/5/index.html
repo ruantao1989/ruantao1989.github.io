@@ -250,6 +250,127 @@
             
               
                 
+                <a class="post-title-link" href="/2015/02/02/openLayers/openLayers-07-tool4/" itemprop="url">
+                  OpenLayers学习7-工具类Util_4
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2015-02-02T22:40:23+08:00" content="2015-02-02">
+              2015-02-02
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/OpenLayers学习/" itemprop="url" rel="index">
+                    <span itemprop="name">OpenLayers学习</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/02/02/openLayers/openLayers-07-tool4/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/02/02/openLayers/openLayers-07-tool4/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <a id="more"></a>
+<h2 id="一-尺寸计算"><a href="#一-尺寸计算" class="headerlink" title="一:尺寸计算"></a>一:尺寸计算</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//计算出popup的尺寸, left值会被写成-9999px, 防止滚动条闪烁</span></div><div class="line"><span class="comment">//size包含w 和 h参数, </span></div><div class="line"><span class="comment">//option: displayClass是css类名, containerElement是父对象</span></div><div class="line">OpenLayers.Util.getRenderedDimensions = <span class="function"><span class="keyword">function</span>(<span class="params">contentHTML, size, options</span>) </span>&#123;</div><div class="line">     </div><div class="line">    <span class="keyword">var</span> w, h;</div><div class="line">     </div><div class="line">    <span class="comment">//临时div对象的容器</span></div><div class="line">    <span class="keyword">var</span> container = <span class="built_in">document</span>.createElement(<span class="string">"div"</span>);</div><div class="line">    container.style.visibility = <span class="string">"hidden"</span>;</div><div class="line">     </div><div class="line">    <span class="comment">//popup容器优先是options.containerElement, 然后是body    </span></div><div class="line">    <span class="keyword">var</span> containerElement = (options &amp;&amp; options.containerElement) </div><div class="line">        ? options.containerElement : <span class="built_in">document</span>.body;</div><div class="line">     </div><div class="line">    <span class="comment">// IE7不能从父对象继承position:aboslute</span></div><div class="line">    <span class="keyword">var</span> parentHasPositionAbsolute = <span class="literal">false</span>;</div><div class="line">    <span class="keyword">var</span> superContainer = <span class="literal">null</span>;</div><div class="line">    <span class="keyword">var</span> parent = containerElement;</div><div class="line">    <span class="keyword">while</span> (parent &amp;&amp; parent.tagName.toLowerCase()!=<span class="string">"body"</span>) &#123;</div><div class="line">        <span class="comment">//获取父对象的position值</span></div><div class="line">        <span class="keyword">var</span> parentPosition = OpenLayers.Element.getStyle(parent, <span class="string">"position"</span>);</div><div class="line">        <span class="keyword">if</span>(parentPosition == <span class="string">"absolute"</span>) &#123;</div><div class="line">            parentHasPositionAbsolute = <span class="literal">true</span>;<span class="comment">//父对象是absolute标记</span></div><div class="line">            <span class="keyword">break</span>;</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (parentPosition &amp;&amp; parentPosition != <span class="string">"static"</span>) &#123;</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">        &#125;</div><div class="line">        parent = parent.parentNode;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span>(parentHasPositionAbsolute &amp;&amp; (containerElement.clientHeight === <span class="number">0</span> || </div><div class="line">                                     containerElement.clientWidth === <span class="number">0</span>) )&#123;</div><div class="line">        <span class="comment">//不能继承aboslute就手工在外边套一层</span></div><div class="line">        superContainer = <span class="built_in">document</span>.createElement(<span class="string">"div"</span>);</div><div class="line">        superContainer.style.visibility = <span class="string">"hidden"</span>;</div><div class="line">        superContainer.style.position = <span class="string">"absolute"</span>;</div><div class="line">        superContainer.style.overflow = <span class="string">"visible"</span>;</div><div class="line">        superContainer.style.width = <span class="built_in">document</span>.body.clientWidth + <span class="string">"px"</span>;</div><div class="line">        superContainer.style.height = <span class="built_in">document</span>.body.clientHeight + <span class="string">"px"</span>;</div><div class="line">        superContainer.appendChild(container);</div><div class="line">    &#125;</div><div class="line">    container.style.position = <span class="string">"absolute"</span>;</div><div class="line"> </div><div class="line">    <span class="comment">//写入指定的w和h</span></div><div class="line">    <span class="keyword">if</span> (size) &#123;</div><div class="line">        <span class="keyword">if</span> (size.w) &#123;</div><div class="line">            w = size.w;</div><div class="line">            container.style.width = w + <span class="string">"px"</span>;</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (size.h) &#123;</div><div class="line">            h = size.h;</div><div class="line">            container.style.height = h + <span class="string">"px"</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="comment">//写入指定css类名</span></div><div class="line">    <span class="keyword">if</span> (options &amp;&amp; options.displayClass) &#123;</div><div class="line">        container.className = options.displayClass;</div><div class="line">    &#125;</div><div class="line">     </div><div class="line">    <span class="comment">//内容div</span></div><div class="line">    <span class="keyword">var</span> content = <span class="built_in">document</span>.createElement(<span class="string">"div"</span>);</div><div class="line">    content.innerHTML = contentHTML;</div><div class="line">     </div><div class="line">    <span class="comment">//计算尺寸时需要overflow: visible</span></div><div class="line">    content.style.overflow = <span class="string">"visible"</span>;</div><div class="line">    <span class="keyword">if</span> (content.childNodes) &#123;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>, l=content.childNodes.length; i&lt;l; i++) &#123;</div><div class="line">            <span class="keyword">if</span> (!content.childNodes[i].style) <span class="keyword">continue</span>;</div><div class="line">            content.childNodes[i].style.overflow = <span class="string">"visible"</span>;<span class="comment">//子元素overflow都改成visible</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">     </div><div class="line">    <span class="comment">//把内容div写入临时容器</span></div><div class="line">    container.appendChild(content);</div><div class="line">     </div><div class="line">    <span class="comment">//把临时容器写入页面</span></div><div class="line">    <span class="keyword">if</span> (superContainer) &#123;</div><div class="line">        containerElement.appendChild(superContainer);</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        containerElement.appendChild(container);</div><div class="line">    &#125;</div><div class="line">     </div><div class="line">    <span class="comment">//没指定w的话</span></div><div class="line">    <span class="keyword">if</span> (!w) &#123;</div><div class="line">        w = <span class="built_in">parseInt</span>(content.scrollWidth);</div><div class="line">     </div><div class="line">        <span class="comment">//宽就是scrollWidth</span></div><div class="line">        container.style.width = w + <span class="string">"px"</span>;</div><div class="line">    &#125;        </div><div class="line">    <span class="comment">//记录下来h</span></div><div class="line">    <span class="keyword">if</span> (!h) &#123;</div><div class="line">        h = <span class="built_in">parseInt</span>(content.scrollHeight);</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="comment">//遍历删除子元素</span></div><div class="line">    container.removeChild(content);</div><div class="line">    <span class="keyword">if</span> (superContainer) &#123;</div><div class="line">        superContainer.removeChild(container);</div><div class="line">        containerElement.removeChild(superContainer);</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        containerElement.removeChild(container);</div><div class="line">    &#125;</div><div class="line">     </div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> OpenLayers.Size(w, h);<span class="comment">//返回w 和 h</span></div><div class="line">&#125;;</div><div class="line"> </div><div class="line"> </div><div class="line"><span class="comment">//获得滚动条宽度</span></div><div class="line">OpenLayers.Util.getScrollbarWidth = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="comment">//默认宽度 初始化时没有, 在这个函数末尾追加</span></div><div class="line">    <span class="keyword">var</span> scrollbarWidth = OpenLayers.Util._scrollbarWidth;</div><div class="line">     </div><div class="line">    <span class="keyword">if</span> (scrollbarWidth == <span class="literal">null</span>) &#123;</div><div class="line">        <span class="comment">//初始化计算</span></div><div class="line">        <span class="keyword">var</span> scr = <span class="literal">null</span>;</div><div class="line">        <span class="keyword">var</span> inn = <span class="literal">null</span>;</div><div class="line">        <span class="keyword">var</span> wNoScroll = <span class="number">0</span>;</div><div class="line">        <span class="keyword">var</span> wScroll = <span class="number">0</span>;</div><div class="line">     </div><div class="line">        <span class="comment">//外层div, 在视野外计算</span></div><div class="line">        scr = <span class="built_in">document</span>.createElement(<span class="string">'div'</span>);</div><div class="line">        scr.style.position = <span class="string">'absolute'</span>;</div><div class="line">        scr.style.top = <span class="string">'-1000px'</span>;</div><div class="line">        scr.style.left = <span class="string">'-1000px'</span>;</div><div class="line">        scr.style.width = <span class="string">'100px'</span>;<span class="comment">//比较小</span></div><div class="line">        scr.style.height = <span class="string">'50px'</span>;</div><div class="line">        <span class="comment">//没有滚动条</span></div><div class="line">        scr.style.overflow = <span class="string">'hidden'</span>;</div><div class="line">     </div><div class="line">        <span class="comment">//内层, 写死大小</span></div><div class="line">        inn = <span class="built_in">document</span>.createElement(<span class="string">'div'</span>);</div><div class="line">        inn.style.width = <span class="string">'100%'</span>;</div><div class="line">        inn.style.height = <span class="string">'200px'</span>;<span class="comment">//比较大</span></div><div class="line">     </div><div class="line">        <span class="comment">//外层套内层</span></div><div class="line">        scr.appendChild(inn);</div><div class="line">        <span class="comment">//body套外层</span></div><div class="line">        <span class="built_in">document</span>.body.appendChild(scr);</div><div class="line">     </div><div class="line">        <span class="comment">//原始内层的实际宽度offsetWidth(包含滚动条宽度)</span></div><div class="line">        wNoScroll = inn.offsetWidth;</div><div class="line">     </div><div class="line">        <span class="comment">//外层显示滚动条</span></div><div class="line">        scr.style.overflow = <span class="string">'scroll'</span>;</div><div class="line">        <span class="comment">//有滚动条以后的实际宽度offsetWidth</span></div><div class="line">        wScroll = inn.offsetWidth;</div><div class="line">     </div><div class="line">        <span class="comment">//计算完了, 删掉div</span></div><div class="line">        <span class="built_in">document</span>.body.removeChild(<span class="built_in">document</span>.body.lastChild);</div><div class="line">     </div><div class="line">        <span class="comment">//记录结果</span></div><div class="line">        OpenLayers.Util._scrollbarWidth = (wNoScroll - wScroll);<span class="comment">//内层没滚动条的宽度 - 有滚动条的宽度</span></div><div class="line">        scrollbarWidth = OpenLayers.Util._scrollbarWidth;</div><div class="line">    &#125;</div><div class="line"> </div><div class="line">    <span class="keyword">return</span> scrollbarWidth;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2015/02/01/openLayers/openLayers-06-tool3/" itemprop="url">
                   OpenLayers学习6-工具类Util_3
                 </a>
@@ -1343,130 +1464,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/12/04/js/js-inheritance-01/" itemprop="url">
-                  js继承1:apply继承和类拷贝继承
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2014-12-04T00:04:00+08:00" content="2014-12-04">
-              2014-12-04
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/js入门/" itemprop="url" rel="index">
-                    <span itemprop="name">js入门</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2014/12/04/js/js-inheritance-01/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/12/04/js/js-inheritance-01/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>俩月没更新博客,10月GCT考试 11月结婚 这又连续加班半个月了, 马上又要去普吉岛蜜月, 都完事儿了就踏实了…<br>这几天自己瞎研究了一下js的继承, 现在写的肯定会有出错的地方, 先记下来 等回头学精了再来查错.</p>
-<p>先从继承的宿主 也就是从对象上分, 对象的声明方式上分为:<br>一: 使用”构造函数”模式, 二: 使用字面量声明对象,<br>先说第二种,字面量因为没有用new, 所以只能手动去拷贝. 可玩性比较低, 以我现在的水平看不合适做继承.</p>
-<p>重点说第一种”构造函数”模式,<br>这种继承从具体的继承方法上分:1.apply继承: 2.类拷贝继承<br>目前实验得出的结论是:<br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2014/12/04/js/js-inheritance-01/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1512,7 +1509,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">75</span>
+              <span class="site-state-item-count">76</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
@@ -1520,7 +1517,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">categories</span>
               </a>
             </div>
