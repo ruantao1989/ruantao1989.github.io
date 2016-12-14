@@ -250,6 +250,130 @@
             
               
                 
+                <a class="post-title-link" href="/2015/02/03/openLayers/openLayers-08-Bounds/" itemprop="url">
+                  OpenLayers学习8-Bounds(首个类)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2015-02-03T23:57:39+08:00" content="2015-02-03">
+              2015-02-03
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/OpenLayers学习/" itemprop="url" rel="index">
+                    <span itemprop="name">OpenLayers学习</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/02/03/openLayers/openLayers-08-Bounds/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/02/03/openLayers/openLayers-08-Bounds/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>Bounds边界, 这是第一次看OpenLayers类的代码, 好好体会了一下他怎么组织代码:</p>
+<p>OpenLayers.Bounds在完成OpenLayers.Class()类的声明之后, OpenLayers.Bounds只是指向构造函数.<br>当new OpenLayers.Bounds()时, 产生一个实例, 此实例才是所需对象</p>
+<p>实例构造时传入”左下右上”四个参数, 类中的全部方法以此”左下右上”为判断的基础,<br>实例方法纯完面向对象, 很少有js里面向过程的思想<br>类的静态方法写法类似:OpenLayers.Bounds.fromArray = function() {return …}, 补充完善OO.<br>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/02/03/openLayers/openLayers-08-Bounds/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2015/02/02/openLayers/openLayers-07-tool4/" itemprop="url">
                   OpenLayers学习7-工具类Util_4
                 </a>
@@ -1342,128 +1466,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/01/09/openLayers/openLayers-01-map/" itemprop="url">
-                  OpenLayers学习-示例学习1:Map
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2015-01-09T21:07:00+08:00" content="2015-01-09">
-              2015-01-09
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/OpenLayers学习/" itemprop="url" rel="index">
-                    <span itemprop="name">OpenLayers学习</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/01/09/openLayers/openLayers-01-map/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/01/09/openLayers/openLayers-01-map/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>先学下OpenLayers 再分析源代码<br>一来是之前一直用公司的js地图api开发, 有时会感觉有些受限. 希望通过源代码学下js实现<br>二来在职研考过了, 怎么也是地质大学的 多少也得学点儿gis的东西吧…先按自己的理解分类记录下<br>这份东西每天晚上弄到12点弄了一个礼拜, 弄完以后感觉主要还是要从openlayers学些组织代码 解决具体问题的方法, 这点上openlayers做的太nb了<br>放个笔记的GitHub地址: <a href="https://github.com/ruantao1989/read_OpenLayers">https://github.com/ruantao1989/read_OpenLayers</a><br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2015/01/09/openLayers/openLayers-01-map/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1509,7 +1511,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">76</span>
+              <span class="site-state-item-count">77</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
