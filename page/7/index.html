@@ -250,6 +250,129 @@
             
               
                 
+                <a class="post-title-link" href="/2014/05/31/jQueryRead/jQuery-read-13-1/" itemprop="url">
+                  jQuery源码阅读13-1:事件绑定流程
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2014-05-31T01:19:00+08:00" content="2014-05-31">
+              2014-05-31
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/jQuery源码阅读/" itemprop="url" rel="index">
+                    <span itemprop="name">jQuery源码阅读</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2014/05/31/jQueryRead/jQuery-read-13-1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/31/jQueryRead/jQuery-read-13-1/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>Event这个摸块大概用了1千行, 占源代码的1/9, 我知道代码量挺大 但是没想到就看一个绑定过程(边跟边记)就得花五六个小时…挺好的周末夜晚就这样到凌晨1点了…<br>这篇按时间顺序 说说jQ事件绑定还有event对象fix的流程</p>
+<p>事件这块结构大概是这样:<br>1.外层: fn里有on,bind,live这些常用的接口<br>2.中间层: 上述接口会调用jQuery.event对象中的基础方法, 如add(). jQuery.event对象只是真正的执行者, 主要负责做(1)data缓存, (2)做兼容,  (3)最终生成jQuery.Event实例 (4)dispatch执行<br>3.内层: jQuery.Event实例包装原生事件对象, 记录扩展的data, 记录执行函数结果等<br>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2014/05/31/jQueryRead/jQuery-read-13-1/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2014/05/24/jQueryRead/jQuery-read-12-1/" itemprop="url">
                   jQuery源码阅读12-1:回调队列$.Callback对象
                 </a>
@@ -1333,129 +1456,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2014/05/16/jQueryRead/jQuery-read-06/" itemprop="url">
-                  jQuery源码阅读6:xml和json解析
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2014-05-16T14:52:00+08:00" content="2014-05-16">
-              2014-05-16
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/jQuery源码阅读/" itemprop="url" rel="index">
-                    <span itemprop="name">jQuery源码阅读</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2014/05/16/jQueryRead/jQuery-read-06/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/16/jQueryRead/jQuery-read-06/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>还是拆解第一次jQuery.extend, 这次阅读json和xml相关的解析<br>除了这一波 , 工具函数里还有proxy,access,和ready没读<br>ready用到了jQuery的队列处理, 打算读完Deferred那块再拆解</p>
-<p>这对转换用正则比较多, 今天应该还有点儿时间, 打算补一补正则<br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2014/05/16/jQueryRead/jQuery-read-06/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1501,7 +1501,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">77</span>
+              <span class="site-state-item-count">78</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
